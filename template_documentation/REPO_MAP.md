@@ -2,7 +2,18 @@
 
 This is a working map of our project directory
 
+For each new feature, we must create/modify:
+
+- API/Model (only for new schema or schema change)
+- API/Controller
+- API/Route
+- API/specs -- tests for each of the above
+
+- Frontend -- this is flexible depending on the feature
+
+
 ## API:
+
 
 ### Bin:
 - Creates the server -- no need to touch for the most part
