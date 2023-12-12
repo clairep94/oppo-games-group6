@@ -78,22 +78,25 @@ const LogInForm = ({ navigate }) => {
       
       {/* LOGIN FORM */}
       <form onSubmit={handleSubmit}>
-        <label for="Email" class="accessible_visuallyhidden">Email: </label>
-        <input placeholder='Email' id="email" type='text' value={ email } onChange={handleEmailChange} />
+        {/* <label for="Email" class="accessible_visuallyhidden">Email: </label> */}
+        <input aria-label="Email Field" placeholder='Email' id="email" type='text' value={ email } onChange={handleEmailChange} />
+        <input aria-label="Password Field" placeholder='Password' id="password" type={passwordHidden ? 'password': 'text'} value={ password } onChange={handlePasswordChange} />
 
-        <label for="Password" class="accessible_visuallyhidden">Password: </label>
-        <input placeholder='Password' id="password" type={passwordHidden ? 'password': 'text'} value={ password } onChange={handlePasswordChange} />
-
-
-        <label for="login-button" class="accessible_visuallyhidden">Login Button: </label>
-        <input role='login-button' id='login-button' type="submit" value="Login" />
+        <input aria-label="Login Button" role='login-button' id='login-button' type="submit" value="Login" />
       </form>
 
       {/* BUTTON TO TOGGLE PW VISIBILITY */}
-      <button onClick={handleSetPasswordHidden}>{passwordHidden ? 'Show Password' : 'Hide Password'}</button>
+      <button
+        onClick={handleSetPasswordHidden}
+        id="toggle-pw-visibility-button"
+        button type="button"
+        aria-label="Toggle Password Visibility Button"
+        >
+          {passwordHidden ? 'Show Password' : 'Hide Password'}
+      </button>
 
       {/* ERROR MESSAGES */}
-      {error && <p className={styles.errorMessage}>{error}</p>}
+      {error && <p className={styles.errorMessage} aria-label="Login Error Message">{error}</p>}
       </>
     );
 }
