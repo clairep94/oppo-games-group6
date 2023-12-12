@@ -97,6 +97,14 @@ const LogInForm = ({ navigate }) => {
 
       {/* ERROR MESSAGES */}
       {error && <p aria-label="Login Error Message" className={styles.errorMessage} >{error}</p>}
+
+      <br/>
+      <p aria-label="Don't have an account? Register">
+      <font color="#505050 ">Don't have an account? </font>
+      <a aria-label="Link to Register" href="/signup" font color="#003163" className={styles.link}>Register</a>
+      </p>
+
+
       </>
     );
 }
