@@ -49,4 +49,16 @@ describe("handleAction", () => {
     });
   });
 
+  test("an error is thrown if the game [progress] state does not exist", () => {
+    const tryWithNonexistentState = () => {
+      handleAction({
+        progressState: "a nonexistent state",
+        boardState: { numberOfCubes: 64 } },
+        { actor: "id of actor", verb: "passively observe" },
+      );
+    };
+    expect(tryWithNonexistentState)
+    .toThrow(new Error("State `a nonexistent state` is undefined"));
+  });
+
 });
