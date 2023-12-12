@@ -87,10 +87,10 @@ const LogInForm = ({ navigate }) => {
 
       {/* BUTTON TO TOGGLE PW VISIBILITY */}
       <button
+        aria-label="Toggle Password Visibility Button"
         onClick={handleSetPasswordHidden}
         id="toggle-pw-visibility-button"
         button type="button"
-        aria-label="Toggle Password Visibility Button"
         >
           {passwordHidden ? 'Show Password' : 'Hide Password'}
       </button>
@@ -100,10 +100,9 @@ const LogInForm = ({ navigate }) => {
 
       <br/>
       <p aria-label="Don't have an account? Register">
-      <font color="#505050 ">Don't have an account? </font>
-      <a aria-label="Link to Register" href="/signup" font color="#003163" className={styles.link}>Register</a>
+        <font color="#505050 ">Don't have an account? </font>
+        <a aria-label="Link to Register" href="/signup" font color="#003163" className={styles.link}>Register</a>
       </p>
-
 
       </>
     );
