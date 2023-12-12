@@ -7,6 +7,12 @@ const STATES = {
   VICTORY: "victory",
 }
 
+const RESPONSES = {
+  OK: "ok",
+  INVALID: "invalid",
+  ERROR: "error",
+}
+
 //imports the state of the board i.e where all the pieces are,
 //  the game state such as player turn, game won
 //and action, that is any actions to be taken on the game
