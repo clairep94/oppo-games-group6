@@ -5,27 +5,19 @@ const handleAction = (gameState, boardState, action) => {
   if (action.verb === "passively observe") {
     const verbFunction = passivelyObserve;
     gameState = verbFunction(gameState, boardState, action);
-    return {
-      gameState: gameState,
-      boardState: boardState,
-    };
     //return { gameState: gameState, boardState: boardState };
     //does nothing but return these variables
   } else if (action.verb === "punch cube") {
     const verbFunction = punchCube;
     gameState = verbFunction(gameState, boardState, action);
     //boardState.numberOfCubes = boardState.numberOfCubes - 1;
-    return {
-      gameState: gameState,
-      boardState: boardState,
-    };
   } else if (action.verb === "give up and go home") {
     const verbFunction = giveUpAndGoHome;
     gameState = verbFunction(gameState, boardState, action);
-    return {
-      gameState: gameState,
-      boardState: boardState,
-    };
+  }
+  return {
+    gameState: gameState,
+    boardState: boardState,
   }
 };
 
