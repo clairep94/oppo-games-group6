@@ -1,17 +1,25 @@
+const PASSIVELY_OBSERVE = "passively observe"
+const PUNCH_CUBE = "punch cube"
+const GIVE_UP_AND_GO_HOME = "give up and go home"
+
+const STATES = {
+  GAME_OVER: "game over"
+}
+
 //imports the state of the board i.e where all the pieces are,
 //  the game state such as player turn, game won
 //and action, that is any actions to be taken on the game
 const handleAction = (gameState, boardState, action) => {
-  if (action.verb === "passively observe") {
+  if (action.verb === PASSIVELY_OBSERVE) {
     const verbFunction = passivelyObserve;
     gameState = verbFunction(gameState, boardState, action);
     //return { gameState: gameState, boardState: boardState };
     //does nothing but return these variables
-  } else if (action.verb === "punch cube") {
+  } else if (action.verb === PUNCH_CUBE) {
     const verbFunction = punchCube;
     gameState = verbFunction(gameState, boardState, action);
     //boardState.numberOfCubes = boardState.numberOfCubes - 1;
-  } else if (action.verb === "give up and go home") {
+  } else if (action.verb === GIVE_UP_AND_GO_HOME) {
     const verbFunction = giveUpAndGoHome;
     gameState = verbFunction(gameState, boardState, action);
   }
@@ -37,7 +45,7 @@ const punchCube = (gameState, boardState, action) => {
 }
 
 const giveUpAndGoHome = (gameState, boardState, action) => {
-  return "game over";
+  return STATES.GAME_OVER;
 }
 
 module.exports = handleAction;
