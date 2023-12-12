@@ -3,8 +3,10 @@ const PUNCH_CUBE = "punch cube"
 const GIVE_UP_AND_GO_HOME = "give up and go home"
 
 const STATES = {
+  A_GAME_STATE: "a game state",
   GAME_OVER: "game over",
   VICTORY: "victory",
+  // Note that there is no state with value "a nonexistent state".
 }
 
 const RESPONSES = {
@@ -25,8 +27,9 @@ const handleAction = (game, action) => {
   } else if (action.verb === GIVE_UP_AND_GO_HOME) {
     verbFunction = giveUpAndGoHome;
   }
-  verbFunction(game, action);
-  return game;
+  // Note: `verbFunction` often has the side effect of modifying `game`
+  /*const result = */verbFunction(game, action);
+  return (game/*, result*/);
 };
 
 const passivelyObserve = (game, action) => {};
