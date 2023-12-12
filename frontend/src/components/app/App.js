@@ -4,6 +4,7 @@ import SignUpForm from '../user/SignUpForm'
 import React, { useState } from 'react';
 // import Feed from '../feed/Feed'
 import GamesLobby from '../games_lobby/GamesLobby';
+import TicTacToe from '../demo_game_schema_design/TicTacToe';
 import {
   useNavigate,
   Routes,
@@ -17,6 +18,8 @@ const App = () => {
           {/* <Route path='/posts'  element={<Feed navigate={ useNavigate() }/>}/> */}
           <Route path='/login'  element={<LoginForm  navigate={ useNavigate() }/>}/>
           <Route path='/signup' element={<SignUpForm navigate={ useNavigate() }/>}/>
+          <Route path='/tictactoetest' element={<TicTacToe navigate={ useNavigate() }/>}/>
+          
         </Routes>
     );
 }
