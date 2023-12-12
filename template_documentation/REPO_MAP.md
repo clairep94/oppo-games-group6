@@ -4,12 +4,13 @@ This is a working map of our project directory
 
 For each new feature, we must create/modify:
 
-- API/Model (only for new schema or schema change)
-- API/Controller
-- API/Route
-- API/specs -- tests for each of the above
+- `API/Model` (only for new schema or schema change)
+- `API/Controller`
+- `API/Route`
+- `API/specs` -- tests for each of the above
 
-- Frontend -- this is flexible depending on the feature
+- `Frontend/src/components` and/or `Frontend/src/pages` -- this is flexible depending on the feature
+- `Frontend/src/components/app/App.js` -- if adding a new page or temporarily viewing a component, add a new route
 
 
 ## API:
