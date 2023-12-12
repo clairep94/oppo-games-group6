@@ -12,4 +12,17 @@ describe("handleAction", () => {
       boardState: { numberOfCubes: 64 },
     });
   });
+
+
+test("tests gamestate remains unchanged and boardstate cubes decreases by 1", () => {
+  const result = handleAction(
+    "my game state",
+    { numberOfCubes: 64 },
+    { actor: "id of actor", verb: "punch cube" },
+  );
+  expect(result).toEqual({
+    gameState: "my game state",
+    boardState: { numberOfCubes: 63 },
+  });
+});
 });
