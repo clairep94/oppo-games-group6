@@ -49,7 +49,7 @@ describe("handleAction", () => {
     });
   });
 
-  test("an error is thrown if the game [progress] state does not exist", () => {
+  test("an error is thrown if the provided game state does not exist", () => {
     const tryWithNonexistentState = () => {
       handleAction({
         progressState: "a nonexistent state",
@@ -58,7 +58,7 @@ describe("handleAction", () => {
       );
     };
     expect(tryWithNonexistentState)
-    .toThrow(new Error("State `a nonexistent state` is undefined"));
+    .toThrow(new Error("State <a nonexistent state> is undefined"));
   });
 
 });

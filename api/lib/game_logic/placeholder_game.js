@@ -15,10 +15,16 @@ const RESPONSES = {
   ERROR: "error",
 }
 
+const hasValidProgressState = (game) => 
+  Object.values(STATES).includes(game.progressState);
+
 //imports the state of the board i.e where all the pieces are,
 //  the game state such as player turn, game won
 //and action, that is any actions to be taken on the game
 const handleAction = (game, action) => {
+  if (!hasValidProgressState(game)) {
+    throw new Error(`State <${game.progressState}> is undefined`);
+  }
   let verbFunction = null;
   if (action.verb === PASSIVELY_OBSERVE) {
     verbFunction = passivelyObserve;
