@@ -96,7 +96,7 @@ const LogInForm = ({ navigate }) => {
       </button>
 
       {/* ERROR MESSAGES */}
-      {error && <p className={styles.errorMessage} aria-label="Login Error Message">{error}</p>}
+      {error && <p aria-label="Login Error Message" className={styles.errorMessage} >{error}</p>}
       </>
     );
 }
