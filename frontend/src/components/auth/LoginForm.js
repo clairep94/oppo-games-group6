@@ -8,6 +8,8 @@ const LogInForm = ({ navigate }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
+  const [passwordHidden, setPasswordHidden] = useState(true);
+
   // const location = useLocation(); // use this for login-popup when timed-out
 
 
@@ -60,6 +62,10 @@ const LogInForm = ({ navigate }) => {
     setPassword(event.target.value)
   }
 
+  const handleSetPasswordHidden = (event) => {
+    setPasswordHidden(!passwordHidden)
+  }
+
   // Enter a valid email or password
 
 
@@ -67,19 +73,26 @@ const LogInForm = ({ navigate }) => {
   // for all styling: use className={styles.Button}
     return (
       <>
+
       <h2>Login</h2>
+      
+      {/* LOGIN FORM */}
       <form onSubmit={handleSubmit}>
         <label for="Email" class="accessible_visuallyhidden">Email: </label>
         <input placeholder='Email' id="email" type='text' value={ email } onChange={handleEmailChange} />
 
         <label for="Password" class="accessible_visuallyhidden">Password: </label>
-        <input placeholder='Password' id="password" type='password' value={ password } onChange={handlePasswordChange} />
+        <input placeholder='Password' id="password" type={passwordHidden ? 'password': 'text'} value={ password } onChange={handlePasswordChange} />
+
 
         <label for="login-button" class="accessible_visuallyhidden">Login Button: </label>
         <input role='login-button' id='login-button' type="submit" value="Login" />
-
       </form>
 
+      {/* BUTTON TO TOGGLE PW VISIBILITY */}
+      <button onClick={handleSetPasswordHidden}>{passwordHidden ? 'Show Password' : 'Hide Password'}</button>
+
+      {/* ERROR MESSAGES */}
       {error && <p className={styles.errorMessage}>{error}</p>}
       </>
     );
