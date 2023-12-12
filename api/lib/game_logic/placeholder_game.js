@@ -3,7 +3,8 @@ const PUNCH_CUBE = "punch cube"
 const GIVE_UP_AND_GO_HOME = "give up and go home"
 
 const STATES = {
-  GAME_OVER: "game over"
+  GAME_OVER: "game over",
+  VICTORY: "victory",
 }
 
 //imports the state of the board i.e where all the pieces are,
@@ -26,6 +27,10 @@ const passivelyObserve = (game, action) => {};
 
 const punchCube = (game, action) => {
   game.boardState.numberOfCubes = game.boardState.numberOfCubes - 1;
+  if (game.boardState.numberOfCubes === 0) {
+    // Congrats! You broke all the cubes
+    game.progressState = STATES.VICTORY;
+  }
 };
 
 const giveUpAndGoHome = (game, action) => {
