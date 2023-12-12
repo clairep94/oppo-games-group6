@@ -6,20 +6,6 @@ const STATES = {
   GAME_OVER: "game over"
 }
 
-// const handleAction = (gameState, boardState, action) => {
-//   const resultingGame = handleActionREFACTORED(
-//     { // Game
-//       progressState: gameState,
-//       boardState: boardState,
-//     },
-//     action
-//   );
-//   return {
-//     gameState: resultingGame.progressState,
-//     boardState: resultingGame.boardState
-//   }
-// }
-
 //imports the state of the board i.e where all the pieces are,
 //  the game state such as player turn, game won
 //and action, that is any actions to be taken on the game
