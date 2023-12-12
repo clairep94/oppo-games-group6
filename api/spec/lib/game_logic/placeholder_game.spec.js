@@ -37,4 +37,16 @@ describe("handleAction", () => {
     });
   });
 
+  test("when the last cube is broken, the game is won", () => {
+    const result = handleAction({
+      progressState: "my game state",
+      boardState: { numberOfCubes: 1 } },
+      { actor: "id of actor", verb: "punch cube" },
+    );
+    expect(result).toEqual({
+      progressState: "victory",
+      boardState: { numberOfCubes: 0 },
+    });
+  });
+
 });
