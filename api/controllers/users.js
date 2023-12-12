@@ -1,5 +1,8 @@
 const User = require("../models/user");
 
+// TODO Review Acebook User Controller methods and update below as a group
+// TODO Unit testing for User Controller methods
+
 const UsersController = {
   Create: (req, res) => {
     const user = new User(req.body);

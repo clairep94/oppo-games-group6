@@ -1,5 +1,8 @@
 const mongoose = require("mongoose");
 
+// TODO Review Acebook User Schema and update below as a group
+// TODO Unit testing for User Schema
+
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
