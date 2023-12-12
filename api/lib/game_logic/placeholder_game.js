@@ -6,46 +6,44 @@ const STATES = {
   GAME_OVER: "game over"
 }
 
+const handleAction = (gameState, boardState, action) => {
+  const resultingGame = handleActionREFACTORED(
+    { // Game
+      progressState: gameState,
+      boardState: boardState,
+    },
+    action
+  );
+  return {
+    gameState: resultingGame.progressState,
+    boardState: resultingGame.boardState
+  }
+}
+
 //imports the state of the board i.e where all the pieces are,
 //  the game state such as player turn, game won
 //and action, that is any actions to be taken on the game
-const handleAction = (gameState, boardState, action) => {
+const handleActionREFACTORED = (game, action) => {
+  let verbFunction = null;
   if (action.verb === PASSIVELY_OBSERVE) {
-    const verbFunction = passivelyObserve;
-    gameState = verbFunction(gameState, boardState, action);
-    //return { gameState: gameState, boardState: boardState };
-    //does nothing but return these variables
+    verbFunction = passivelyObserve;
   } else if (action.verb === PUNCH_CUBE) {
-    const verbFunction = punchCube;
-    gameState = verbFunction(gameState, boardState, action);
-    //boardState.numberOfCubes = boardState.numberOfCubes - 1;
+    verbFunction = punchCube;
   } else if (action.verb === GIVE_UP_AND_GO_HOME) {
-    const verbFunction = giveUpAndGoHome;
-    gameState = verbFunction(gameState, boardState, action);
+    verbFunction = giveUpAndGoHome;
   }
-  return {
-    gameState: gameState,
-    boardState: boardState,
-  }
+  verbFunction(game, action);
+  return game;
 };
 
-const passivelyObserve = (gameState, boardState, action) => {
-  return gameState;
-  // ^ Maybe this (having to return gameState) can be avoided by wrapping
-  // the gameState in an object? i.e.
-  // old: gameState: "something"; new: gameState: { id: "something" }
-  // Another advantage of this method is that it lets you encode additional
-  // details within the game state; for instance, the ending timestamp of a game
-  // (only known once the game has ended) could be stored in the "game over" state.
+const passivelyObserve = (game, action) => {};
+
+const punchCube = (game, action) => {
+  game.boardState.numberOfCubes = game.boardState.numberOfCubes - 1;
 };
 
-const punchCube = (gameState, boardState, action) => {
-  boardState.numberOfCubes = boardState.numberOfCubes - 1;
-  return gameState;
-}
-
-const giveUpAndGoHome = (gameState, boardState, action) => {
-  return STATES.GAME_OVER;
-}
+const giveUpAndGoHome = (game, action) => {
+  game.progressState = STATES.GAME_OVER;
+};
 
 module.exports = handleAction;
