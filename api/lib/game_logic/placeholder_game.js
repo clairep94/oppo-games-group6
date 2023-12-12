@@ -6,24 +6,24 @@ const STATES = {
   GAME_OVER: "game over"
 }
 
-const handleAction = (gameState, boardState, action) => {
-  const resultingGame = handleActionREFACTORED(
-    { // Game
-      progressState: gameState,
-      boardState: boardState,
-    },
-    action
-  );
-  return {
-    gameState: resultingGame.progressState,
-    boardState: resultingGame.boardState
-  }
-}
+// const handleAction = (gameState, boardState, action) => {
+//   const resultingGame = handleActionREFACTORED(
+//     { // Game
+//       progressState: gameState,
+//       boardState: boardState,
+//     },
+//     action
+//   );
+//   return {
+//     gameState: resultingGame.progressState,
+//     boardState: resultingGame.boardState
+//   }
+// }
 
 //imports the state of the board i.e where all the pieces are,
 //  the game state such as player turn, game won
 //and action, that is any actions to be taken on the game
-const handleActionREFACTORED = (game, action) => {
+const handleAction = (game, action) => {
   let verbFunction = null;
   if (action.verb === PASSIVELY_OBSERVE) {
     verbFunction = passivelyObserve;
