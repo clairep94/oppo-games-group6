@@ -66,7 +66,7 @@ const SignUpForm = ({ navigate }) => {
   };
 
 
-  const handleFirstNameChange = (event) => {
+  const handleUserNameChange = (event) => {
     setUserName(event.target.value)
   }
 
