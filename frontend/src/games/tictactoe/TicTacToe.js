@@ -72,6 +72,7 @@ const TicTacToe = ({ navigate }) => {
 
     const sessionUserID = getSessionUserID(token);
 
+    // Function 1: to fetch the tictactoe data.
     const fetchGame = () => {
         fetch(`/tictactoe/${id}`, {
             headers: {
@@ -87,6 +88,7 @@ const TicTacToe = ({ navigate }) => {
         })
     }
 
+    // Use Function 1 once page is loaded:
     useEffect(() => {
         if(token) {
             fetchGame()
@@ -94,8 +96,7 @@ const TicTacToe = ({ navigate }) => {
     }, []);
 
 
-
-
+    // Function 2: Allows players to PlacePiece, which returns the updated game.data, and sets the updated game board.
     const updateGameBoard = async (row, col) => { 
         console.log(`Player ${sessionUserID} Selected: Row ${row}, Col ${col}`);
 
@@ -115,7 +116,7 @@ const TicTacToe = ({ navigate }) => {
             setGame(data.game);
             setGameBoard(data.game.game_board);
         } catch (error) {
-            console.error('Error updating game: ', error);
+            console.error(error)
         }
     }
 

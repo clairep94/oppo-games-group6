@@ -72,8 +72,24 @@ const TicTacToeGameController = {
             const userID = req.user_id;
             const { row, col } = req.body;
             const coordinate = `${row}${col}`
+
             const game = await TicTacToeGame.findById(gameID);
             console.log(coordinate);
+
+            // Check if the user is the game.whose_turn. If not, the user can only observe
+            if (game.whose_turn != userID) { // NOTE: this is != and not !== on purpose. game.whose_turn and userID are not the same datatype but can be compared this way.
+                console.log("ERROR: IT IS NOT YOUR TURN");
+                return res.status(403).json({ error: 'It is not your turn.', game: game }); //return the old game so as to not mess up the rendering
+            }
+
+            // Check if the session user is player 1 or 2 to indicate the piece
+
+            // 
+            /** Check if session user is player 1, player 2 or NOT a player (observer) OR Not their turn:
+             * if player 1: piece = "X", place in x_placements
+             * if player 2: piece = "O", place in o_placements
+             * if user is not player 1 OR 2 OR it is not their turn, console.log error: not your turn! + do nothing
+             */
 
             //TEMPORARY: hardcode that we are putting in X:
             const piece = "X";
