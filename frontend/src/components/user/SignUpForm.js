@@ -92,8 +92,10 @@ const SignUpForm = ({ navigate }) => {
 
     return (
       <form onSubmit={handleSubmit}>
-        <h2>Sign Up</h2> 
+        <h2>Sign Up</h2>
+        <div>
           <input placeholder="Username" id="Username" type='text' value={ userName } onChange={handleUserNameChange} />
+        </div> 
           <input placeholder="Email" id="Email" type='text' value={ email } onChange={handleEmailChange} />
           
         <div className="password-input-container">
@@ -112,8 +114,8 @@ const SignUpForm = ({ navigate }) => {
       </button>
     </div>
           <input role='submit' id='submit' className='primary-btn' type="submit" value="Sign Up" />
-          {emptyFieldsError && <p style={{ color: 'red' }}>{emptyFieldsError}</p>}
-          {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
+          {emptyFieldsError && <p>{emptyFieldsError}</p>}
+          {errorMessage && <p>{errorMessage}</p>}
           <p>Already have an account? <a href="/Login">Login</a></p>
       </form>
     );
