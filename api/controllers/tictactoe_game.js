@@ -75,22 +75,27 @@ const TicTacToeGameController = {
 
     
             const game = await TicTacToeGame.findById(gameID);
-            console.log(game);
             console.log(coordinate);
 
             //TEMP
             const piece = "X";
 
-            game.game_board[row][col] = piece;
-            game.x_placements.push(coordinate)
-            console.log(game.game_board);
-            console.log(game.x_placements);
-            game.save();
 
-            
+            const updatedGame = await TicTacToeGame.findOneAndUpdate(
+                { _id: gameID },
+                { 
+                    $set: { [`game_board.${row}.${col}`]: piece },
+                    $push: { x_placements: coordinate }
+                },
+                { new: true }
+            );
+            console.log(updatedGame);
+
+
+
 
             const token = TokenGenerator.jsonwebtoken(req.user_id);
-            res.status(201).json({ message: 'OK', game: game, token: token });
+            res.status(201).json({ message: 'OK', game: updatedGame, token: token });
         
         } catch (error) {
             console.error('Error placing piece:', error);
