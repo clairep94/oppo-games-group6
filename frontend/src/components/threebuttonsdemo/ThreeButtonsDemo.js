@@ -12,8 +12,8 @@ const ThreeButtonsDemo = ({ navigate }) => {
 
   useEffect(() => {
     const mailCheckerCallback = () => {
-      // Fetch request will go here 
-      console.log("I'd check it if I could");
+      console.log("Checking it now");
+      //fetch("/")
     };
     const startChecking = () => {
       mailTimer.current = setInterval(mailCheckerCallback, 2000);
