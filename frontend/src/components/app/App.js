@@ -1,7 +1,7 @@
 import './App.css';
 import LoginForm from '../auth/LoginForm'
 import SignUpForm from '../user/SignUpForm'
-import ThreeButtonsDemo from '../demo/ThreeButtonsDemo'
+import ThreeButtonsDemo from '../threebuttonsdemo/ThreeButtonsDemo'
 import React, { useState } from 'react';
 // import Feed from '../feed/Feed'
 import GamesLobby from '../games_lobby/GamesLobby';
