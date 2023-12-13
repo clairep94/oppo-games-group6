@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
-import styles from './TicTacToe.module.css'
+import styles from './TicTacToe.module.css';
+import getSessionUserID from "../../utility/getSessionUserID";
+
 
 // ======== PAGE ============ //
 const TicTacToePage = ({ navigate }) => {
@@ -62,96 +64,61 @@ const TicTacToe = ({ navigate }) => {
     const gameID = id
 
     const [game, setGame] = useState(null);
-    // const [gameBoard, setGameBoard] = useState(null);
+    const [gameBoard, setGameBoard] = useState(null);
     // const [winner, setWinner] = useState(null);
     const rows = ["A", "B", "C"];
 
     const [token, setToken] = useState(window.localStorage.getItem("token"));
 
+    const sessionUserID = getSessionUserID(token);
 
-    useEffect(() => {
-        if(token) {
-            fetch(`/tictactoe/${id}`, {
+    const fetchGame = () => {
+        fetch(`/tictactoe/${id}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
         })
-            .then(response => response.json())
-            .then(async data => {
-                window.localStorage.setItem("token", data.token)
-                setToken(window.localStorage.getItem("token"))
-                setGame(data.game);
-            })
+        .then((res) => res.json())
+        .then((data) => {
+            window.localStorage.setItem("token", data.token)
+            setToken(window.localStorage.getItem("token"))
+            setGame(data.game)
+            setGameBoard(data.game.game_board)
+        })
+    }
+
+    useEffect(() => {
+        if(token) {
+            fetchGame()
         }
-    }, [])
-
-
-    // const fetchGame = async () => {
-    //     try {
-    //         const response = await fetch(`/tictactoe/${gameID}`, {
-    //             headers: {
-    //                 Authorization: `Bearer ${token}`,
-    //             },
-    //         });
-    //         const data = await response.json();
-    //         setGame(data.game);
-    //         // setGameBoard(data.game.game_board);
-    //         // setWinner(data.game.winner);
-    //     } catch (error) {
-    //         console.error('Error fetching game: ', error);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     if (token) {
-    //         fetchGame();
-    //     }
-    // }, []);
-
-
-    // const updateGameBoard = async (row, col) => {
-    //     try {
-    //         const response = await fetch(`/tictactoe/${gameID}/place_piece`, {
-    //             method: 'put',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: `Bearer ${token}`,
-    //             },
-    //             body: JSON.stringify({ row: row, col: col }),
-    //         });
-    //         const data = await response.json();
-    //         setGame(data.game);
-    //         // setGameBoard(data.game.game_board);
-    //         // setWinner(data.game.winner);
-    //     } catch (error) {
-    //         console.error('Error updating game: ', error);
-    //     }
-    // };
+    }, []);
 
 
 
-    // useEffect(() => {
-    //     setGameBoard(game.game_board)
-    //     setWinner(game.winner)
-    // }, [game]);
 
-    // const renderGameBoard = () => (
-    //     <div id='tictactoe-board'>
-    //         {rows.map((row) => (
-    //             <div key={row}>
-    //                 {Object.keys(gameBoard[row]).map((col) => (
-    //                     <TicTacToeButton
-    //                         key={`${row}${col}`}
-    //                         row={row}
-    //                         col={col}
-    //                         gameBoard={gameBoard}
-    //                         updateGameBoard={() => updateGameBoard(row, col)}
-    //                     />
-    //                 ))}
-    //             </div>
-    //         ))}
-    //     </div>
-    // );
+    const updateGameBoard = async (row, col) => { 
+        console.log(`Player ${sessionUserID} Selected: Row ${row}, Col ${col}`);
+
+        try {
+            const response = await fetch(`/tictactoe/${id}/place_piece`, {
+                method: 'put',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    row: row, 
+                    col: col
+                })
+            })
+            const data = await response.json();
+            setGame(data.game);
+            setGameBoard(data.game.game_board);
+        } catch (error) {
+            console.error('Error updating game: ', error);
+        }
+    }
+
 
     return (
         <>
@@ -161,20 +128,23 @@ const TicTacToe = ({ navigate }) => {
             <p>{game ? "Game object found" : "No game object found"}</p>
             <p>{game ? game._id : "No game object found"}</p>
             <p>{game ? game.whose_turn : "No game object found"}</p>
-            {game && game.game_board && (
-                <div>
-                <p>Game Board:</p>
-                <table>
-                    <tbody>
-                    {Object.keys(game.game_board).map((row) => (
-                        <tr key={row}>
-                        {Object.keys(game.game_board[row]).map((col) => (
-                            <td key={col}>{game.game_board[row][col]}</td>
+            <p>{sessionUserID}</p>
+
+            {game && gameBoard && (
+                <div id='tictactoe-board'>
+                    {rows.map((row) => (
+                        <div key={row}>
+                            {Object.keys(gameBoard[row]).map((col) => (
+                            <TicTacToeButton
+                                key={`${row}${col}`}
+                                row={row}
+                                col={col}
+                                gameBoard={gameBoard}
+                                updateGameBoard={() => updateGameBoard(row, col)}
+                            />
+                                ))}
+                        </div>
                         ))}
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
                 </div>
             )}
 

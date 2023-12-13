@@ -91,9 +91,13 @@ const TicTacToeGameSchema = new mongoose.Schema({
             C: { type: { 1: String, 2: String, 3: String } },
         },
         default: {
-            A: { 1: "X", 2: "O", 3: "X" },
-            B: { 1: "X", 2: "O", 3: "X" },
-            C: { 1: "O", 2: "X", 3: "O" },
+            // A: { 1: "X", 2: "O", 3: "X" },
+            // B: { 1: "X", 2: "O", 3: "X" },
+            // C: { 1: "O", 2: "X", 3: "O" },
+            A: { 1: " ", 2: " ", 3: " " },
+            B: { 1: " ", 2: " ", 3: " " },
+            C: { 1: " ", 2: " ", 3: " " },
+            
         },
     },
 
