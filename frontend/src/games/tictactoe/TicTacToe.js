@@ -85,6 +85,7 @@ const TicTacToe = ({ navigate }) => {
             setToken(window.localStorage.getItem("token"))
             setGame(data.game)
             setGameBoard(data.game.game_board)
+            setWinner(data.game.winner)
         })
     }
 
@@ -134,7 +135,7 @@ const TicTacToe = ({ navigate }) => {
                 })
             })
             const data = await response.json();
-            setWinner(data.game.winner[0]); // TODO CHANGE THIS FOR A DRAW!
+            setWinner(data.game.winner); // TODO CHANGE THIS FOR A DRAW!
         } catch (error) {
             console.error(error)
         }
@@ -150,6 +151,7 @@ const TicTacToe = ({ navigate }) => {
             <p>{game ? "Game object found" : "No game object found"}</p>
             <p>{game ? game._id : "No game object found"}</p>
             <p>{game ? game.whose_turn : "No game object found"}</p>
+            <p>{game ? `Winner found: ${game.winner}` : "No winner found"}</p>
             <p>{sessionUserID}</p>
 
 
@@ -190,7 +192,7 @@ const TicTacToe = ({ navigate }) => {
                 </div>
             )}
 
-        {winner && <p aria-label="Winner Announcement">{winner} wins!</p>}
+        {game && winner && <p aria-label="Winner Announcement">{winner} wins!</p>}
 
             {/* {game && renderGameBoard()}
             {winner && <p aria-label="Winner Announcement">{winner} wins!</p>} */}
@@ -201,6 +203,7 @@ const TicTacToe = ({ navigate }) => {
 // ======== SINGLE BUTTON ===========//
 const TicTacToeButton = (props) => {
     const space = props.gameBoard[props.row][props.col]
+    // const buttonActive = space === " "
     const buttonActive = space === " " && props.winner.length === 0;
 
     return (
