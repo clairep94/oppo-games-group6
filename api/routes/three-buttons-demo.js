@@ -12,3 +12,4 @@ router.get("/mailbox", ThreeButtonsDemoController.CheckMail);
 // Interact with the game
 router.patch("/game", ThreeButtonsDemoController.DoGameAction);
 
+module.exports = router;
