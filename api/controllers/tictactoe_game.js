@@ -55,12 +55,57 @@ const TicTacToeGameController = {
         })
     },
 
-    // PlacePiece: (req, res) => {
-    //     // find the turn number
-    //     // if % 2 === 0: add to X
-    //     // else: add to O
+    PlacePiece: async (req, res) => {
+        try {
+            const gameID = req.params.id;
+            const userID = req.user_id;
+            const { row, col } = req.body;
+    
+            const game = await TicTacToeGame.findById(gameID);
+    
+            // Check if it's the correct player's turn
+            if (game.whose_turn !== userId) {
+                return res.status(403).json({ error: 'It is not your turn.' });
+            }
+    
+            // Check if the chosen cell is empty
+            if (game.game_board[row][col] !== ' ') {
+                return res.status(400).json({ error: 'The chosen cell is already occupied.' });
+            }
 
-    // }
+            // Check if the user is X or O
+            let piece
+            piece = userID === game.player_one ? "X" : "O";
+
+            // Update game board with the placed piece
+            game.game_board[row][col] = piece;
+    
+            // Update player-specific placements
+            const coordinate = `${row}${col}`
+            if (piece === 'X') {
+                game.x_placements.push({ coordinate });
+            } else if (piece === 'O') {
+                game.o_placements.push({ coordinate });
+            }
+    
+            // Update other game properties
+            game.whose_turn = game.whose_turn === game.player_one ? game.player_two : game.player_one;
+            game.date_of_last_move = new Date();
+            game.turn++;
+    
+            // Save the updated game
+            await game.save();
+    
+            // TODO Check for a win or draw
+    
+            // Respond with the updated game state
+            const token = TokenGenerator.jsonwebtoken(req.user_id);
+            res.status(200).json({ message: 'Piece placed successfully', game, token });
+        } catch (error) {
+            console.error('Error placing piece:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    },
 
 };
 
