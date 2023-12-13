@@ -85,6 +85,7 @@ const TicTacToeGameController = {
             
             // Check if the session user is player 1 or 2 to indicate if they are X or O
             const piece = (userID == game.player_one ? "X" : "O"); // NOTE by Claire: this is == and not === on purpose, see line 80. do not change.
+            const placementField = (piece == "X" ? "x_placements" : "o_placements");
             const nextPlayerTurn = (piece == "X" ? game.player_two : game.player_one)
             console.log(`NEXT TURN PLAYER:${nextPlayerTurn}`)
 
@@ -93,7 +94,7 @@ const TicTacToeGameController = {
                 { _id: gameID },
                 { 
                     $set: { [`game_board.${row}.${col}`]: piece },
-                    $push: { x_placements: coordinate }
+                    $push: { [placementField]: coordinate }
                 },
                 { new: true }
             );
