@@ -16,20 +16,31 @@ const TicTacToeGameController = {
         });
         
     },
+    // FindByID: (req, res) => {
+    //     const gameID = req.params.id;
+    //     TicTacToeGame.findById(gameID)
+    //     // .populate('user_id', '-password') // Populate the 'user_id' field with the entire User document
+    //     // .populate('likes', '-password')
+    //     // .populate('comments')
+    //     .exec((err, game) => {
+    //         if (err) {
+    //             throw err;
+    //         }
+    //         const token = TokenGenerator.jsonwebtoken(req.user_id)
+    //         res.status(200).json({ game: game, token: token });
+    //     });
+    
+    // },
+
     FindByID: (req, res) => {
-        const gameID = req.params.id;
-        TicTacToeGame.findById(gameID)
-        // .populate('user_id', '-password') // Populate the 'user_id' field with the entire User document
-        // .populate('likes', '-password')
-        // .populate('comments')
+        TicTacToeGame.findById(req.params.id)
         .exec((err, game) => {
             if (err) {
                 throw err;
             }
-            const token = TokenGenerator.jsonwebtoken(req.user_id)
-            res.status(200).json({ game: game, token: token });
-        });
-    
+            const token = TokenGenerator.jsonwebtoken(req.user_id);
+            res.status(200).json({game: game, token: token});
+        })
     },
     Create: (req, res) => { //creates a game and returns the tictactoe_game object
         const sessionUser = req.user_id;

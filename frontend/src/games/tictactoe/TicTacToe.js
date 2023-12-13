@@ -1,94 +1,36 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
+import {useParams} from "react-router-dom";
 import styles from './TicTacToe.module.css'
 
-// THE BELOW IS JUST AN EXAMPLE
-// Ideally we would fetch the instance of the game from the BE with the game._id 
+// ======== PAGE ============ //
+const TicTacToePage = ({ navigate }) => {
 
-// ======== SINGLE BUTTON ===========//
-// ideally load {tictactoeGame}
-const TicTacToeButton = ({ row, col, turnNum, setTurnNum }) => {
-    const [buttonActive, setButtonActive] = useState(true);
-    const [space, setSpace] = useState(" ");
+    // THE PAGE FETCHES THE GAME OBJECT, like with FEED -> posts are automatically updated this way?
+    // useEffect here or in TicTacToe?
 
-    const handleCoordinateSelection = async (event) => {
-      // skipping FE/BE connection for now:
-      // this button would actually write to the DB for this specific TicTacToe game
-        console.log(`Selected: Row ${row}, Col ${col}`);
-        setButtonActive(false);
+    // const {gameID} = useParams(); // Access gameID from the URL
+    // const [tictactoeGame, setTicTacToeGame] = useState(null); // stores the game object once retrieved
+    // const [token, setToken] = useState(window.localStorage.getItem("token"));
 
-      // ideally there is also logic that checks whether the user is X or O
-        if (turnNum % 2 === 0) {
-            setSpace("X");
-            setTurnNum(turnNum + 1);
+    // TO STORE AT THIS LEVEL: SessionID, SessionUser, token?
 
-            //temp logic
-            // setXPlacements(XPlacements.append(`${row}${col}`))
-            // function for checking for wins which includes set-winner
+    // Fetch the game object when the page mounts
+    // useEffect(() => {
+    //     if(token) {
+    //         fetch(`/tictactoe/${gameID}`, {
+    //             headers: {
+    //                 'Authorization': `Bearer ${token}`
+    //             }
+    //         })
+    //         .then(response => response.json())
+    //         .then(async data => {
+    //             window.localStorage.setItem("token", data.token)
+    //             setToken(window.localStorage.getItem("token"))
+    //             setTicTacToeGame(data.game);
 
-        } else {
-            setSpace("O");
-            setTurnNum(turnNum + 1);
-
-            //temp logic
-            // setYPlacements(YPlacements.append(`${row}${col}`))
-            // function for checking for wins which includes set-winner
-        }
-    };
-
-    return (
-        <>
-            <button
-            aria-label={`${row}${col} button`}
-            onClick={(event) => handleCoordinateSelection(event)}
-            className={buttonActive ? "active-ttt-space" : "inactive-ttt-space"}
-            disabled={!buttonActive}
-            style={{ width: "100px", height: "100px" }}
-            >
-            <span style={{ display: "inline-block", minWidth: "100%" }}>{space}</span>
-            </button>
-        </>
-        );
-    };
-    
-
-// ======== BOARD ===========//
-//ideally we would fetch the instance of the game
-//and load {navigate, tictactoeGame}
-const TicTacToe = ({ navigate }) => {
-    // would have states such as gameFinished, etc.
-    const [turnNum, setTurnNum] = useState(0)
-    const [winner, setWinner] = useState(null)
-
-    // ========== GAME LOGIC ============
-    
-    // temporary, will be replaced with above:
-    const rowA = [1, 2, 3]
-    const rowB = [1, 2, 3]
-    const rowC = [1, 2, 3]
-    
-    const checkForWinner = () => {
-        console.log("Check for winner function")
-        //if .....
-            // setWinner("O")
-        //else if...
-            // setWinner("X")
-    }
-
-
-
-    // ideally this component would continuously access the DB to watch
-    // for board changes & re-render when the board is changed
-
-    // for the board:
-        // for row in boardMatrix:
-            // row.key
-            // for col in row:
-                // {TicTacToeButton(row, col, setTurnNum)}
-            // <br>
-
-
-
-
+    //     })
+    // }
+    // }, [])
 
     const logout = () => {
         window.localStorage.removeItem("token")
@@ -97,56 +39,176 @@ const TicTacToe = ({ navigate }) => {
 
     
     return (
-        <>
-        <h2>TicTacToe</h2>
+        <>  
+            {/* <TicTacToe
+            tictactoeGame={tictactoeGame}
+            setTicTacToeGame={setTicTacToeGame}
+            /> */}
 
-        <div id='test-ttt-board'>
-            <div id='test-row-a'>
-                {rowA.map(
-                    (col) => ( <TicTacToeButton 
-                                    row={ "A" } 
-                                    col= {col} 
-                                    turnNum={turnNum}
-                                    setTurnNum={setTurnNum}
-                                />)
-                )}
-                <br/>
-            </div>
-
-            <div id='test-row-b'>
-                {rowB.map(
-                    (col) => ( <TicTacToeButton 
-                                    row={ "B" } 
-                                    col= {col} 
-                                    turnNum={turnNum}
-                                    setTurnNum={setTurnNum}
-                                />)
-                )}
-                <br/>
-            </div>
-
-            <div id='test-row-c'>
-                {rowC.map(
-                    (col) => ( <TicTacToeButton 
-                                    row={ "C" } 
-                                    col= {col} 
-                                    turnNum={turnNum}
-                                    setTurnNum={setTurnNum}
-                                />)
-                )}
-                <br/>
-            </div>
-        </div>
-
-        {winner && <p aria-label="Winner Announcement">{winner} wins!</p>}
-
-        <button onClick={logout}>
-              Logout
+            <button onClick={logout}>
+                Logout
             </button>
         </>
+
+
     )
 
-
 }
+
+// ======== BOARD ===========//
+const TicTacToe = ({ navigate }) => {
+    const { id } = useParams(); // IMPORTANT: DO NOT RENAME 'id' This refers to gameID but changing it would cause issues in routes etc.
+    console.log(id)
+    const gameID = id
+
+    const [game, setGame] = useState(null);
+    // const [gameBoard, setGameBoard] = useState(null);
+    // const [winner, setWinner] = useState(null);
+    const rows = ["A", "B", "C"];
+
+    const [token, setToken] = useState(window.localStorage.getItem("token"));
+
+
+    useEffect(() => {
+        if(token) {
+            fetch(`/tictactoe/${id}`, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(async data => {
+                window.localStorage.setItem("token", data.token)
+                setToken(window.localStorage.getItem("token"))
+                setGame(data.game);
+            })
+        }
+    }, [])
+
+
+    // const fetchGame = async () => {
+    //     try {
+    //         const response = await fetch(`/tictactoe/${gameID}`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //         });
+    //         const data = await response.json();
+    //         setGame(data.game);
+    //         // setGameBoard(data.game.game_board);
+    //         // setWinner(data.game.winner);
+    //     } catch (error) {
+    //         console.error('Error fetching game: ', error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     if (token) {
+    //         fetchGame();
+    //     }
+    // }, []);
+
+
+    // const updateGameBoard = async (row, col) => {
+    //     try {
+    //         const response = await fetch(`/tictactoe/${gameID}/place_piece`, {
+    //             method: 'put',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Authorization: `Bearer ${token}`,
+    //             },
+    //             body: JSON.stringify({ row: row, col: col }),
+    //         });
+    //         const data = await response.json();
+    //         setGame(data.game);
+    //         // setGameBoard(data.game.game_board);
+    //         // setWinner(data.game.winner);
+    //     } catch (error) {
+    //         console.error('Error updating game: ', error);
+    //     }
+    // };
+
+
+
+    // useEffect(() => {
+    //     setGameBoard(game.game_board)
+    //     setWinner(game.winner)
+    // }, [game]);
+
+    // const renderGameBoard = () => (
+    //     <div id='tictactoe-board'>
+    //         {rows.map((row) => (
+    //             <div key={row}>
+    //                 {Object.keys(gameBoard[row]).map((col) => (
+    //                     <TicTacToeButton
+    //                         key={`${row}${col}`}
+    //                         row={row}
+    //                         col={col}
+    //                         gameBoard={gameBoard}
+    //                         updateGameBoard={() => updateGameBoard(row, col)}
+    //                     />
+    //                 ))}
+    //             </div>
+    //         ))}
+    //     </div>
+    // );
+
+    return (
+        <>
+            <h2>TicTacToe</h2>
+            <p>Seeing if I can get the game data at all:</p>
+            <p>{gameID ? gameID: "Cannot get game ID from Params"}</p>
+            <p>{game ? "Game object found" : "No game object found"}</p>
+            <p>{game ? game._id : "No game object found"}</p>
+            <p>{game ? game.whose_turn : "No game object found"}</p>
+            {game && game.game_board && (
+                <div>
+                <p>Game Board:</p>
+                <table>
+                    <tbody>
+                    {Object.keys(game.game_board).map((row) => (
+                        <tr key={row}>
+                        {Object.keys(game.game_board[row]).map((col) => (
+                            <td key={col}>{game.game_board[row][col]}</td>
+                        ))}
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+                </div>
+            )}
+
+
+
+            {/* {game && renderGameBoard()}
+            {winner && <p aria-label="Winner Announcement">{winner} wins!</p>} */}
+        </>
+    );
+};
+
+// ======== SINGLE BUTTON ===========//
+const TicTacToeButton = ({ row, col, gameBoard, updateGameBoard }) => {
+    const [buttonActive, setButtonActive] = useState(gameBoard[row][col] === " ");
+    const [space, setSpace] = useState(gameBoard[row][col]);
+
+    const handleCoordinateSelection = async () => {
+        if (buttonActive) {
+            setButtonActive(false);
+            updateGameBoard();
+        }
+    };
+
+    return (
+        <button
+            aria-label={`${row}${col} button`}
+            onClick={handleCoordinateSelection}
+            className={buttonActive ? "active-ttt-space" : "inactive-ttt-space"}
+            disabled={!buttonActive}
+            style={{ width: "100px", height: "100px" }}
+        >
+            <span style={{ display: "inline-block", minWidth: "100%" }}>{space}</span>
+        </button>
+    );
+};
 
 export default TicTacToe;

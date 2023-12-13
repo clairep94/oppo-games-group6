@@ -9,7 +9,7 @@ router.get("/:id", TicTacToeGameController.FindByID);
 
 router.post("/", TicTacToeGameController.Create);
 
-// router.put("/:id", TicTacToeGameController.PlacePiece);
+router.put("/:id/place_piece", TicTacToeGameController.PlacePiece);
 // router.get("/:id/check_win", TicTacToeGameController.CheckWin);
 // router.get("/:id/update_win", TicTacToeGameController.UpdateWinner);
 // router.get("/:id/forfeit", TicTacToeGameController.Forfeit);
