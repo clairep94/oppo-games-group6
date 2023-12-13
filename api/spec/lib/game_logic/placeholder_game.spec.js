@@ -7,7 +7,7 @@ describe("handleActionRequest", () => {
       boardState: { numberOfCubes: 64 } },
       { actor: "id of actor", op: "passively observe" },
     );
-    expect(result).toEqual({
+    expect(result.game).toEqual({
       progressState: "a game state",
       boardState: { numberOfCubes: 64 },
     });
@@ -19,7 +19,7 @@ describe("handleActionRequest", () => {
       boardState: { numberOfCubes: 64 } },
       { actor: "id of actor", op: "punch cube" },
     );
-    expect(result).toEqual({
+    expect(result.game).toEqual({
       progressState: "a game state",
       boardState: { numberOfCubes: 63 },
     });
@@ -31,7 +31,7 @@ describe("handleActionRequest", () => {
       boardState: { numberOfCubes: 64 } },
       { actor: "id of actor", op: "give up and go home" },
     );
-    expect(result).toEqual({
+    expect(result.game).toEqual({
       progressState: "game over",
       boardState: { numberOfCubes: 64 },
     });
@@ -43,7 +43,7 @@ describe("handleActionRequest", () => {
       boardState: { numberOfCubes: 1 } },
       { actor: "id of actor", op: "punch cube" },
     );
-    expect(result).toEqual({
+    expect(result.game).toEqual({
       progressState: "victory",
       boardState: { numberOfCubes: 0 },
     });
