@@ -1,22 +1,22 @@
-const PASSIVELY_OBSERVE = "passively observe"
-const PUNCH_CUBE = "punch cube"
-const GIVE_UP_AND_GO_HOME = "give up and go home"
+const PASSIVELY_OBSERVE = "passively observe";
+const PUNCH_CUBE = "punch cube";
+const GIVE_UP_AND_GO_HOME = "give up and go home";
 
 const STATES = {
   A_GAME_STATE: "a game state",
   GAME_OVER: "game over",
   VICTORY: "victory",
   // Note that there is no state with value "a nonexistent state".
-}
+};
 
-const hasValidProgressState = (game) => 
+const hasValidProgressState = (game) =>
   Object.values(STATES).includes(game.progressState);
 
 const RESPONSE_CODES = {
   OK: "ok",
   INVALID: "invalid",
   /*ERROR: "error",  <-- Probably not needed */
-}
+};
 
 //imports the state of the board i.e where all the pieces are,
 //  the game state such as player turn, game won
@@ -38,18 +38,23 @@ const handleActionRequest = (game, actionRequest) => {
   try {
     opFunction(game, actionRequest);
   } catch (e) {
-    return { game: game, response: {
-      code: RESPONSE_CODES.INVALID/*, errorMessage: e.message*/
-    }};
+    return {
+      game: game,
+      response: {
+        code: RESPONSE_CODES.INVALID /*, errorMessage: e.message*/,
+      },
+    };
   }
-  return { game: game, response: { code: RESPONSE_CODES.OK }};
+  return { game: game, response: { code: RESPONSE_CODES.OK } };
 };
 
 const passivelyObserve = (game, actionRequest) => {
   // This may be in want of State-Transition Transpose refactoring at some point :)
-  // if (game.progressState === GAME_OVER) {
-  //   throw new Error("Invalid state transition requested");
-  // }
+  if (game.progressState === STATES.GAME_OVER) {
+    throw new Error("Invalid state transition requested");
+  } else {
+    // do nothing
+  }
 };
 
 const punchCube = (game, actionRequest) => {
