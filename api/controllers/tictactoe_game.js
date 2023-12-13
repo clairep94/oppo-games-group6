@@ -109,7 +109,65 @@ const TicTacToeGameController = {
         }
     },
 
-};
+    CheckWin: async (req, res) => {
+        try {
+            const gameID = req.params.id;
+            const game = await TicTacToeGame.findById(gameID);
+
+            // Check if any of the game.winning_placements arrays in any order are in game.x_placements and game.o_placements:
+
+            // if game.winner != [], end game
+            // if game.winner == [], change turn
+            // if turn === 9, draw & end game
+
+            // Check for a win
+            const checkWin = (placements, winningCombination) => {
+                // Sort the placements and winning combination arrays
+                const sortedPlacements = placements.sort();
+                const sortedWinningCombination = winningCombination.sort();
+
+                // Check if the sorted arrays are equal
+                return JSON.stringify(sortedPlacements) === JSON.stringify(sortedWinningCombination);
+            };
+
+            // Check if any winning combination is a subset of x_placements
+            const xWin = game.winning_combinations.some(combination =>
+                checkWin(game.x_placements, combination)
+            );
+
+            // Check if any winning combination is a subset of o_placements
+            const oWin = game.winning_combinations.some(combination =>
+                checkWin(game.o_placements, combination)
+            );
+
+            if (xWin) {
+                const updatedGame = await TicTacToeGame.findByIdAndUpdate(
+                    gameID,
+                    { $push: { winner: game.player_one } },
+                    { new: true }
+                );
+                const token = TokenGenerator.jsonwebtoken(req.user_id);
+                res.status(201).json({ message: 'OK', game: updatedGame, token: token });
+            } else if (oWin) {
+                const updatedGame = await TicTacToeGame.findByIdAndUpdate(
+                    gameID,
+                    { $push: { winner: game.player_two } },
+                    { new: true }
+                );
+                const token = TokenGenerator.jsonwebtoken(req.user_id);
+                res.status(201).json({ message: 'OK', game: updatedGame, token: token });
+            } else {
+                // No winner, handle the case accordingly
+                const token = TokenGenerator.jsonwebtoken(req.user_id);
+                res.status(201).json({ message: 'OK', game: game, token: token });
+            }
+            
+        } catch (error) {
+            console.error('Error checking for win:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+    }
+}
 
 /**
  * GAMEPLAY:

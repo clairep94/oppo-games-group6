@@ -65,7 +65,7 @@ const TicTacToe = ({ navigate }) => {
 
     const [game, setGame] = useState(null);
     const [gameBoard, setGameBoard] = useState(null);
-    // const [winner, setWinner] = useState(null);
+    const [winner, setWinner] = useState(null);
     const rows = ["A", "B", "C"];
 
     const [token, setToken] = useState(window.localStorage.getItem("token"));
@@ -100,6 +100,7 @@ const TicTacToe = ({ navigate }) => {
     const updateGameBoard = async (row, col) => { 
         console.log(`Player ${sessionUserID} Selected: Row ${row}, Col ${col}`);
 
+        //1) Updating the GameBoard with the piece:
         try {
             const response = await fetch(`/tictactoe/${id}/place_piece`, {
                 method: 'put',
@@ -118,6 +119,26 @@ const TicTacToe = ({ navigate }) => {
         } catch (error) {
             console.error(error)
         }
+
+        //2) Checking for a winner:
+        try {
+            const response = await fetch(`/tictactoe/${id}/check_win`, {
+                method: 'put',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({
+                    row: row, 
+                    col: col
+                })
+            })
+            const data = await response.json();
+            setWinner(data.game.winner[0]); // TODO CHANGE THIS FOR A DRAW!
+        } catch (error) {
+            console.error(error)
+        }
+
     }
 
 
@@ -159,6 +180,7 @@ const TicTacToe = ({ navigate }) => {
                                 key={`${row}${col}`}
                                 row={row}
                                 col={col}
+                                winner={winner}
                                 gameBoard={gameBoard}
                                 handleClick={() => updateGameBoard(row, col)}
                             />
@@ -168,7 +190,7 @@ const TicTacToe = ({ navigate }) => {
                 </div>
             )}
 
-
+        {winner && <p aria-label="Winner Announcement">{winner} wins!</p>}
 
             {/* {game && renderGameBoard()}
             {winner && <p aria-label="Winner Announcement">{winner} wins!</p>} */}
@@ -179,7 +201,7 @@ const TicTacToe = ({ navigate }) => {
 // ======== SINGLE BUTTON ===========//
 const TicTacToeButton = (props) => {
     const space = props.gameBoard[props.row][props.col]
-    const buttonActive = space === " "
+    const buttonActive = space === " " && props.winner.length === 0;
 
     return (
         <button
