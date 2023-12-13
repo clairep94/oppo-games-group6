@@ -11,6 +11,7 @@ describe("handleActionRequest", () => {
       progressState: "a game state",
       boardState: { numberOfCubes: 64 },
     });
+    expect(result.response.code).toEqual("ok");
   });
 
   test("gameState remains unchanged and boardState cube count decreases by 1", () => {
@@ -23,6 +24,7 @@ describe("handleActionRequest", () => {
       progressState: "a game state",
       boardState: { numberOfCubes: 63 },
     });
+    expect(result.response.code).toEqual("ok");
   });
 
   test("gameState changes (Game Over) and boardState does not change", () => {
@@ -35,6 +37,7 @@ describe("handleActionRequest", () => {
       progressState: "game over",
       boardState: { numberOfCubes: 64 },
     });
+    expect(result.response.code).toEqual("ok");
   });
 
   test("when the last cube is broken, the game is won", () => {
@@ -47,6 +50,7 @@ describe("handleActionRequest", () => {
       progressState: "victory",
       boardState: { numberOfCubes: 0 },
     });
+    expect(result.response.code).toEqual("ok");
   });
 
   test("an error is thrown if the provided game state does not exist", () => {
