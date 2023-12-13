@@ -5,7 +5,7 @@ describe("handleAction", () => {
     const result = handleAction({
       progressState: "a game state",
       boardState: { numberOfCubes: 64 } },
-      { actor: "id of actor", verb: "passively observe" },
+      { actor: "id of actor", op: "passively observe" },
     );
     expect(result).toEqual({
       progressState: "a game state",
@@ -17,7 +17,7 @@ describe("handleAction", () => {
     const result = handleAction({
       progressState: "a game state",
       boardState: { numberOfCubes: 64 } },
-      { actor: "id of actor", verb: "punch cube" },
+      { actor: "id of actor", op: "punch cube" },
     );
     expect(result).toEqual({
       progressState: "a game state",
@@ -29,7 +29,7 @@ describe("handleAction", () => {
     const result = handleAction({
       progressState: "a game state",
       boardState: { numberOfCubes: 64 } },
-      { actor: "id of actor", verb: "give up and go home" },
+      { actor: "id of actor", op: "give up and go home" },
     );
     expect(result).toEqual({
       progressState: "game over",
@@ -41,7 +41,7 @@ describe("handleAction", () => {
     const result = handleAction({
       progressState: "a game state",
       boardState: { numberOfCubes: 1 } },
-      { actor: "id of actor", verb: "punch cube" },
+      { actor: "id of actor", op: "punch cube" },
     );
     expect(result).toEqual({
       progressState: "victory",
@@ -54,7 +54,7 @@ describe("handleAction", () => {
       handleAction({
         progressState: "a nonexistent state",
         boardState: { numberOfCubes: 64 } },
-        { actor: "id of actor", verb: "passively observe" },
+        { actor: "id of actor", op: "passively observe" },
       );
     };
     expect(tryWithNonexistentState)
