@@ -193,7 +193,7 @@ const TicTacToe = ({ navigate }) => {
                 </div>
             )}
 
-        {winner.length>0 && <p aria-label="Winner Announcement">{winner} wins!</p>}
+        {winner && <p aria-label="Winner Announcement">{winner} wins!</p>}
 
             {/* {game && renderGameBoard()}
             {winner && <p aria-label="Winner Announcement">{winner} wins!</p>} */}
