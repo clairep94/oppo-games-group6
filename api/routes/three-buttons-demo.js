@@ -3,6 +3,9 @@ const router = express.Router();
 
 const ThreeButtonsDemoController = require("../controllers/three-buttons-game");
 
+// Have a look at the buttons
+router.get("/", ThreeButtonsDemoController.Index);
+
 // Hit the big reset switch on the three buttons game
 router.post("/", ThreeButtonsDemoController.Restart);
 
