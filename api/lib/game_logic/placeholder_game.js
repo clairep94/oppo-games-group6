@@ -12,10 +12,10 @@ const STATES = {
 const hasValidProgressState = (game) => 
   Object.values(STATES).includes(game.progressState);
 
-const RESPONSES = {
+const RESPONSE_CODES = {
   OK: "ok",
   INVALID: "invalid",
-  ERROR: "error",
+  /*ERROR: "error",  <-- Probably not needed */
 }
 
 //imports the state of the board i.e where all the pieces are,
@@ -34,11 +34,23 @@ const handleActionRequest = (game, actionRequest) => {
     opFunction = giveUpAndGoHome;
   }
   // Note: `opFunction` often has the side effect of modifying `game`
-  /*const result = */opFunction(game, actionRequest);
-  return (game/*, result*/);
+  // It will also throw an error if the request is for an invalid state transition
+  try {
+    opFunction(game, actionRequest);
+  } catch (e) {
+    return { game: game, response: {
+      code: RESPONSE_CODES.INVALID/*, errorMessage: e.message*/
+    }};
+  }
+  return { game: game, response: { code: RESPONSE_CODES.OK }};
 };
 
-const passivelyObserve = (game, actionRequest) => {};
+const passivelyObserve = (game, actionRequest) => {
+  // This may be in want of State-Transition Transpose refactoring at some point :)
+  // if (game.progressState === GAME_OVER) {
+  //   throw new Error("Invalid state transition requested");
+  // }
+};
 
 const punchCube = (game, actionRequest) => {
   game.boardState.numberOfCubes = game.boardState.numberOfCubes - 1;
