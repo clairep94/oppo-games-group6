@@ -1,0 +1,1 @@
+const ThreeButtonsGame = require("../models/three-buttons-game");
