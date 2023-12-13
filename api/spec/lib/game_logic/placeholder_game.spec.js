@@ -61,4 +61,21 @@ describe("handleActionRequest", () => {
     .toThrow(new Error("State <a nonexistent state> is undefined"));
   });
 
+  //test("an error is thrown if the provided op does not exist", () => {})
+
+  test("get a rejection response if the op isn't available in the current state", () => {
+    const gameBeforeRequest = {
+      progressState: "game over",
+      boardState: { numberOfCubes: 64 }
+    };
+    const result = handleActionRequest(
+      gameBeforeRequest,
+      { actor: "id of actor", op: "passively observe" },
+    );
+    // Check the progress & board states haven't changed
+    expect(result.game).toEqual(gameBeforeRequest);
+    // Can't passively observe any more once you've given up and gone home!
+    expect(result.response.code).toEqual("invalid");
+  })
+
 });
