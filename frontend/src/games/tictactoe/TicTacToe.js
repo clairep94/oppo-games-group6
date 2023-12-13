@@ -58,7 +58,7 @@ const TicTacToePage = ({ navigate }) => {
 // ======== BOARD ===========//
 const TicTacToe = ({ navigate }) => {
     const { id } = useParams(); // IMPORTANT: DO NOT RENAME 'id' This refers to gameID but changing it would cause issues in routes etc.
-    console.log(id)
+
     const gameID = id
 
     const [game, setGame] = useState(null);
