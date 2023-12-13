@@ -77,22 +77,16 @@ const TicTacToeGameController = {
             console.log(coordinate);
 
             // Check if the user is the game.whose_turn. If not, the user can only observe
-            if (game.whose_turn != userID) { // NOTE: this is != and not !== on purpose. game.whose_turn and userID are not the same datatype but can be compared this way.
+            if (game.whose_turn != userID) { // NOTE by Claire: this is != and not !== on purpose. game.whose_turn and userID are not the same datatype but can be compared this way.
                 console.log("ERROR: IT IS NOT YOUR TURN");
                 return res.status(403).json({ error: 'It is not your turn.', game: game }); //return the old game so as to not mess up the rendering
             }
 
-            // Check if the session user is player 1 or 2 to indicate the piece
-
-            // 
-            /** Check if session user is player 1, player 2 or NOT a player (observer) OR Not their turn:
-             * if player 1: piece = "X", place in x_placements
-             * if player 2: piece = "O", place in o_placements
-             * if user is not player 1 OR 2 OR it is not their turn, console.log error: not your turn! + do nothing
-             */
-
-            //TEMPORARY: hardcode that we are putting in X:
-            const piece = "X";
+            
+            // Check if the session user is player 1 or 2 to indicate if they are X or O
+            const piece = (userID == game.player_one ? "X" : "O"); // NOTE by Claire: this is == and not === on purpose, see line 80. do not change.
+            const nextPlayerTurn = (piece == "X" ? game.player_two : game.player_one)
+            console.log(`NEXT TURN PLAYER:${nextPlayerTurn}`)
 
             //Put request to update the (hard_coded) x_placements with the coordinate
             const updatedGame = await TicTacToeGame.findOneAndUpdate(
@@ -104,7 +98,6 @@ const TicTacToeGameController = {
                 { new: true }
             );
             console.log(updatedGame);
-
 
             const token = TokenGenerator.jsonwebtoken(req.user_id);
             res.status(201).json({ message: 'OK', game: updatedGame, token: token });
