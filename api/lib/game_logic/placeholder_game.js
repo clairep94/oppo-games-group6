@@ -21,26 +21,26 @@ const RESPONSES = {
 //imports the state of the board i.e where all the pieces are,
 //  the game state such as player turn, game won
 //and action, that is any actions to be taken on the game
-const handleAction = (game, action) => {
+const handleActionRequest = (game, actionRequest) => {
   if (!hasValidProgressState(game)) {
     throw new Error(`State <${game.progressState}> is undefined`);
   }
   let opFunction = null;
-  if (action.op === PASSIVELY_OBSERVE) {
+  if (actionRequest.op === PASSIVELY_OBSERVE) {
     opFunction = passivelyObserve;
-  } else if (action.op === PUNCH_CUBE) {
+  } else if (actionRequest.op === PUNCH_CUBE) {
     opFunction = punchCube;
-  } else if (action.op === GIVE_UP_AND_GO_HOME) {
+  } else if (actionRequest.op === GIVE_UP_AND_GO_HOME) {
     opFunction = giveUpAndGoHome;
   }
   // Note: `opFunction` often has the side effect of modifying `game`
-  /*const result = */opFunction(game, action);
+  /*const result = */opFunction(game, actionRequest);
   return (game/*, result*/);
 };
 
-const passivelyObserve = (game, action) => {};
+const passivelyObserve = (game, actionRequest) => {};
 
-const punchCube = (game, action) => {
+const punchCube = (game, actionRequest) => {
   game.boardState.numberOfCubes = game.boardState.numberOfCubes - 1;
   if (game.boardState.numberOfCubes === 0) {
     // Congrats! You broke all the cubes. The day is yours
@@ -48,8 +48,8 @@ const punchCube = (game, action) => {
   }
 };
 
-const giveUpAndGoHome = (game, action) => {
+const giveUpAndGoHome = (game, actionRequest) => {
   game.progressState = STATES.GAME_OVER;
 };
 
-module.exports = handleAction;
+module.exports = handleActionRequest;

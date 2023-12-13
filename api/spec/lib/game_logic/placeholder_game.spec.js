@@ -1,8 +1,8 @@
-const handleAction = require("../../../lib/game_logic/placeholder_game");
+const handleActionRequest = require("../../../lib/game_logic/placeholder_game");
 
-describe("handleAction", () => {
+describe("handleActionRequest", () => {
   test("gameState and boardState remain unchanged", () => {
-    const result = handleAction({
+    const result = handleActionRequest({
       progressState: "a game state",
       boardState: { numberOfCubes: 64 } },
       { actor: "id of actor", op: "passively observe" },
@@ -14,7 +14,7 @@ describe("handleAction", () => {
   });
 
   test("gameState remains unchanged and boardState cube count decreases by 1", () => {
-    const result = handleAction({
+    const result = handleActionRequest({
       progressState: "a game state",
       boardState: { numberOfCubes: 64 } },
       { actor: "id of actor", op: "punch cube" },
@@ -26,7 +26,7 @@ describe("handleAction", () => {
   });
 
   test("gameState changes (Game Over) and boardState does not change", () => {
-    const result = handleAction({
+    const result = handleActionRequest({
       progressState: "a game state",
       boardState: { numberOfCubes: 64 } },
       { actor: "id of actor", op: "give up and go home" },
@@ -38,7 +38,7 @@ describe("handleAction", () => {
   });
 
   test("when the last cube is broken, the game is won", () => {
-    const result = handleAction({
+    const result = handleActionRequest({
       progressState: "a game state",
       boardState: { numberOfCubes: 1 } },
       { actor: "id of actor", op: "punch cube" },
@@ -51,7 +51,7 @@ describe("handleAction", () => {
 
   test("an error is thrown if the provided game state does not exist", () => {
     const tryWithNonexistentState = () => {
-      handleAction({
+      handleActionRequest({
         progressState: "a nonexistent state",
         boardState: { numberOfCubes: 64 } },
         { actor: "id of actor", op: "passively observe" },
