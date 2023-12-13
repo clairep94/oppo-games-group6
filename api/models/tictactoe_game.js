@@ -68,7 +68,7 @@ const TicTacToeGameSchema = new mongoose.Schema({
     },
     
 
-    // --------------- Active TicTacToe Properities --------------- :
+    // --------------- Active TicTacToe Properties --------------- :
     turn: { // after a player moves, turn ++; if turn === 9: draw
         type: Number,
         default: 0
@@ -98,6 +98,7 @@ const TicTacToeGameSchema = new mongoose.Schema({
     },
 
 })
+
 
 const TicTacToeGame = mongoose.model("TicTacToeGame", TicTacToeGameSchema);
 
