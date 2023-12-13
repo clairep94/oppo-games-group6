@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import styles from './TicTacToe.module.css'
 
-// THE BELOW IS JUST AN EXAMPLE
+// THE BELOW IS JUST AN EXAMPLE TO DEMONSTRATE FE
 // Ideally we would fetch the instance of the game from the BE with the game._id 
 
 // ======== SINGLE BUTTON ===========//
 // ideally load {tictactoeGame}
-const TicTacToeButton = ({ row, col, turnNum, setTurnNum }) => {
+const TicTacToeButtonTest = ({ row, col, turnNum, setTurnNum }) => {
     const [buttonActive, setButtonActive] = useState(true);
     const [space, setSpace] = useState(" ");
 
@@ -54,7 +54,7 @@ const TicTacToeButton = ({ row, col, turnNum, setTurnNum }) => {
 // ======== BOARD ===========//
 //ideally we would fetch the instance of the game
 //and load {navigate, tictactoeGame}
-const TicTacToe = ({ navigate }) => {
+const TicTacToeTest = ({ navigate }) => {
     // would have states such as gameFinished, etc.
     const [turnNum, setTurnNum] = useState(0)
     const [winner, setWinner] = useState(null)
@@ -98,12 +98,13 @@ const TicTacToe = ({ navigate }) => {
     
     return (
         <>
-        <h2>TicTacToe</h2>
+        <h2>TicTacToe Test</h2>
+        <p>This is to demonstrate the FE buttons, see the console logs to see how button press is captured!</p>
 
         <div id='test-ttt-board'>
             <div id='test-row-a'>
                 {rowA.map(
-                    (col) => ( <TicTacToeButton 
+                    (col) => ( <TicTacToeButtonTest 
                                     row={ "A" } 
                                     col= {col} 
                                     turnNum={turnNum}
@@ -115,7 +116,7 @@ const TicTacToe = ({ navigate }) => {
 
             <div id='test-row-b'>
                 {rowB.map(
-                    (col) => ( <TicTacToeButton 
+                    (col) => ( <TicTacToeButtonTest
                                     row={ "B" } 
                                     col= {col} 
                                     turnNum={turnNum}
@@ -127,7 +128,7 @@ const TicTacToe = ({ navigate }) => {
 
             <div id='test-row-c'>
                 {rowC.map(
-                    (col) => ( <TicTacToeButton 
+                    (col) => ( <TicTacToeButtonTest 
                                     row={ "C" } 
                                     col= {col} 
                                     turnNum={turnNum}
@@ -149,4 +150,4 @@ const TicTacToe = ({ navigate }) => {
 
 }
 
-export default TicTacToe;
+export default TicTacToeTest;
