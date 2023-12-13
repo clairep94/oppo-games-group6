@@ -121,13 +121,17 @@ const TicTacToeGameController = {
             // if turn === 9, draw & end game
 
             // Check for a win
-            const checkWin = (placements, winningCombination) => {
-                // Sort the placements and winning combination arrays
-                const sortedPlacements = placements.sort();
-                const sortedWinningCombination = winningCombination.sort();
+            // const checkWin = (placements, winningCombination) => {
+            //     // Sort the placements and winning combination arrays
+            //     const sortedPlacements = placements.sort();
+            //     const sortedWinningCombination = winningCombination.sort();
 
-                // Check if the sorted arrays are equal
-                return JSON.stringify(sortedPlacements) === JSON.stringify(sortedWinningCombination);
+            //     // Check if the sorted arrays are equal
+            //     return JSON.stringify(sortedPlacements) === JSON.stringify(sortedWinningCombination);
+            // };
+
+            const checkWin = (placements, winningCombination) => {
+                return winningCombination.every(coord => placements.includes(coord));
             };
 
             // Check if any winning combination is a subset of x_placements
@@ -161,7 +165,7 @@ const TicTacToeGameController = {
                 const token = TokenGenerator.jsonwebtoken(req.user_id);
                 res.status(201).json({ message: 'OK', game: game, token: token });
             }
-            
+
         } catch (error) {
             console.error('Error checking for win:', error);
             res.status(500).json({ error: 'Internal Server Error' });
