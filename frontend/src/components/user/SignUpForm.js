@@ -94,12 +94,12 @@ const SignUpForm = ({ navigate }) => {
       <form onSubmit={handleSubmit}>
         <h2>Sign Up</h2>
         <div>
-          <input placeholder="Username" id="Username" type='text' value={ userName } onChange={handleUserNameChange} />
+          <input aria-label="Username Field" placeholder="Username" id="Username" type='text' value={ userName } onChange={handleUserNameChange} />
         </div> 
-          <input placeholder="Email" id="Email" type='text' value={ email } onChange={handleEmailChange} />
+          <input aria-label="Email Field" placeholder="Email" id="Email" type='text' value={ email } onChange={handleEmailChange} />
           
         <div className="password-input-container">
-          <input placeholder="Password" id="password" type={showPassword ? 'text' : 'password'} value={ password } onChange={handlePasswordChange} />
+          <input aria-label="Password Field" placeholder="Password" id="password" type={showPassword ? 'text' : 'password'} value={ password } onChange={handlePasswordChange} />
           
           <button type="button" onClick={toggleShowPassword} className="toggle-password-button">
           {showPassword ? '🙈' : '👀'} 
@@ -107,7 +107,7 @@ const SignUpForm = ({ navigate }) => {
         </div>
 
         <div className="password-input-container">
-          <input placeholder="Retype Password" id="retypePassword" type={showRetypePassword ? 'text' : 'password'} value={ retypePassword } onChange={handleRetypePasswordChange} />
+          <input aria-label="Retype Password Field" placeholder="Retype Password" id="retypePassword" type={showRetypePassword ? 'text' : 'password'} value={ retypePassword } onChange={handleRetypePasswordChange} />
           
           <button type="button" onClick={toggleShowRetypePassword} className="toggle-password-button">
         {showRetypePassword ? '🙈' : '👀'}
