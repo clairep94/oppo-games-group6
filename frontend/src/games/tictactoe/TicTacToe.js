@@ -130,6 +130,25 @@ const TicTacToe = ({ navigate }) => {
             <p>{game ? game.whose_turn : "No game object found"}</p>
             <p>{sessionUserID}</p>
 
+
+            {game && game.game_board && (
+                <div>
+                <p>Game Board:</p>
+                <table>
+                    <tbody>
+                    {Object.keys(game.game_board).map((row) => (
+                        <tr key={row}>
+                        {Object.keys(game.game_board[row]).map((col) => (
+                            <td key={col}>{game.game_board[row][col]}</td>
+                        ))}
+                        </tr>
+                    ))}
+                    </tbody>
+                </table>
+                </div>
+            )}
+
+
             {game && gameBoard && (
                 <div id='tictactoe-board'>
                     {rows.map((row) => (
@@ -140,7 +159,7 @@ const TicTacToe = ({ navigate }) => {
                                 row={row}
                                 col={col}
                                 gameBoard={gameBoard}
-                                updateGameBoard={() => updateGameBoard(row, col)}
+                                handleClick={() => updateGameBoard(row, col)}
                             />
                                 ))}
                         </div>
@@ -157,26 +176,19 @@ const TicTacToe = ({ navigate }) => {
 };
 
 // ======== SINGLE BUTTON ===========//
-const TicTacToeButton = ({ row, col, gameBoard, updateGameBoard }) => {
-    const [buttonActive, setButtonActive] = useState(gameBoard[row][col] === " ");
-    const [space, setSpace] = useState(gameBoard[row][col]);
-
-    const handleCoordinateSelection = async () => {
-        if (buttonActive) {
-            setButtonActive(false);
-            updateGameBoard();
-        }
-    };
+const TicTacToeButton = (props) => {
+    const space = props.gameBoard[props.row][props.col]
+    const buttonActive = space === " "
 
     return (
         <button
-            aria-label={`${row}${col} button`}
-            onClick={handleCoordinateSelection}
+            aria-label={`${props.row}${props.col} button`}
+            onClick={props.handleClick}
             className={buttonActive ? "active-ttt-space" : "inactive-ttt-space"}
             disabled={!buttonActive}
             style={{ width: "100px", height: "100px" }}
         >
-            <span style={{ display: "inline-block", minWidth: "100%" }}>{space}</span>
+            <span style={{ display: "inline-block", minWidth: "100%" }}>{ space }</span>
         </button>
     );
 };

@@ -72,15 +72,13 @@ const TicTacToeGameController = {
             const userID = req.user_id;
             const { row, col } = req.body;
             const coordinate = `${row}${col}`
-
-    
             const game = await TicTacToeGame.findById(gameID);
             console.log(coordinate);
 
-            //TEMP
+            //TEMPORARY: hardcode that we are putting in X:
             const piece = "X";
 
-
+            //Put request to update the (hard_coded) x_placements with the coordinate
             const updatedGame = await TicTacToeGame.findOneAndUpdate(
                 { _id: gameID },
                 { 
@@ -90,8 +88,6 @@ const TicTacToeGameController = {
                 { new: true }
             );
             console.log(updatedGame);
-
-
 
 
             const token = TokenGenerator.jsonwebtoken(req.user_id);
