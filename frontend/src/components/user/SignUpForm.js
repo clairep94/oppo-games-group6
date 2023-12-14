@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-
+import styles from './SignUpForm.module.css';
 const SignUpForm = ({ navigate }) => {
 
     // =========== STATE VARIABLES ==========================
@@ -95,7 +95,7 @@ const SignUpForm = ({ navigate }) => {
       </button>
       
       {/* ERROR MESSAGES */}
-      {error && <p aria-label="Error Message" >{error}</p>}
+      {error && <p aria-label="Error Message" className={styles.errorMessage}>{error}</p>}
 
       </>
     
