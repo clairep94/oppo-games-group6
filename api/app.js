@@ -4,16 +4,19 @@ const path = require("path");
 const logger = require("morgan");
 const JWT = require("jsonwebtoken");
 const cors = require('cors');
+const dotenv = require ('dotenv');
 const socketio = require ('socket.io');
 
 const postsRouter = require("./routes/posts");
 const authenticationRouter = require("./routes/authentication");
 const usersRouter = require("./routes/users");
-const messageRouter = require(".routes/messages");
+const messageRouter = require("./routes/messages");
 
 const app = express();
 const server = require('http').Server(app);
 const io = socketio(server);
+
+const port = 8080;
 
 // setup for receiving JSON
 app.use(express.json())
@@ -48,7 +51,7 @@ const tokenChecker = (req, res, next) => {
 app.use("/posts", tokenChecker, postsRouter);
 app.use("/tokens", authenticationRouter);
 app.use("/users", usersRouter);
-app.use('/message', messageRouter);
+app.use('/messages', messageRouter);
 
 
 // catch 404 and forward to error handler

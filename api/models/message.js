@@ -10,7 +10,7 @@ const MessageSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
   },
-  //how to reference tictactoe or battleships?
+  //TODO how to reference tictactoe or battleships?
   game_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Game'
