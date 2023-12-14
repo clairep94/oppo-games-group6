@@ -108,11 +108,22 @@ const TicTacToeGameController = {
         }
     },
 
-    CheckWin: async (req, res) => {
+    CheckWin: async (req, res) => { // This function checks for wins, draws and if none, increases the turn
+        const now = new Date();
         try {
             const gameID = req.params.id;
             const game = await TicTacToeGame.findById(gameID);
-            
+
+            // ======= 1) Increase game.turn by one ======================================
+            const addedTurnGame = await TicTacToeGame.findByIdAndUpdate(
+                gameID,
+                { $inc: { turn: 1 }},
+                { new: true}
+            );
+
+            // ======= 2) Check for wins: ==================================================
+
+            // ------- supportive functions for win-checking -------------
             // Check if any of the game.winning_placements arrays in any order are in game.x_placements and game.o_placements:
             const checkWin = (placements, winningCombination) => {
                 return winningCombination.every(coord => placements.includes(coord));
@@ -128,33 +139,87 @@ const TicTacToeGameController = {
                 checkWin(game.o_placements, combination)
             );
 
-            // if game.winner != [], end game
+
+            // ------- If either player has achieved a win condition, update the DB accordingly. --------------
+            // NOTE from Claire: I could not do more than one operation in a single update, or else 500 errors and/or component doesnt re-render. Please do not change.
+            
             if (xWin) {
                 const updatedGame = await TicTacToeGame.findByIdAndUpdate(
                     gameID,
                     { $push: { winner: game.player_one } },
                     { new: true }
                 );
-                // TODO:
-                // add: 
+                const wonGame = await TicTacToeGame.findByIdAndUpdate(
+                    gameID,
+                    { $set: {date_completed: now} },
+                    { new: true }
+                );
+                // TODO - USER INTEGRATION --> do this above or below?? Do not return user info:
+                // add points to User.points 
                 const token = TokenGenerator.jsonwebtoken(req.user_id);
-                res.status(201).json({ message: 'OK', game: updatedGame, token: token });
+                res.status(201).json({ message: 'OK', game: wonGame, token: token });
+            
             } else if (oWin) {
                 const updatedGame = await TicTacToeGame.findByIdAndUpdate(
                     gameID,
-                    { $push: { winner: game.player_two } },
+                    { $push: { winner: game.player_one } },
                     { new: true }
                 );
+                const wonGame = await TicTacToeGame.findByIdAndUpdate(
+                    gameID,
+                    { $set: {date_completed: now} },
+                    { new: true }
+                );
+                // TODO - USER INTEGRATION:
+                // add points to User.points 
                 const token = TokenGenerator.jsonwebtoken(req.user_id);
-                res.status(201).json({ message: 'OK', game: updatedGame, token: token });
+                res.status(201).json({ message: 'OK', game: wonGame, token: token });
+            
+
+            // ======== 3) If no player has won, check for draws and increase the turn. =============
             } else {
-                // No winner, handle the case accordingly
-                const token = TokenGenerator.jsonwebtoken(req.user_id);
-                res.status(201).json({ message: 'OK', game: game, token: token });
+
+                // if game.turn is now 9 -> DRAW. add both users to winner and update date_completed accordingly.
+                if (addedTurnGame.turn === 9) { 
+                    const draw_date = new Date();
+                    const updatedGame1 = await TicTacToeGame.findByIdAndUpdate(
+                        gameID,
+                        { $push: { winner: game.player_one } },
+                        { new: true }
+                    )
+                    const updatedGame2 = await TicTacToeGame.findByIdAndUpdate(
+                        gameID,
+                        { $push: { winner: game.player_two } },
+                        { new: true }
+                    )
+                    const finalDrawGame = await TicTacToeGame.findByIdAndUpdate(
+                        gameID,
+                        { $set: {date_completed: now} },
+                        { new: true }
+                    )
+                    const token = TokenGenerator.jsonwebtoken(req.user_id);
+                    res.status(201).json({ message: 'OK', game: finalDrawGame, token: token });
+                } else {
+                    const nextPlayer = game.whose_turn === game.player_one ? game.player_two : game.player_one;
+
+                    const updatedTimeGame = await TicTacToeGame.findByIdAndUpdate(
+                        gameID,
+                        { $set: {date_of_last_move: now} },
+                        { new: true }
+                    )
+                    // const finalNextTurnGame = updatedTimeGame; // this was used for FE testing purposes
+                    const finalNextTurnGame = await TicTacToeGame.findByIdAndUpdate(
+                        gameID,
+                        { $set: {whose_turn: nextPlayer} },
+                        { new: true }
+                    )
+                    const token = TokenGenerator.jsonwebtoken(req.user_id);
+                    res.status(201).json({ message: 'OK', game: finalNextTurnGame, token: token });
+                }
             }
 
                         // if game.winner == [], change turn
-            // if turn === 9, draw & end game
+
 
 
         } catch (error) {

@@ -176,6 +176,7 @@ const TicTacToe = ({ navigate }) => {
             <p>{game ? game._id : "No game object found"}</p>
             <p>{game ? game.whose_turn : "No game object found"}</p>
             <p>{game ? `Winner found: ${game.winner}` : "No winner found"}</p>
+            <p>{game ? `Checking turn counter: ${game.turn}` : "No winner found"}</p>
             <p>{game ? `Checking game.whose_turn vs. sessionUserID: ${game.whose_turn} === ${sessionUserID}? ${game.whose_turn === sessionUserID}` : 'does not find whose turn'}</p>
             <p>{game && game.whose_turn === sessionUserID ? `Checking against opponents turn property: ${opponentsTurn}` : 'does not find whose turn'}</p>
 
