@@ -3,7 +3,7 @@ const express = require("express");
 const path = require("path");
 const logger = require("morgan");
 const JWT = require("jsonwebtoken");
-const cors = require("cors");
+const cors = require('cors');
 const socketio = require ('socket.io');
 
 const postsRouter = require("./routes/posts");
@@ -12,6 +12,7 @@ const usersRouter = require("./routes/users");
 const messageRouter = require(".routes/messages");
 
 const app = express();
+const server = require('http').Server(app);
 const io = socketio(server);
 
 // setup for receiving JSON

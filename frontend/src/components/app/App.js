@@ -16,7 +16,6 @@ const App = () => {
     return (
         <Routes>
           <Route path='/lobby'  element={<GamesLobby navigate={ useNavigate() }/>}/>
-          {/* <Route path='/posts'  element={<Feed navigate={ useNavigate() }/>}/> */}
           <Route path='/login'  element={<LoginForm  navigate={ useNavigate() }/>}/>
           <Route path='/signup' element={<SignUpForm navigate={ useNavigate() }/>}/>
           <Route path='/message' element={<MessageForm navigate={ useNavigate() }/>}/>
