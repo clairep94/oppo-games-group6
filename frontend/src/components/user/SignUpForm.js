@@ -76,38 +76,31 @@ const SignUpForm = ({ navigate }) => {
 
     return (
       <>
-
       <h2>Sign Up</h2>
 
       <form onSubmit={handleSubmit}>
-        <div>
+
           <input aria-label="Username input field" placeholder="Username" id="username" type='text' value={ username } onChange={handleUsernameChange} />
-        </div>
-        <div>
           <input aria-label="Email address input field" placeholder="Email" id="email" type='text' value={ email } onChange={handleEmailChange} />
-        </div>
-        <div>
           <input aria-label="Password input field" placeholder="Password" id="password" type={passwordHidden ? 'password': 'text'} value={ password } onChange={handlePasswordChange} />
-        </div>
-        <div>
           <input aria-label="Retype password input field" placeholder="Retype Password" id="retype-password" type={passwordHidden ? 'password': 'text'} value={retypePassword} onChange={handleRetypePasswordChange}/>
-        </div>
-        <div>
           {/* BUTTON TO TOGGLE PW VISIBILITY */}
           <button
             onClick={handleSetPasswordHidden} id="toggle-pw-visibility-button" button type="button" aria-label="Toggle Password Visibility Button"> {passwordHidden ? 'Show Password' : 'Hide Password'}
           </button>
-        </div>
-        <div>
-          <input id='submit' type="submit" value="Submit" />
-        </div>
+          <input id='submit' type="submit" value="Submit"/>
       </form>
 
         
       
       {/* ERROR MESSAGES */}
       {error && <p aria-label="Error Message" className={styles.errorMessage}>{error}</p>}
-
+      
+      <br/>
+      <p aria-label="Aready have an account? Log in">
+      <font color="#505050 ">Already have an account? </font>
+      <a aria-label="Link to Log in" href="/login" font color="#003163" className={styles.link}>Log in</a>
+      </p>
       </>
     
     );
