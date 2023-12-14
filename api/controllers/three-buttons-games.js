@@ -6,15 +6,21 @@ const handleGameAction = require("../lib/game-logic/three-buttons-game");
 
 const ThreeButtonsGamesController = {
   Create: (req, res) => {
-    ThreeButtonsGame
-    .find()
-    .exec((err, games) => {
+    const creatorId = req.user_id;
+    const threeButtonsGame = new ThreeButtonsGame({
+      progressState: {
+        code: "waiting for players",
+        playersJoinedCount: 0,
+      },
+      players: [null, null],
+      queuedMessages: [],
+    });
+    threeButtonsGame.save((err) => {
       if (err) {
         throw err;
-      } else {
-        const token = TokenGenerator.jsonwebtoken(req.user_id);
-        res.status(400).json({ message: 'Not implemented yet', token: token });
       }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(201).json({ message: 'OK', game: threeButtonsGame, token: token });
     });
   },
   Index: (req, res) => {
