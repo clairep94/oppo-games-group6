@@ -46,9 +46,9 @@ const TicTacToe = ({ navigate }) => {
     const [gameBoard, setGameBoard] = useState(null); // game.game_board
     const [winner, setWinner] = useState(null); //game.winner
     
-    const [opponentsTurn, setOpponentsTurn] = useState(null);
-    const timeInterval = 5000
-    
+    const [opponentID, setOpponentID] = useState(null); // additional property to store opponent's turn -- this is to prevent re-rendering when the game is over.
+    const [opponentsTurn, setOpponentsTurn] = useState(null); // checks if game.whose_turn === opponent, if so set to True and run the 5-sec game fetch to check for opponent moves
+    const timeInterval = 5000;
     const rows = ["A", "B", "C"];
 
 
@@ -67,6 +67,12 @@ const TicTacToe = ({ navigate }) => {
             setGame(data.game)
             setGameBoard(data.game.game_board)
             setWinner(data.game.winner)
+            if (sessionUserID === data.game.player_one) {
+                setOpponentID(data.game.player_two)
+            } else {
+                setOpponentID(data.game.player_two)
+            }
+            setOpponentsTurn(data.game.whose_turn === opponentID) 
         })
     }
 
@@ -118,6 +124,10 @@ const TicTacToe = ({ navigate }) => {
             })
             const data = await response.json();
             setWinner(data.game.winner); // TODO CHANGE THIS FOR A DRAW!
+            if (winner.length !== 0) {
+                setOpponentsTurn(data.game.whose_turn === opponentID) // TODO change to true if running into problems, see check on 155.
+            }
+
         } catch (error) {
             console.error(error)
         }
@@ -126,9 +136,36 @@ const TicTacToe = ({ navigate }) => {
 
     // ============ OPPONENT GAMEPLAY =============
 
-    const fiveSecFetchGame = setInterval(fetchGame, timeInterval);
+    // TODO make a version of fetchGame where no new token is given so that users can timeout! Otherwise the user will never timeout.
 
-    // TODO add useEffect to check for opponentsTurn change
+    // When it is the opponent's turn, we run fetchGame every 5 seconds to check for the opponent to make moves and if they win/draw/forfeit.
+    useEffect(() => {
+        let fiveSecFetchGame;
+    
+        const fetchGameWrapper = () => {
+            fetchGame(); // Call fetchGame immediately when the effect runs
+    
+            // Set up an interval to call fetchGame every 5 seconds
+            fiveSecFetchGame = setInterval(fetchGame, timeInterval);
+        };
+    
+        // Check if it's the opponent's turn
+        if (token && opponentsTurn) {
+            fetchGameWrapper();
+    
+            // Cleanup function: clear the interval when !opponentsTurn
+            return () => clearInterval(fiveSecFetchGame);
+        } else {
+            // Clear the interval when !opponentsTurn
+            clearInterval(fiveSecFetchGame);
+        }
+    
+        // Cleanup function for unmount or other cases
+        return () => {
+            // Additional cleanup logic if needed
+        };
+    }, [opponentsTurn]);
+
 
 
     // ============ JSX FOR THE UI =============
@@ -141,6 +178,9 @@ const TicTacToe = ({ navigate }) => {
             <p>{game ? game._id : "No game object found"}</p>
             <p>{game ? game.whose_turn : "No game object found"}</p>
             <p>{game ? `Winner found: ${game.winner}` : "No winner found"}</p>
+            <p>{game ? `Checking game.whose_turn vs. sessionUserID: ${game.whose_turn} === ${sessionUserID}? ${game.whose_turn === sessionUserID}` : 'does not find whose turn'}</p>
+            <p>{game && game.whose_turn === sessionUserID ? `Checking against opponents turn property: ${opponentsTurn}` : 'does not find whose turn'}</p>
+
             <p>{sessionUserID}</p>
 
 
