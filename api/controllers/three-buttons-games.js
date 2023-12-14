@@ -7,7 +7,7 @@ const handleGameAction = require("../lib/game-logic/three-buttons-game");
 const ThreeButtonsGamesController = {
   Create: (req, res) => {
     const creatorId = req.user_id;
-    const threeButtonsGame = new ThreeButtonsGame({
+    const game = new ThreeButtonsGame({
       progressState: {
         code: "waiting for players",
         playersJoinedCount: 0,
@@ -15,13 +15,13 @@ const ThreeButtonsGamesController = {
       players: [null, null],
       queuedMessages: [],
     });
-    threeButtonsGame
+    game
     .save((err) => {
       if (err) {
         throw err;
       }
       const token = TokenGenerator.jsonwebtoken(req.user_id);
-      res.status(201).json({ message: 'OK', game: threeButtonsGame, token: token });
+      res.status(201).json({ message: 'OK', game: game, token: token });
     });
   },
   Index: (req, res) => {
@@ -46,10 +46,23 @@ const ThreeButtonsGamesController = {
       res.status(200).json({ game: game, token: token });
     });
   },
-  DoGameAction: (req, res) => {
+  DoGameAction: async (req, res) => {
+    const game = await ThreeButtonsGame.findById(req.params.id);
+    const result = handleGameAction(
+      game, { op: req.params.op, playerId: req.user_id }
+    );
+    result.game
+    .save((err) => {
+      if (err) {
+        throw err;
+      }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(201).json({ message: 'OK', game: game, token: token });
+    });
+
     ThreeButtonsGame
-    .find()
-    .exec((err, games) => {
+    .findById(req.params.id)
+    .exec((err, game) => {
       if (err) {
         throw err;
       }
