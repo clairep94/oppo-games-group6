@@ -139,7 +139,7 @@ const getStateManager = (progressState) => {
 const waitingManager = (game, action) => {
   if (action.op === OPS.JOIN_GAME) {
     if ((game.progressState.playersJoinedCount < 2) &&
-      (!game.playersincludes(action.playerId))){
+      (!game.players.includes(action.playerId))){
       doJoinGameEvent(game, action);
     }
   } else {
@@ -153,14 +153,14 @@ const gameplayManager = (game, action) => {
   }
   if (action.op === OPS.WIN) {
     /*if (game.active.playerId === action.playerId)*/ // <-- :)
-    if (game.active.playerId === action.playerId) {
+    if (game.progressState.active.playerId === action.playerId) {
       doWinTransition(game, action);
     } else {
       throw new Error("You can't win outside of your turn");
     }
   }
   if (action.op === OPS.PASS) {
-    if (game.active.playerId === action.playerId) {
+    if (game.progressState.active.playerId === action.playerId) {
       doPassEvent(game, action);
     } else {
       throw new Error("You can't pass outside of your turn");
