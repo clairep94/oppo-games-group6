@@ -7,6 +7,7 @@ const SignUpForm = ({ navigate }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [passwordHidden, setPasswordHidden] = useState(true);
+  const [retypePassword, setRetypePassword] = useState("");
 
   // ============ FORM SUBMISSION FOR LOGIN ====================
   const handleSubmit = async (event) => {
@@ -46,12 +47,17 @@ const SignUpForm = ({ navigate }) => {
     setPasswordHidden(!passwordHidden)
   }
 
+  const handleRetypePasswordChange = (event) => {
+    setRetypePassword(event.target.value)
+  }
+
     return (
       <>
       <form onSubmit={handleSubmit}>
           <input placeholder="Username" id="username" type='text' value={ username } onChange={handleUsernameChange} />
           <input placeholder="Email" id="email" type='text' value={ email } onChange={handleEmailChange} />
           <input placeholder="Password" id="password" type={passwordHidden ? 'password': 'text'} value={ password } onChange={handlePasswordChange} />
+          <input placeholder="Retype Password" id="retype-password" type={passwordHidden ? 'password': 'text'} value={retypePassword} onChange={handleRetypePasswordChange}/>
           <input id='submit' type="submit" value="Submit" />
       </form>
 
