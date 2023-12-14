@@ -71,7 +71,11 @@ const ThreeButtonsGamesController = {
       console.log(err);
       console.log(JSON.stringify(updatedGame));
       const token = TokenGenerator.jsonwebtoken(req.user_id);
-      res.status(200).json({ game: updatedGame, message: resultOfAction.response.code, token: token });
+      res.status(200).json({
+        game: updatedGame,
+        message: resultOfAction.response.code,
+        token: token
+      });
     });
 
   },
