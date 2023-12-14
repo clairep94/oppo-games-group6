@@ -225,13 +225,13 @@ const doBeginGameTransition = (game) => {
 };
 
 const doWinTransition = (game, action) => {
-  const winner = getPlayerNumber(action.playerId);
+  const winner = getPlayerNumber(game, action.playerId);
   game.progressState = {
     code: STATE_CODES.GAME_OVER,
     outcome: {
       type: "normal victory",
       winner: action.playerId,
-      loser: getOtherPlayerIdById(action.playerId),
+      loser: getOtherPlayerIdById(game, action.playerId),
     },
   };
   enqueueMessage(game, winner, MESSAGES.VICTORY);
@@ -239,7 +239,7 @@ const doWinTransition = (game, action) => {
 };
 
 const doPassEvent = (game, action) => {
-  const passer = getPlayerNumber(action.playerId)
+  const passer = getPlayerNumber(game, action.playerId)
   game.progressState.active.number = getOtherPlayer(passer);
   game.progressState.active.playerId = game.players[getOtherPlayer(passer)];
   enqueueMessage(game, getOtherPlayer(passer), MESSAGES.IT_IS_YOUR_TURN);
@@ -250,11 +250,11 @@ const doResignTransition = (game, action) => {
     code: STATE_CODES.GAME_OVER,
     outcome: {
       type: "victory by default",
-      winner: getOtherPlayerIdById(action.playerId),
+      winner: getOtherPlayerIdById(game, action.playerId),
       loser: action.playerId,
     },
   };
-  const resignerNumber = getPlayerNumber(action.playerId);
+  const resignerNumber = getPlayerNumber(game, action.playerId);
   enqueueMessage(game, resignerNumber, MESSAGES.YOU_RESIGNED);
   enqueueMessage(game, getOtherPlayer(resignerNumber), MESSAGES.VICTORY);
 };
