@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ThreeButtonsGame from "../../games/threebuttonsgame/ThreeButtonsGame";
 import { useParams } from 'react-router-dom';
 
-// Currently, GamePage is hardcoded to point to ThreeButtonsGame.
+// Currently, GamePage is only able to display ThreeButtonsGame.
 
 // This component should eventually be accessible at /<title of game>/<game id>
 // for all game titles
@@ -30,20 +30,26 @@ const GamePage = ({ navigate, gameTitle }) => {
     navigate("/lobby");
   };
 
-  // For now: Hardcode three buttons game
-  // TODO: Change it so it can point to any game.
-  gameTitle = "three-buttons-game"
+  // For now: only offer ThreeButtonsGame or an error page
 
-  return (
-    <>
-      {/* TODO: Replace this with a navbar component with ARIA labels etc */}
-      <div className="psuedo-navbar">
-        <button onClick={logout}>Log out</button>
-        <button onClick={backToLobby}>Back to Lobby</button>
-      </div>
-      <ThreeButtonsGame gameId={ gameId }/>
-    </>
-  );
+  if (gameTitle === "three-buttons-game") {
+    return (
+      <>
+        {/* TODO: Replace this with a navbar component with ARIA labels etc */}
+        <div className="psuedo-navbar">
+          <button onClick={logout}>Log out</button>
+          <button onClick={backToLobby}>Back to Lobby</button>
+        </div>
+        <ThreeButtonsGame gameId={ gameId }/>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <p>Oops! GamePage doesn't recognise that game title yet.</p>
+      </>
+    );
+  }
 };
 
 export default GamePage;
