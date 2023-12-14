@@ -10,7 +10,7 @@ const SignUpForm = ({ navigate }) => {
   const [retypePassword, setRetypePassword] = useState("");
   const [error, setError] = useState(null);
 
-  // ============ FORM SUBMISSION FOR LOGIN ====================
+  // ============ FORM SUBMISSION FOR SIGNUP ====================
   const handleSubmit = async (event) => {
     event.preventDefault();
 
