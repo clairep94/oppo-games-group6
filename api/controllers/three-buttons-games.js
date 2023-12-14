@@ -51,3 +51,5 @@ const ThreeButtonsGamesController = {
   },
 
 };
+
+module.exports = ThreeButtonsGamesController;
