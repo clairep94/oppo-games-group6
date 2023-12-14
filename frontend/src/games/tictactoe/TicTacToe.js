@@ -7,33 +7,6 @@ import getSessionUserID from "../../utility/getSessionUserID";
 // ======== PAGE ============ //
 const TicTacToePage = ({ navigate }) => {
 
-    // THE PAGE FETCHES THE GAME OBJECT, like with FEED -> posts are automatically updated this way?
-    // useEffect here or in TicTacToe?
-
-    // const {gameID} = useParams(); // Access gameID from the URL
-    // const [tictactoeGame, setTicTacToeGame] = useState(null); // stores the game object once retrieved
-    // const [token, setToken] = useState(window.localStorage.getItem("token"));
-
-    // TO STORE AT THIS LEVEL: SessionID, SessionUser, token?
-
-    // Fetch the game object when the page mounts
-    // useEffect(() => {
-    //     if(token) {
-    //         fetch(`/tictactoe/${gameID}`, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${token}`
-    //             }
-    //         })
-    //         .then(response => response.json())
-    //         .then(async data => {
-    //             window.localStorage.setItem("token", data.token)
-    //             setToken(window.localStorage.getItem("token"))
-    //             setTicTacToeGame(data.game);
-
-    //     })
-    // }
-    // }, [])
-
     const logout = () => {
         window.localStorage.removeItem("token")
         navigate('/login')
@@ -52,26 +25,28 @@ const TicTacToePage = ({ navigate }) => {
             </button>
         </>
 
-
     )
-
 }
 
-// ======== BOARD ===========//
+// ========================== MAIN: BOARD ================================================= //
+
 const TicTacToe = ({ navigate }) => {
+
+    // =========== STATE VARIABLES ==========================
+    // --------- Session & Game ID ----------
     const { id } = useParams(); // IMPORTANT: DO NOT RENAME 'id' This refers to gameID but changing it would cause issues in routes etc.
+    const gameID = id; // declared gameID variable to store this info in case it is more readable for usage below:
+    const [token, setToken] = useState(window.localStorage.getItem("token"));
+    const sessionUserID = getSessionUserID(token);
 
-    const gameID = id
-
+    // ------- Game states ----------
     const [game, setGame] = useState(null);
     const [gameBoard, setGameBoard] = useState(null);
     const [winner, setWinner] = useState(null);
     const rows = ["A", "B", "C"];
 
-    const [token, setToken] = useState(window.localStorage.getItem("token"));
 
-    const sessionUserID = getSessionUserID(token);
-
+    // ============ LOADING THE BOARD =============
     // Function 1: to fetch the tictactoe data.
     const fetchGame = () => {
         fetch(`/tictactoe/${id}`, {
@@ -96,6 +71,7 @@ const TicTacToe = ({ navigate }) => {
         }
     }, []);
 
+    // ============ SESSION USER GAMEPLAY =============
 
     // Function 2: Allows players to PlacePiece, which returns the updated game.data, and sets the updated game board.
     const updateGameBoard = async (row, col) => { 
@@ -142,8 +118,11 @@ const TicTacToe = ({ navigate }) => {
 
     }
 
+    // ============ OPPONENT GAMEPLAY =============
 
 
+
+    // ============ JSX FOR THE UI =============
     return (
         <>
             <h2>TicTacToe</h2>
@@ -194,12 +173,11 @@ const TicTacToe = ({ navigate }) => {
             )}
 
         {winner && <p aria-label="Winner Announcement">{winner} wins!</p>}
-
-            {/* {game && renderGameBoard()}
-            {winner && <p aria-label="Winner Announcement">{winner} wins!</p>} */}
         </>
     );
 };
+
+// =========== SUPPORTIVE COMPONENTS: ==================================== //
 
 // ======== SINGLE BUTTON ===========//
 const TicTacToeButton = (props) => {
