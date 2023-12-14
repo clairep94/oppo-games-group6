@@ -17,7 +17,6 @@ function Message() {
     event.preventDefault();
     if (message) {
       socket.emit('sendMessage', { message });
-      setName('');
       setMessage('');
     }
   };
