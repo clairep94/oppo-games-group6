@@ -48,17 +48,30 @@ const ThreeButtonsGamesController = {
   },
   DoGameAction: async (req, res) => {
     const game = await ThreeButtonsGame.findById(req.params.id);
-    const result = handleGameAction(
+    const resultOfAction = handleGameAction(
       game, { op: req.params.op, playerId: req.user_id/*, details: Turn_Into_Json_Please(req.body) */ }
     );
     // result will have 2 properties: `game` and `response`
-    await result.game
-    .save((err) => {
+    // await result.game
+    // .save((err) => {
+    //   if (err) {
+    //     throw err;
+    //   }
+    //   const token = TokenGenerator.jsonwebtoken(req.user_id);
+    //   res.status(201).json({ message: 'OK', game: game, token: token });
+    // });
+    ThreeButtonsGame.replaceOne(
+      { _id: game._id },
+      resultOfAction.game
+    ).exec((err, updatedGame) => {
       if (err) {
         throw err;
       }
+      console.log("DoGameAction was called");
+      console.log(err);
+      console.log(JSON.stringify(updatedGame));
       const token = TokenGenerator.jsonwebtoken(req.user_id);
-      res.status(201).json({ message: 'OK', game: game, token: token });
+      res.status(200).json({ game: updatedGame, message: resultOfAction.response.code, token: token });
     });
 
   },
