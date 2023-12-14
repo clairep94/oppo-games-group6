@@ -44,7 +44,7 @@ const TicTacToe = ({ navigate }) => {
     // ------- Game states ----------
     const [game, setGame] = useState(null); // stores game object retrieved from DB
     const [gameBoard, setGameBoard] = useState(null); // game.game_board
-    const [winner, setWinner] = useState(null); //game.winner
+    const [winMessage, setWinMessage] = useState(null); // check if game.winner == [] or [user] or [user, user]
     
     const [opponentID, setOpponentID] = useState(null); // additional property to store opponent's turn -- this is to prevent re-rendering when the game is over.
     const [opponentsTurn, setOpponentsTurn] = useState(null); // checks if game.whose_turn === opponent, if so set to True and run the 5-sec game fetch to check for opponent moves
@@ -67,7 +67,26 @@ const TicTacToe = ({ navigate }) => {
             setToken(window.localStorage.getItem("token"))
             setGame(data.game)
             setGameBoard(data.game.game_board)
-            setWinner(data.game.winner)
+
+            //set Win message
+            if (data.game.winner.length === 0) {
+                setWinMessage(null);
+            } else if (data.game.winner.length === 1) {
+                const winner = data.game.winner[0];
+                if (sessionUserID === winner){
+                    setWinMessage("You win!")
+                } else {
+                    setWinMessage(`${data.game.winner[0]} wins!`)
+                }
+            } else { // draw
+                if (sessionUserID === data.game.winner[0] || sessionUserID === data.game.winner[1]){
+                    setWinMessage("You have a draw!")
+                } else {
+                    setWinMessage(`${data.game.winner[0]} and ${data.game.winner[1]} draw!`)
+                }
+            }
+
+            //set if it's the opponent's turn
             if (sessionUserID === data.game.player_one) {
                 setOpponentID(data.game.player_two)
             } else {
@@ -122,10 +141,25 @@ const TicTacToe = ({ navigate }) => {
                 })
             })
             const data = await response.json();
-            setWinner(data.game.winner); // TODO CHANGE THIS FOR A DRAW!
-            if (winner.length !== 0) {
-                setOpponentsTurn(data.game.whose_turn === opponentID) 
+            //set Win message or move to next turn
+            if (data.game.winner.length === 0) {
+                setWinMessage(null);
+                setOpponentsTurn(data.game.whose_turn === opponentID); 
+            } else if (data.game.winner.length === 1) {
+                const winner = data.game.winner[0];
+                if (sessionUserID === winner){
+                    setWinMessage("You win!")
+                } else {
+                    setWinMessage(`${data.game.winner[0]} wins!`)
+                }
+            } else { // draw
+                if (sessionUserID === data.game.winner[0] || sessionUserID === data.game.winner[1]){
+                    setWinMessage("You have a draw!")
+                } else {
+                    setWinMessage(`${data.game.winner[0]} and ${data.game.winner[1]} draw!`)
+                }
             }
+            
 
         } catch (error) {
             console.error(error)
@@ -184,7 +218,25 @@ const TicTacToe = ({ navigate }) => {
                 const data = await response.json();
                 setGame(data.game);
                 setGameBoard(data.game.game_board);
-                setWinner(data.game.winner);
+                
+                //set Win message
+                if (data.game.winner.length === 0) {
+                    setWinMessage(null);
+                } else if (data.game.winner.length === 1) {
+                    const winner = data.game.winner[0];
+                    if (sessionUserID === winner){
+                        setWinMessage("You win!")
+                    } else {
+                        setWinMessage(`${data.game.winner[0]} wins!`)
+                    }
+                } else { // draw
+                    if (sessionUserID === data.game.winner[0] || sessionUserID === data.game.winner[1]){
+                        setWinMessage("You have a draw!")
+                    } else {
+                        setWinMessage(`${data.game.winner[0]} and ${data.game.winner[1]} draw!`)
+                    }
+                }
+
             } catch (error) {
                 console.error(error)
             }
@@ -236,7 +288,8 @@ const TicTacToe = ({ navigate }) => {
                                 key={`${row}${col}`}
                                 row={row}
                                 col={col}
-                                winner={winner}
+                                // winner={game.winner}
+                                winMessage={winMessage}
                                 gameBoard={gameBoard}
                                 handleClick={() => updateGameBoard(row, col)}
                             />
@@ -248,11 +301,12 @@ const TicTacToe = ({ navigate }) => {
         <button 
             aria-label="Forfeit Button"
             onClick={() => forfeitGame()}
+            disabled={winMessage}
         >
         Forfeit Game
         </button>
 
-        {winner && <p aria-label="Winner Announcement">{winner} wins!</p>}
+        {winMessage && <p aria-label="Winner Announcement">{winMessage}</p>}
         </>
     );
 };
@@ -263,7 +317,7 @@ const TicTacToe = ({ navigate }) => {
 const TicTacToeButton = (props) => {
     const space = props.gameBoard[props.row][props.col]
     // const buttonActive = space === " "
-    const buttonActive = space === " " && props.winner.length === 0;
+    const buttonActive = space === " " && !props.winMessage;
 
     return (
         <button

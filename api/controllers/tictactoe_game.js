@@ -223,7 +223,7 @@ const TicTacToeGameController = {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     },
-    Forfeit: async (req, res) => {
+    Forfeit: async (req, res) => { // This function allows users to forfeit, (their opponent wins)
         
         const now = new Date();
 
