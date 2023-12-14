@@ -21,6 +21,13 @@ const SignUpForm = ({ navigate }) => {
       setError("")
     }
 
+    if (!isValidPassword(password)) {
+      setError("Password must be 8 characters or more, contain a special character, and have at least 1 number");
+      return;
+    } else {
+      setError("");
+    }
+
     if (password !== retypePassword) {
       setError("Passwords do not match")
       return;
@@ -93,6 +100,12 @@ const SignUpForm = ({ navigate }) => {
       </>
     
     );
+}
+
+function isValidPassword(password) {
+  // Password must be 8 characters or more, contain a special character, and have at least 1 number
+  const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})/;
+  return passwordRegex.test(password);
 }
 
 export default SignUpForm;
