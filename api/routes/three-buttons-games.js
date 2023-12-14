@@ -11,4 +11,8 @@ router.post("/", ThreeButtonsGamesController.Create);
 // (Such as joining the game, making moves, resigning, etc.)
 router.put("/:id/:op", ThreeButtonsGamesController.DoGameAction);
 
+// PUT /three-buttons-game/7/join
+
+// PUT /battleships/456765/fire {x: 3, y: 2}
+
 module.exports = router;
