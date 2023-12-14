@@ -14,6 +14,13 @@ const SignUpForm = ({ navigate }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!username || !email || !password || !retypePassword) {
+      setError("All fields must be filled"); 
+      return;
+    } else {
+      setError("")
+    }
+
     if (password !== retypePassword) {
       setError("Passwords do not match")
       return;
