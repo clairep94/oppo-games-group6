@@ -11,7 +11,6 @@ router.post("/", TicTacToeGameController.Create);
 
 router.put("/:id/place_piece", TicTacToeGameController.PlacePiece);
 router.put("/:id/check_win", TicTacToeGameController.CheckWin);
-// router.get("/:id/update_win", TicTacToeGameController.UpdateWinner);
-// router.get("/:id/forfeit", TicTacToeGameController.Forfeit);
+router.put("/:id/forfeit", TicTacToeGameController.Forfeit);
 
 module.exports = router;

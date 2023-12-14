@@ -218,16 +218,44 @@ const TicTacToeGameController = {
                 }
             }
 
-                        // if game.winner == [], change turn
-
-
-
         } catch (error) {
             console.error('Error checking for win:', error);
             res.status(500).json({ error: 'Internal Server Error' });
         }
     },
-    //TODO : FORFEIT GAME
+    Forfeit: async (req, res) => {
+        
+        const now = new Date();
+
+        try {
+            const sessionUser = req.user_id;
+            const gameID = req.params.id;
+            const game = await TicTacToeGame.findById(gameID);
+            const winner = sessionUser == game.player_one ? game.player_two : game.player_one;
+
+            const updatedGame = await TicTacToeGame.findByIdAndUpdate(
+                gameID,
+                { $push: { winner: winner } },
+                { new: true }
+            );
+            const wonGame = await TicTacToeGame.findByIdAndUpdate(
+                gameID,
+                { $set: {date_completed: now} },
+                { new: true }
+            );
+            // TODO - USER INTEGRATION:
+            // add points to User.points 
+            const token = TokenGenerator.jsonwebtoken(req.user_id);
+            res.status(201).json({ message: 'OK', game: wonGame, token: token });
+
+
+        } catch (error) {
+            console.error('Error forfeiting:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
+
+    },
+
 
     //TODO: SEND INVITE
 

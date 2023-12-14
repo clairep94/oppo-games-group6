@@ -49,6 +49,7 @@ const TicTacToe = ({ navigate }) => {
     const [opponentID, setOpponentID] = useState(null); // additional property to store opponent's turn -- this is to prevent re-rendering when the game is over.
     const [opponentsTurn, setOpponentsTurn] = useState(null); // checks if game.whose_turn === opponent, if so set to True and run the 5-sec game fetch to check for opponent moves
     const timeInterval = 5000;
+    
     const rows = ["A", "B", "C"];
 
 
@@ -165,6 +166,31 @@ const TicTacToe = ({ navigate }) => {
     }, [opponentsTurn]);
 
 
+    // ============ FORFEIT GAME ==================
+    // Note from Claire: I tried to make this show an warning message first, but it was causing bugs, may add in later.
+    // TODO: warning message? or popup.
+
+    const forfeitGame = async () => {
+            try {
+                const response = await fetch(`/tictactoe/${id}/forfeit`, {
+                    method: 'put',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({
+                    })
+                })
+                const data = await response.json();
+                setGame(data.game);
+                setGameBoard(data.game.game_board);
+                setWinner(data.game.winner);
+            } catch (error) {
+                console.error(error)
+            }
+        }
+    
+
 
     // ============ JSX FOR THE UI =============
     return (
@@ -219,6 +245,12 @@ const TicTacToe = ({ navigate }) => {
                         ))}
                 </div>
             )}
+        <button 
+            aria-label="Forfeit Button"
+            onClick={() => forfeitGame()}
+        >
+        Forfeit Game
+        </button>
 
         {winner && <p aria-label="Winner Announcement">{winner} wins!</p>}
         </>
