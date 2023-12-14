@@ -13,7 +13,7 @@ const ThreeButtonsGamesController = {
         throw err;
       } else {
         const token = TokenGenerator.jsonwebtoken(req.user_id);
-        res.status(400).json({message: 'Not implemented yet'});
+        res.status(400).json({ message: 'Not implemented yet', token: token });
       }
     });
   },
@@ -25,7 +25,7 @@ const ThreeButtonsGamesController = {
         throw err;
       } else {
         const token = TokenGenerator.jsonwebtoken(req.user_id);
-        res.status(400).json({message: 'Not implemented yet'});
+        res.status(400).json({ message: 'Not implemented yet', token: token });
       }
     });
   },
@@ -37,7 +37,7 @@ const ThreeButtonsGamesController = {
         throw err;
       } else {
         const token = TokenGenerator.jsonwebtoken(req.user_id);
-        res.status(400).json({message: 'Not implemented yet'});
+        res.status(400).json({ message: 'Not implemented yet', token: token });
       }
     });
   },
@@ -49,7 +49,7 @@ const ThreeButtonsGamesController = {
         throw err;
       } else {
         const token = TokenGenerator.jsonwebtoken(req.user_id);
-        res.status(400).json({message: 'Not implemented yet'});
+        res.status(400).json({ message: 'Not implemented yet', token: token });
       }
     });
   },
