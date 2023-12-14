@@ -15,8 +15,11 @@ const SignUpForm = ({ navigate }) => {
     event.preventDefault();
 
     if (password !== retypePassword) {
-      setError("Passwords do not match") 
+      setError("Passwords do not match")
+      return;
     } else {
+      setError("")
+    }
     
 
     fetch( '/users', {
@@ -34,7 +37,6 @@ const SignUpForm = ({ navigate }) => {
         }
       })
   }
-}
 
   // ------------ SUPPORTIVE FUNCTIONS: ----------------
   // FUNCTIONS FOR CHANGING STATE VARIABLES 
