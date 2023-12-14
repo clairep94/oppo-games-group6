@@ -1,7 +1,7 @@
 // ================================ CONSTANTS ===============================
 //
 // OPS represent the operations the client can request the server to perform
-//   via sending PATCH HTTP requests to the game's endpoint (e.g. /game/:id).
+//   via sending PUT HTTP requests to the game's endpoint (e.g. /game/:id).
 //
 // STATE_CODES represent the labels for the game progress state that
 //   the game is occupying. The game progress state also contains specific
@@ -9,7 +9,7 @@
 //
 // RESPONSE_CODES represent broad categories of response to the action
 //   requests. The controller that calls `handleGameAction` uses these
-//   codes to determine the next step in processing the PATCH request.
+//   codes to determine the next step in processing the PUT request.
 //
 // MESSAGES represent classes of messages that should be delivered to the
 //   client. They are pushed to an array in the game object; the controller
@@ -285,7 +285,7 @@ const doResignTransition = (game, action) => {
 // `game`. It's then the controller's job (or the job of another thing the
 // controller calls) to prepare these messages for sending back to the
 // appropriate clients.
-// - This will often *not* be the same client that sent the PATCH request!
+// - This will often *not* be the same client that sent the PUT request!
 // [  I am still working out the implementation details of how these  ]
 // [  scheduled / deferred / 'mailed' messages get passed around.     ]
 
