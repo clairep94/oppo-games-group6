@@ -1,7 +1,5 @@
 const Message = require("../models/message");
 
-// TODO Review Acebook User Controller methods and update below as a group
-// TODO Unit testing for User Controller methods
 
 const MessageController = {
   Create: (req, res) => {
