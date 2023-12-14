@@ -36,7 +36,7 @@ const GamePage = ({ navigate, gameTitle }) => {
     return (
       <>
         {/* TODO: Replace this with a navbar component with ARIA labels etc */}
-        <div className="psuedo-navbar">
+        <div className="temporary-psuedo-navbar">
           <button onClick={logout}>Log out</button>
           <button onClick={backToLobby}>Back to Lobby</button>
         </div>

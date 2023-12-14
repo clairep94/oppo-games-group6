@@ -55,6 +55,7 @@ const ThreeButtonsGame = ({ gameId }) => {
   return(
     <>
       <h2>Three Buttons Game</h2>
+      <p>{game /* DEBUG */}</p>
     </>
   );
 };
