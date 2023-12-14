@@ -4,8 +4,10 @@ import styles from './TicTacToe.module.css';
 import getSessionUserID from "../../utility/getSessionUserID";
 
 
-// ======== PAGE ============ //
+// ==================== PAGE ===================================================== //
 const TicTacToePage = ({ navigate }) => {
+
+    // TODO: Shift GameID, token, sessionUserID here.
 
     const logout = () => {
         window.localStorage.removeItem("token")
@@ -40,9 +42,13 @@ const TicTacToe = ({ navigate }) => {
     const sessionUserID = getSessionUserID(token);
 
     // ------- Game states ----------
-    const [game, setGame] = useState(null);
-    const [gameBoard, setGameBoard] = useState(null);
-    const [winner, setWinner] = useState(null);
+    const [game, setGame] = useState(null); // stores game object retrieved from DB
+    const [gameBoard, setGameBoard] = useState(null); // game.game_board
+    const [winner, setWinner] = useState(null); //game.winner
+    
+    const [opponentsTurn, setOpponentsTurn] = useState(null);
+    const timeInterval = 5000
+    
     const rows = ["A", "B", "C"];
 
 
@@ -120,6 +126,9 @@ const TicTacToe = ({ navigate }) => {
 
     // ============ OPPONENT GAMEPLAY =============
 
+    const fiveSecFetchGame = setInterval(fetchGame, timeInterval);
+
+    // TODO add useEffect to check for opponentsTurn change
 
 
     // ============ JSX FOR THE UI =============

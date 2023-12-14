@@ -82,14 +82,13 @@ const TicTacToeGameController = {
                 return res.status(403).json({ error: 'It is not your turn.', game: game }); //return the old game so as to not mess up the rendering
             }
 
-            
             // Check if the session user is player 1 or 2 to indicate if they are X or O
             const piece = (userID == game.player_one ? "X" : "O"); // NOTE by Claire: this is == and not === on purpose, see line 80. do not change.
             const placementField = (piece == "X" ? "x_placements" : "o_placements");
             const nextPlayerTurn = (piece == "X" ? game.player_two : game.player_one)
             console.log(`NEXT TURN PLAYER:${nextPlayerTurn}`)
 
-            //Put request to update the (hard_coded) x_placements with the coordinate
+            // Put request to update the (hard_coded) x_placements with the coordinate
             const updatedGame = await TicTacToeGame.findOneAndUpdate(
                 { _id: gameID },
                 { 
@@ -113,23 +112,8 @@ const TicTacToeGameController = {
         try {
             const gameID = req.params.id;
             const game = await TicTacToeGame.findById(gameID);
-
+            
             // Check if any of the game.winning_placements arrays in any order are in game.x_placements and game.o_placements:
-
-            // if game.winner != [], end game
-            // if game.winner == [], change turn
-            // if turn === 9, draw & end game
-
-            // Check for a win
-            // const checkWin = (placements, winningCombination) => {
-            //     // Sort the placements and winning combination arrays
-            //     const sortedPlacements = placements.sort();
-            //     const sortedWinningCombination = winningCombination.sort();
-
-            //     // Check if the sorted arrays are equal
-            //     return JSON.stringify(sortedPlacements) === JSON.stringify(sortedWinningCombination);
-            // };
-
             const checkWin = (placements, winningCombination) => {
                 return winningCombination.every(coord => placements.includes(coord));
             };
@@ -144,12 +128,15 @@ const TicTacToeGameController = {
                 checkWin(game.o_placements, combination)
             );
 
+            // if game.winner != [], end game
             if (xWin) {
                 const updatedGame = await TicTacToeGame.findByIdAndUpdate(
                     gameID,
                     { $push: { winner: game.player_one } },
                     { new: true }
                 );
+                // TODO:
+                // add: 
                 const token = TokenGenerator.jsonwebtoken(req.user_id);
                 res.status(201).json({ message: 'OK', game: updatedGame, token: token });
             } else if (oWin) {
@@ -166,11 +153,20 @@ const TicTacToeGameController = {
                 res.status(201).json({ message: 'OK', game: game, token: token });
             }
 
+                        // if game.winner == [], change turn
+            // if turn === 9, draw & end game
+
+
         } catch (error) {
             console.error('Error checking for win:', error);
             res.status(500).json({ error: 'Internal Server Error' });
         }
-    }
+    },
+    //TODO : FORFEIT GAME
+
+    //TODO: SEND INVITE
+
+    //TODO: ACCEPT INVITE or JOIN GAME
 }
 
 /**
