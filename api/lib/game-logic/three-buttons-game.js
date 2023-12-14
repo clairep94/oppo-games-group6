@@ -310,7 +310,7 @@ const handleGameAction = (game, action) => {
 
 const enqueueMessage = (game, playerNumber, message) => {
   game.queuedMessages.push({
-    recipient: playerNumber,  // This is a number, 0 or 1
+    recipient: game.players[playerNumber],  // This is a player ID
     message: message,
   });
 };
