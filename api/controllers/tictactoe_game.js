@@ -110,6 +110,7 @@ const TicTacToeGameController = {
 
     CheckWin: async (req, res) => { // This function checks for wins, draws and if none, increases the turn
         const now = new Date();
+
         try {
             const gameID = req.params.id;
             const game = await TicTacToeGame.findById(gameID);
@@ -200,7 +201,8 @@ const TicTacToeGameController = {
                     const token = TokenGenerator.jsonwebtoken(req.user_id);
                     res.status(201).json({ message: 'OK', game: finalDrawGame, token: token });
                 } else {
-                    const nextPlayer = game.whose_turn === game.player_one ? game.player_two : game.player_one;
+
+                    const nextPlayer = addedTurnGame.turn % 2 === 0 ? game.player_one : game.player_two;
 
                     const updatedTimeGame = await TicTacToeGame.findByIdAndUpdate(
                         gameID,

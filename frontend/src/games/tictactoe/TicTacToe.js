@@ -248,7 +248,7 @@ const TicTacToe = ({ navigate }) => {
     return (
         <>
             <h2>TicTacToe</h2>
-            <p>Seeing if I can get the game data at all:</p>
+            <p>GAME DATA VISIBILITY:</p>
             <p>{gameID ? gameID: "Cannot get game ID from Params"}</p>
             <p>{game ? "Game object found" : "No game object found"}</p>
             <p>{game ? game._id : "No game object found"}</p>
@@ -291,6 +291,7 @@ const TicTacToe = ({ navigate }) => {
                                 // winner={game.winner}
                                 winMessage={winMessage}
                                 gameBoard={gameBoard}
+                                opponentsTurn={opponentsTurn}
                                 handleClick={() => updateGameBoard(row, col)}
                             />
                                 ))}
@@ -316,8 +317,7 @@ const TicTacToe = ({ navigate }) => {
 // ======== SINGLE BUTTON ===========//
 const TicTacToeButton = (props) => {
     const space = props.gameBoard[props.row][props.col]
-    // const buttonActive = space === " "
-    const buttonActive = space === " " && !props.winMessage;
+    const buttonActive = space === " " && !props.winMessage && !props.opponentsTurn;
 
     return (
         <button
