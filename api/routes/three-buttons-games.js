@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const ThreeButtonsGamesController = require("../controllers/three-buttons-game");
+const ThreeButtonsGamesController = require("../controllers/three-buttons-games");
 
 router.get("/", ThreeButtonsGamesController.Index);
 router.get("/:id", ThreeButtonsGamesController.FindByID);
