@@ -8,13 +8,14 @@ const SignUpForm = ({ navigate }) => {
   const [password, setPassword] = useState("");
   const [passwordHidden, setPasswordHidden] = useState(true);
   const [retypePassword, setRetypePassword] = useState("");
+  const [error, setError] = useState(null);
 
   // ============ FORM SUBMISSION FOR LOGIN ====================
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (password !== retypePassword) {
-      navigate('/signup')
+      setError("Passwords do not match") 
     } else {
     
 
@@ -76,6 +77,9 @@ const SignUpForm = ({ navigate }) => {
         >
           {passwordHidden ? 'Show Password' : 'Hide Password'}
       </button>
+      
+      {/* ERROR MESSAGES */}
+      {error && <p aria-label="Error Message" >{error}</p>}
 
       </>
     
