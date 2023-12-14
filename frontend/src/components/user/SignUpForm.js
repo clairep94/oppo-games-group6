@@ -88,7 +88,7 @@ const SignUpForm = ({ navigate }) => {
           <button
             onClick={handleSetPasswordHidden} id="toggle-pw-visibility-button" button type="button" aria-label="Toggle Password Visibility Button"> {passwordHidden ? 'Show Password' : 'Hide Password'}
           </button>
-          <input id='submit' type="submit" value="Submit"/>
+          <input aria-label="Submit button" id='submit' type="submit" value="Submit"/>
       </form>
 
         
