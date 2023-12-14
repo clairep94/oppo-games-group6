@@ -4,6 +4,7 @@ import SignUpForm from '../user/SignUpForm'
 import React, { useState } from 'react';
 // import Feed from '../feed/Feed'
 import GamesLobby from '../games_lobby/GamesLobby';
+import GamePage from '../game_page/GamePage';
 import {
   useNavigate,
   Routes,
