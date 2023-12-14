@@ -13,6 +13,11 @@ const SignUpForm = ({ navigate }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (password !== retypePassword) {
+      navigate('/signup')
+    } else {
+    
+
     fetch( '/users', {
       method: 'post',
       headers: {
@@ -28,6 +33,7 @@ const SignUpForm = ({ navigate }) => {
         }
       })
   }
+}
 
   // ------------ SUPPORTIVE FUNCTIONS: ----------------
   // FUNCTIONS FOR CHANGING STATE VARIABLES 
