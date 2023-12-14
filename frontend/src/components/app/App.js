@@ -2,6 +2,8 @@ import './App.css';
 import LoginForm from '../auth/LoginForm'
 import SignUpForm from '../user/SignUpForm'
 import React, { useState } from 'react';
+import io from 'socket.io-client' ;
+
 // import Feed from '../feed/Feed'
 import GamesLobby from '../games_lobby/GamesLobby';
 import {

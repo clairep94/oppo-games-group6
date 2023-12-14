@@ -9,7 +9,7 @@ const socketio = require ('socket.io');
 const postsRouter = require("./routes/posts");
 const authenticationRouter = require("./routes/authentication");
 const usersRouter = require("./routes/users");
-const messagesRouter = require(".routes/messages");
+const messageRouter = require(".routes/messages");
 
 const app = express();
 const io = socketio(server);
@@ -47,7 +47,7 @@ const tokenChecker = (req, res, next) => {
 app.use("/posts", tokenChecker, postsRouter);
 app.use("/tokens", authenticationRouter);
 app.use("/users", usersRouter);
-app.use('/messages', messagesRouter);
+app.use('/message', messageRouter);
 
 
 // catch 404 and forward to error handler
@@ -64,5 +64,26 @@ app.use((err, req, res) => {
   // respond with details of the error
   res.status(err.status || 500).json({message: 'server error'})
 });
+
+//start socket
+server.listen(port,() =>{
+  console.log(`Server running on port ${port}`);
+});
+
+//socket.io
+
+io.on('connection', (socket) => {
+  console.log(`Socket ${socket.id} connected`);
+
+  socket.on('sendMessage', (message) => {
+    io.emit('message', message);
+  });
+
+  socket.on('disconnect', () => {
+    console.log(`Socket ${socket.id} disconnected`);
+  });
+});
+
+
 
 module.exports = app;
