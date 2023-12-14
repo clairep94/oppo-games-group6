@@ -15,7 +15,8 @@ const ThreeButtonsGamesController = {
       players: [null, null],
       queuedMessages: [],
     });
-    threeButtonsGame.save((err) => {
+    threeButtonsGame
+    .save((err) => {
       if (err) {
         throw err;
       }
@@ -29,22 +30,20 @@ const ThreeButtonsGamesController = {
     .exec((err, games) => {
       if (err) {
         throw err;
-      } else {
-        const token = TokenGenerator.jsonwebtoken(req.user_id);
-        res.status(400).json({ message: 'Not implemented yet', token: token });
       }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(200).json({ games: games, token: token });
     });
   },
   FindByID: (req, res) => {
     ThreeButtonsGame
-    .find()
-    .exec((err, games) => {
+    .findById(req.params.id)
+    .exec((err, game) => {
       if (err) {
         throw err;
-      } else {
-        const token = TokenGenerator.jsonwebtoken(req.user_id);
-        res.status(400).json({ message: 'Not implemented yet', token: token });
       }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(200).json({ game: game, token: token });
     });
   },
   DoGameAction: (req, res) => {
@@ -53,10 +52,9 @@ const ThreeButtonsGamesController = {
     .exec((err, games) => {
       if (err) {
         throw err;
-      } else {
-        const token = TokenGenerator.jsonwebtoken(req.user_id);
-        res.status(400).json({ message: 'Not implemented yet', token: token });
       }
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(400).json({ message: 'Not implemented yet', token: token });
     });
   },
 
