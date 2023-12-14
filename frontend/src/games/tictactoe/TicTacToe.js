@@ -118,14 +118,12 @@ const TicTacToe = ({ navigate }) => {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({
-                    row: row, 
-                    col: col
                 })
             })
             const data = await response.json();
             setWinner(data.game.winner); // TODO CHANGE THIS FOR A DRAW!
             if (winner.length !== 0) {
-                setOpponentsTurn(data.game.whose_turn === opponentID) // TODO change to true if running into problems, see check on 155.
+                setOpponentsTurn(data.game.whose_turn === opponentID) 
             }
 
         } catch (error) {
