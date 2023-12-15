@@ -7,6 +7,7 @@ const TicTacToeGameController = {
     //     // .populate('user_id', '-password') // Populate the 'user_id' field with the entire User document
     //     // .populate('likes', '-password')
     //     // .populate('comments')
+        .sort({ date_created: -1 }) // reverse-chronological order
         .exec((err, games) => {
             if (err) {
                 throw err;
@@ -50,8 +51,8 @@ const TicTacToeGameController = {
         const tictactoe_game = new TicTacToeGame({
             player_one: req.user_id,
             date_created: time_now,
-            awaiting_challenger: false, // TODO remove hardcode
-            player_two: "65784b4eacc551b6b8e8f4b0", // TODO remove hardcode
+            // awaiting_challenger: false, // TODO remove hardcode
+            // player_two: "65784b4eacc551b6b8e8f4b0", // TODO remove hardcode
             whose_turn: req.user_id,
         });
         console.log("controllers/tictactoe_game.js 69: getting tictactoe_game object:")

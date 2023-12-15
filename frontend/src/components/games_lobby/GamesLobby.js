@@ -10,28 +10,26 @@ const GamesLobby = ({ navigate }) => {
   const games = ['tictactoe'] // <------- LIST OF ENDPOINTS FOR EACH GAME!!
   const [openGames, setOpenGames] = useState(null);
   const [yourGames, setYourGames] = useState(null);
+  const [allGames, setAllGames] = useState(null);
 
 
+  // ============= TEMP: ALL GAMES SECTION ================= //
+  useEffect(() => {
+    if(token) {
+      fetch("/tictactoe", {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      })
+        .then(response => response.json())
+        .then(async data => {
+          window.localStorage.setItem("token", data.token)
+          setToken(window.localStorage.getItem("token"))
+          setAllGames(data.games);
+        })
+    }
+  }, [])
 
-  // ============= YOUR GAMES SECTION ================= //
-  
-  //TODO: Update with TicTacToeGames.Index
-  // useEffect(() => {
-  //   if(token) {
-  //     fetch("/posts", {
-  //       headers: {
-  //         'Authorization': `Bearer ${token}`
-  //       }
-  //     })
-  //       .then(response => response.json())
-  //       .then(async data => {
-  //         window.localStorage.setItem("token", data.token)
-  //         setToken(window.localStorage.getItem("token"))
-  //         setPosts(data.posts);
-  //       })
-  //   }
-  // }, [])
-    
 
   // ============= LOGOUT ======================== //
   const logout = () => {
@@ -39,15 +37,13 @@ const GamesLobby = ({ navigate }) => {
     navigate('/login')
   }
 
-
-  
-  
   // ============== JSX FOR UI ========================
 
     if(token) {
       return(
         <>
           <h2>Games Lobby</h2>
+          <p>Welcome player {sessionUserID}</p>
           <div id='create-game-section'>
             <h3>Create a game:</h3>
 
@@ -64,10 +60,16 @@ const GamesLobby = ({ navigate }) => {
           <br/>
 
           <div id='temp-all-games'>
-            <h3>Temp: All games:</h3>
-              Will change to the below later, this is just for 3pm:
+            <h3>Temp: All games:               Will change to the below later, this is just for 3pm:
+            </h3>
+              Checking if this is fetching games:
+              <br/>
+              {allGames ? 'games exist' : 'games not found'}
+              <br/>
+              {allGames ? `${allGames.length} games found` : 'games not found'}
 
-              <AllGames/>
+
+              {allGames && <AllGames allGames={allGames} sessionUserID={sessionUserID}/>}
               {/* <div id='available_games' role="available_games">
                   {games.map(
                     (game) => ( <Game game={ game } key={ game._id } /> )
@@ -168,19 +170,19 @@ const NewGameButton = (props) => {
 
 // ---------- TEMP ALL GAMES ------------------ //
 const AllGames = (props) => {
-  // const games = props.games
-  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10'];
+  const allGames = props.allGames
+  const sessionUserID = props.sessionUserID
 
-  // const items = [{_id:1, player_one: 12345, player_two: null}, {_id:1, player_one: 12345, player_two: 123456}]
+
 
   return(
     <>
     <div style={{ height: '200px', overflowY: 'scroll', border: '1px solid #ccc', padding: '5px', width: '70%' }}>
 
       <ul style={{ listStyle: 'none', padding: 0 }}>
-        {items.map((item, index) => (
+        {allGames.map((game, index) => (
           <li key={index} style={{ borderBottom: '1px solid #eee', padding: '5px' }}>
-            {item}
+            <SingleGame game={game} sessionUserID={sessionUserID}/>
           </li>
         ))}
       </ul>
@@ -191,11 +193,19 @@ const AllGames = (props) => {
 }
 const SingleGame = (props) => {
   const game = props.game
+  const sessionUserID = props.sessionUserID
 
   return (
     <>
-    <p>Tictactoe #{game._id}: {game.player_two ? `${game.player_one} vs. ${game.player_two}` : `${game.player_one} awaiting opponent`}</p>
+    <a href={`/tictactoe/${game._id}`}>Tictactoe #{game._id}: {game.player_two ? `${game.player_one} vs. ${game.player_two}` : `${game.player_one} awaiting opponent`}</a>
     {/* TODO: add join button, if open game; forfeit button if your game & not awaiting challenger */}
+    {game.awaiting_challenger && <> <button>Join Game</button> <button>Delete Game</button></>}
+    {/* {game.player_one === sessionUserID && <button>Delete Game</button>} */}
+    {game.player_one === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
+    {game.player_two === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
+
+
+
     </>
   )
 }
