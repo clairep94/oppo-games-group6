@@ -60,20 +60,50 @@ const GamesLobby = ({ navigate }) => {
       return(
         <>
           <h2>Games Lobby</h2>
-          <button onClick={newTicTacToeGame}>
-              New TicTacToe Game
-          </button>
-
-          <a href='/tictactoetest'>Go to demo game</a>
-
-            <button onClick={logout}>
-              Logout
+          <div id='create-game-section'>
+            <h3>Create a game:</h3>
+            {/* TODO: Make this button into a function, and map per game */}
+            <button onClick={newTicTacToeGame}>
+                New TicTacToe Game
             </button>
-          {/* <div id='available_games' role="available_games">
-              {games.map(
-                (game) => ( <Game game={ game } key={ game._id } /> )
-              )}
-          </div> */}
+            <br/>
+
+            <button onClick={() => {console.log('placeholder for RPS')}}>
+              New Rock Paper Scissors Game
+            </button>
+            <br/>
+          </div>
+
+          <br/>
+          <br/>
+
+          <div id='open-games-section'>
+            <h3>Join a game:</h3>
+              TODO: Open games. Each game has a join button and a link, and shows the Game Type, GameID + Host ID
+              {/* <div id='available_games' role="available_games">
+                  {games.map(
+                    (game) => ( <Game game={ game } key={ game._id } /> )
+                  )}
+              </div> */}
+          </div>
+
+          <br/>
+          <br/>
+
+          <div id='your-games-section'>
+            <h3>Your games:</h3>
+            TODO: Your games. Each game has a link, and shows the Game Type, GameID + Forfeit or Delete button based on if there's an opponent
+
+          </div>
+
+          <br/>
+          <br/>
+
+          
+
+          <button onClick={logout}>
+            Logout
+          </button>
         </>
       )
     } else {
