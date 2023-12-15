@@ -28,6 +28,13 @@ const SignUpForm = ({ navigate }) => {
       setError("");
     }
 
+    if (!isValidEmail(email)) {
+      setError("Please enter a valid email address");
+      return;
+    } else {
+      setError("");
+    }
+
     if (!isValidPassword(password)) {
       setError("Password must have at least 8 characters with no spaces and must include at least 1 special character and 1 number");
       return;
@@ -52,7 +59,7 @@ const SignUpForm = ({ navigate }) => {
     })
       .then(response => {
         if(response.status === 201) {
-          navigate('/lobby')
+          navigate('/login')
         } else {
           navigate('/signup')
         }
@@ -125,4 +132,15 @@ function isValidUsername(username) {
   return usernameRegex.test(username);
 }
 
+function isValidEmail(email) {
+  /* Email must comply with the following criteria set out in the email address standards (RFC 5321 and RFC 5322):
+  no spaces
+  a single @ sign
+  maximum  64 characters in the local part before the @ sign
+  only certain accepted characters in the local part before the @ sign
+  maximum 255 characters in the domain part after the @ sign
+  the top-level domain (TLD) e.g. .com .org should be a valid and recognised TLD*/
+  const emailRegex = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/;
+  return emailRegex.test(email);
+}
 export default SignUpForm;
