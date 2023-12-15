@@ -21,8 +21,15 @@ const SignUpForm = ({ navigate }) => {
       setError("")
     }
 
+    if (!isValidUsername(password)) {
+      setError("Username must have at least 6 characters and must not include any spaces or special characters");
+      return;
+    } else {
+      setError("");
+    }
+
     if (!isValidPassword(password)) {
-      setError("Password have at least 8 characters and have at least 1 lowercase letter, 1 uppercase letter, 1 special character and 1 number.");
+      setError("Password must have at least 8 characters including at least 1 lowercase letter, 1 uppercase letter, 1 special character and 1 number.");
       return;
     } else {
       setError("");
@@ -107,9 +114,15 @@ const SignUpForm = ({ navigate }) => {
 }
 
 function isValidPassword(password) {
-  // Password must be 8 characters or more, contain a special character, and have at least 1 number
+  // Password must have at least 8 characters and contain at least 1 special character, and have at least 1 number
   const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})(?=.*[a-z])(?=.*[A-Z])/;
   return passwordRegex.test(password);
+}
+
+function isValidUsername(username) {
+  // Username must have at least 6 characters and must not include any spaces or special characters
+  const usernameRegex = /^[a-zA-Z0-9]{6,}$/;
+  return usernameRegex.test(username);
 }
 
 export default SignUpForm;
