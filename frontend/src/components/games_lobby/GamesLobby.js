@@ -1,10 +1,20 @@
 import React, { useEffect, useState } from 'react';
-// import Post from '../post/Post'
+import getSessionUserID from "../../utility/getSessionUserID";
+
+
 
 const GamesLobby = ({ navigate }) => {
-  // const [posts, setPosts] = useState([]); //will change to available_games, setAvailableGames
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
 
+  const [token, setToken] = useState(window.localStorage.getItem("token"));
+  const sessionUserID = getSessionUserID(token);
+  const games = ['tictactoe'] // <------- LIST OF ENDPOINTS FOR EACH GAME!!
+  const [openGames, setOpenGames] = useState(null);
+  const [yourGames, setYourGames] = useState(null);
+
+
+
+  // ============= YOUR GAMES SECTION ================= //
+  
   //TODO: Update with TicTacToeGames.Index
   // useEffect(() => {
   //   if(token) {
@@ -23,38 +33,16 @@ const GamesLobby = ({ navigate }) => {
   // }, [])
     
 
+  // ============= LOGOUT ======================== //
   const logout = () => {
     window.localStorage.removeItem("token")
     navigate('/login')
   }
 
-  const newTicTacToeGame = async (event) => {
-    event.preventDefault()
-
-    try {
-      const response = await fetch('/tictactoe', {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({}),
-      });
-  
-      if (response.status === 201) {
-        const data = await response.json();
-        const gameID = data.game._id;
-        navigate(`/tictactoe/${gameID}`);
-      } else {
-        navigate('/signup');
-      }
-    } catch (error) {
-      console.error('Error creating new TicTacToe game:', error);
-      navigate('/signup');
-    }
-  };
 
   
+  
+  // ============== JSX FOR UI ========================
 
     if(token) {
       return(
@@ -62,20 +50,34 @@ const GamesLobby = ({ navigate }) => {
           <h2>Games Lobby</h2>
           <div id='create-game-section'>
             <h3>Create a game:</h3>
-            {/* TODO: Make this button into a function, and map per game */}
-            <button onClick={newTicTacToeGame}>
-                New TicTacToe Game
-            </button>
-            <br/>
 
-            <button onClick={() => {console.log('placeholder for RPS')}}>
-              New Rock Paper Scissors Game
-            </button>
-            <br/>
+            <div id='create-game-buttons'>
+              {games.map((game) => <>
+              <NewGameButton key={game} game={game} token={token} navigate={navigate} />
+              <br/>
+              </>)}
+            </div>
+
           </div>
 
           <br/>
           <br/>
+
+          <div id='temp-all-games'>
+            <h3>Temp: All games:</h3>
+              Will change to the below later, this is just for 3pm:
+
+              <AllGames/>
+              {/* <div id='available_games' role="available_games">
+                  {games.map(
+                    (game) => ( <Game game={ game } key={ game._id } /> )
+                  )}
+              </div> */}
+          </div>
+
+          <br/>
+          <br/>
+
 
           <div id='open-games-section'>
             <h3>Join a game:</h3>
@@ -110,5 +112,93 @@ const GamesLobby = ({ navigate }) => {
       navigate('/login')
     }
 }
+
+
+// ============== SUPPORTIVE COMPONENTS ============================================== //
+
+// ----------- NEW GAME BUTTON ---------------------- //
+const NewGameButton = (props) => {
+  const game = props.game
+  const token = props.token
+  const navigate = props.navigate
+  // const gameTitle = props.gameTitle
+
+  const createNewGame = async (event) => {
+    event.preventDefault()
+
+    try {
+      const response = await fetch(`/${game}`, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({}),
+      });
+  
+      if (response.status === 201) {
+        const data = await response.json();
+        const gameID = data.game._id;
+        navigate(`/${game}/${gameID}`);
+      } else {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error(`Error creating new ${game} game:`, error);
+      navigate('/login');
+    }
+  };
+
+
+  return (
+    <button
+      aria-label={`create ${game} game button`}
+      onClick={createNewGame}
+      className={`create-${game}-game-button`}
+      id={`create-${game}-game-button`}
+      style={{width: "200px", height: "50px"}}
+    >
+      {`New ${game} game`}
+      {/* TODO: Fix this string to be title case */}
+    </button>
+  )
+
+  };
+
+
+// ---------- TEMP ALL GAMES ------------------ //
+const AllGames = (props) => {
+  // const games = props.games
+  const items = ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6', 'Item 7', 'Item 8', 'Item 9', 'Item 10'];
+
+  // const items = [{_id:1, player_one: 12345, player_two: null}, {_id:1, player_one: 12345, player_two: 123456}]
+
+  return(
+    <>
+    <div style={{ height: '200px', overflowY: 'scroll', border: '1px solid #ccc', padding: '5px', width: '70%' }}>
+
+      <ul style={{ listStyle: 'none', padding: 0 }}>
+        {items.map((item, index) => (
+          <li key={index} style={{ borderBottom: '1px solid #eee', padding: '5px' }}>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </div>
+    </>
+  )
+
+}
+const SingleGame = (props) => {
+  const game = props.game
+
+  return (
+    <>
+    <p>Tictactoe #{game._id}: {game.player_two ? `${game.player_one} vs. ${game.player_two}` : `${game.player_one} awaiting opponent`}</p>
+    {/* TODO: add join button, if open game; forfeit button if your game & not awaiting challenger */}
+    </>
+  )
+}
+
 
 export default GamesLobby;
