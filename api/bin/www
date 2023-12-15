@@ -11,7 +11,7 @@ if (!process.env.JWT_SECRET) {
  */
 
 var app = require("../app");
-var debug = require("debug")("battleships:server"); //previously ("battleships:server")
+var debug = require("debug")("battleships:server"); //previously ("acebook:server")
 var http = require("http");
 var mongoose = require("mongoose");
 

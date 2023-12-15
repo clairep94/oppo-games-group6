@@ -4,6 +4,7 @@ This is a working map of our project directory
 
 For each new feature, we must create/modify:
 
+- `API/app.js` (only for new schema, create the schema root endpoint)
 - `API/Model` (only for new schema or schema change)
 - `API/Controller`
 - `API/Route`

@@ -11,8 +11,8 @@ class TokenGenerator {
       user_id: user_id,
       iat: Math.floor(Date.now() / 1000),
       
-      // Set the JWT token to expire in 10 minutes -> changed to 20 minutes for convenience
-      exp: Math.floor(Date.now() / 1000) + (20 * 60)
+      // Set the JWT token to expire in 10 minutes -> changed to 60 minutes for convenience
+      exp: Math.floor(Date.now() / 1000) + (60 * 60)
     }, secret);
   }
 }
