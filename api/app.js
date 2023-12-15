@@ -16,7 +16,9 @@ const app = express();
 const server = require('http').Server(app);
 const io = socketio(server);
 
-const port = 8080;
+dotenv.config();
+const port = process.env.PORT || 5001;
+
 
 // setup for receiving JSON
 app.use(express.json())
