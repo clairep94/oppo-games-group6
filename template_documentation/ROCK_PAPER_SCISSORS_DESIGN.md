@@ -72,6 +72,32 @@
         - Finds and returns the matching game document.
         - NOTE: `Index` and `Find` this doesn't return the *entire* game object, because certain properties in the game object are marked with a *knownBy* list of player IDs. 
     - function `DoGameAction`: handle **PUT** requests to `/:id/:op`.
-        - Uses game logic functions to process actions, either rejecting the action, or accepting it (which will change the game object).
-        - Uses `findOneAndReplace` to overwrite the game document.
+        - Uses the game logic function `handleGameAction` to process actions, either rejecting the action, or accepting it (which will change the game object).
+            - `handleGameAction` is described in the "Game logic functions" section. It returns an object containing the game (which may or may not have been updated), and a response.
+                - In short: it takes `game` and `action` (`action` contains `op`, `args`, `playerId`) as arguments and returns `game` and `response` (`response` contains `code` and sometimes `message`)
+            - `DoGameAction` uses `response.code` to determine the next course of action:
+                - On `"ok"`, the action was accepted, and so the game object changed as a result (no successful action is idempotent because at the very least it will modify `game.actionLog`). In this case, the Mongoose `findOneAndReplace` method is used to replace the game document.
+                    - This isn't an atomic operation (because it finds, then processes with `handleGameAction`, then replaces the document) but it doesn't matter for our use case since the backend is running on Node which is single-threaded. (Otherwise we would have had to figure out how transactions work in mongoose.)
+                - On `"invalid"`, the action was rejected, because it wasn't an acceptable action given the state of the game. An example of when this code is recieved is if any actions are attempted after the game has already ended, or if a third player tries to join the game in the waiting phase.
+                    - It seems like the HTTP status code 409 Conflict might be appropriate here: *"the request could not be completed due to a conflict with the current state of the target resource"*.
+                - On `"unknown-token"`, an undefined constant was provided in the request, which could indicate e.g. the endpoint was mispelled in a `fetch` API call on the frontend. So this will return a 404 Not Found to the client. (TODO: determine if 404 is the most appropriate here).
+
     - We will probably also have `Delete` (**DELETE** to `/:id`, allows you to delete if you were the game host OR a site administrator) in the future, but it's not needed for now.
+
+- Game logic functions: **FOR NOW: SEE COMMENTS IN /api/lib/game-logic/rock-paper-scissors**
+    - Each game needs three key game logic functions: `getNewGame`, `handleGameAction`, and `makeGameSnapshot`.
+        - `getNewGame` takes no arguments and always returns a new, correctly initialised game object.
+            - This should be called by the controller `Create` function, which should save the returned object.
+        - `handleGameAction` takes `game` and `action` as arguments and returns `game` (possibly modified) and `response`.
+            - Arguments: `game` is the prior game object; `action` is an object with properties `op`, `args`, and `playerId`.
+                - `op` is the operation to perform, which must be one of the operations listed in the game's `OPS`, defined in `handleGameAction`.
+                - `args` is an object containing any additional data needed to perform the requested operation; for many operations, no additional data (other than `playerId`) is required, so `args` will be `{ }`.
+                - `playerId` is the ID of the logged-in user of the client sending the request.
+            - Return values: `game` is the possibly-updated game object (for consistency reasons, it is always returned even if it's unchanged); `response` is an object with property `code` that will be one of the response codes listed in the game's `RESPONSE_CODES`, defined in `handleGameAction`.
+                - The standard response codes are `"ok"` (corresponding to 200 OK), `"invalid"` (corresponding to 409 Conflict), and `"unknown-token"` (corresponding to 400 Not Found).
+        - (TODO: check this is how we want to do it) `makeGameSnapshot` takes `game` and `playerId` as arguments and returns `gameSnapshot`.
+            - `gameSnapshot` is a 'redacted' version of `game` where certain data, marked (**TODO: somehow!**) as secret or "known/unknown" to certain players (playerIds), is not included. This version is safe to send to the client for rendering the UI in such a way that the player will not be able to deduce disallowed information ("peeking at opponents' cards") via methods such as using the browser inspect tool to see information send to the client but not rendered by the UI.
+    - Documentation for the game logic functions has been temporarily moved to comments in those files (as it was changing too quickly), it will be moved back once those have been worked out and stabilised enough.
+
+- Schema: **FOR NOW: SEE COMMENTS IN /api/models/rock-paper-scissors-game**
+    - See above
