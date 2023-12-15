@@ -36,7 +36,7 @@ const SignUpForm = ({ navigate }) => {
     }
 
     if (!isValidPassword(password)) {
-      setError("Password must have at least 8 characters with no spaces and must include at least 1 special character and 1 number");
+      setError("Password must have at least 8 characters with no spaces and must include at least 1 lowercase letter, 1 uppercase letter, 1 special character and 1 number");
       return;
     } else {
       setError("");
@@ -121,7 +121,7 @@ const SignUpForm = ({ navigate }) => {
 }
 
 function isValidPassword(password) {
-  // Password must have at least 8 characters with no spaces and must include at least 1 special character and 1 number
+  // Password must have at least 8 characters with no spaces and must include at least 1 lowercase letter, 1 uppercase letter, 1 special character and 1 number
   const passwordRegex = /^(?!.*\s)(?=.*[0-9])(?=.*[!@#$%^&*])(?=.{8,})(?=.*[a-z])(?=.*[A-Z])/;
   return passwordRegex.test(password);
 }
@@ -132,14 +132,14 @@ function isValidUsername(username) {
   return usernameRegex.test(username);
 }
 
+/* Email must comply with the following criteria set out in line with the email address standards (RFC 5321 and RFC 5322):
+no spaces
+a single @ sign
+maximum 64 characters before the @ sign
+only certain accepted characters before the @ sign
+maximum 255 characters after the @ sign
+the top-level domain (TLD) e.g. .com .org should be a valid and recognised TLD*/
 function isValidEmail(email) {
-  /* Email must comply with the following criteria set out in the email address standards (RFC 5321 and RFC 5322):
-  no spaces
-  a single @ sign
-  maximum  64 characters in the local part before the @ sign
-  only certain accepted characters in the local part before the @ sign
-  maximum 255 characters in the domain part after the @ sign
-  the top-level domain (TLD) e.g. .com .org should be a valid and recognised TLD*/
   const emailRegex = /^[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+\/=?^_`{|}~-]+)*@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/;
   return emailRegex.test(email);
 }
