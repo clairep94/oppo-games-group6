@@ -20,19 +20,19 @@
 ### Use of states
 
 - Pre-game states:
-    - Waiting for host
+    - Waiting for host (code `AWAITING_HOST`)
         - Ops allowed in this state: `JOIN` (only)
             - `JOIN`: The first player joining necessarily becomes the host (stored in a property)?
         - API note: When creating a new game, either offer a controller `CreateAsHost` function, or make the "create game" button on the frontend call an `async` function which makes the game, waits for success confirmation, and then sends a `JOIN` op
             - Controller `CreateAsHost` function is probably a better idea, which would mean the 'Waiting for host' state would be essentially for algebraic completeness (read: testing) purposes
             - BETTER IDEA THAT WE SHOULD GO WITH: Have `Create` automatically make you join as the host, but supress this functionality if JSON `{ shouldJoin: false }` is in the request body.
                 - (The **POST** header should be 'Content-Type': 'application/json' in any case, because we might want to pre-specify settings so e.g. there could be separate buttons for "Start best-of-1 game" and "Start best-of-3)
-        - Properties required to enter state: `_id` (auto-assigned), `title: String` with `"Rock Paper Scissors"`, `createdAt: Date`, `players: [userId]` (initially `[]`), `updatedAt: Date`, `actionLog: [Object of <timestamp, <op, playerId, extras> OR <requestForRandomValue, randomValue /*MAYBE??? Syntax needs work*/>>]` (initially `[]`)
+        - Properties required to enter state: `_id` (auto-assigned), `title: String` with `"Rock Paper Scissors"`, `createdAt: Date`, `players: [userId]` (initially `[]`), `updatedAt: Date`, `actionLog: [Object of <timestamp, <op, playerId, extras> OR <requestForRandomValue, randomValue /*MAYBE??? Syntax needs work*/>>]` (initially `[]`), `progressState`
             - `updatedAt` is not changed whenever an op results in an `INVALID` or error result code.
             - `actionLog` should also not be changed (appended to) whenever an op results in such a code. `actionLog` also **DEFINITELY SHOULD NOT** be sent to the client before the game has ended, it contains literally all the successful game actions plus other info such as random number generation results.
                 - The idea is that `actionLog`, along with the standard initial game state, can be used to reconstruct the exact game state. So it will be useful for debugging.
                 - Random generation doesn't feature in RPS because there isn't even a random first player as turns are simultaneous. This makes it a good candidate for testing out implementing the history feature, since we don't have to define the randomness syntax yet.
-    - Waiting for game start
+    - Waiting for game start (code `AWAITING_GAME`)
         - Ops allowed in this state: `JOIN`, `SETUP`, `READY`; in future: `QUIT`, `KICK`
             - `JOIN`: Allows players to join up to the player limit for RPS of 2 players.
                 - Implementation detail: Players are stored in an array.
@@ -46,7 +46,7 @@
             - *(Future)* `KICK`: Host can remove a specific player from the game. This should send a message to the client to inform the user of this and show them a link to click to get back to the lobby.
                 - Redirecting them automatically (after a short delay?) might be possible but a little tricky because `navigate` is passed to the `GamePage` component but not the game component itself.
         - Properties required to enter state: `players` with `[<id of host>]`, `hostId: userId` with `<id of host>` (for now: can't change host), `settings: Object` with `<the default settings>`, `isReady: [Boolean]` (starts `[false]`)
-    - In-game
+    - In-game (code `PLAYING_GAME`)
         - Ops allowed in this state: `THROW (handSign)`, `RESIGN`
             - `THROW`: Takes a hand sign as a property in the request body (`"rock"`, `"paper"` or `"scissors"`). Request body also contains the round number (1-indexed for inspect readability) just to be safe, with a response code of `INVALID` returned if this doesn't match the current round number.
                 - This can't be overwritten (i.e. first choice is final - UI: grey out buttons once one is pressed?) but perhaps the UI could let you click around a bit (highlighting your last choice) and then click "confirm" to send your selection to the server. Sending a `THROW` op with e.g. `{handSign: null}` to the server might need to result (for generalisation purposes) in a response code of `ERROR`/`ERROR_TOKEN_UNDEFINED`/etc. rather than `INVALID`, so perhaps the `handSignSelected` variable (or equivalent) should be initialised to `"default"` or `"selection-pending"`.
@@ -55,7 +55,7 @@
             - `RESIGN`: Instantly ends the game, with a loss for the player resigning. Isn't dependent on e.g. whose turn it is (not that RPS, as a simultaneous game, has traditional turns).
                 - Game engine note: Calls `doResignTransition`; across different game titles, this should be the standard name for the function that does this.
         - Properties required to enter state: `hasThrownSign: [Boolean]` with all `false` (also resets to this each new round), `currentRound` with `1`, `signThrown: [String]`, `scores: [Number]` with all `0`
-    - Post-game
+    - Post-game (code `CONCLUDED`)
         - Ops allowed in this state: None. This is a terminal state which exists for the purpose of marking the game as complete and immutable.
             - API: Functionality such as deleting completed games should be done via a **DELETE** request, not a **PUT** request.
         - Properties required to enter state: `concludedAt: Date`, `conclusionType: String`, `playerResults: [{ outcome: String, finalScore: Number }]`
@@ -97,7 +97,14 @@
                 - The standard response codes are `"ok"` (corresponding to 200 OK), `"invalid"` (corresponding to 409 Conflict), and `"unknown-token"` (corresponding to 400 Not Found).
         - (TODO: check this is how we want to do it) `makeGameSnapshot` takes `game` and `playerId` as arguments and returns `gameSnapshot`.
             - `gameSnapshot` is a 'redacted' version of `game` where certain data, marked (**TODO: somehow!**) as secret or "known/unknown" to certain players (playerIds), is not included. This version is safe to send to the client for rendering the UI in such a way that the player will not be able to deduce disallowed information ("peeking at opponents' cards") via methods such as using the browser inspect tool to see information send to the client but not rendered by the UI.
-    - Documentation for the game logic functions has been temporarily moved to comments in those files (as it was changing too quickly), it will be moved back once those have been worked out and stabilised enough.
 
-- Schema: **FOR NOW: SEE COMMENTS IN /api/models/rock-paper-scissors-game**
-    - See above
+- Schema:
+    - **First needed for AWAITING_HOST**
+        - `_id` auto-assigned on game creation
+        - `title: String` with `"Rock Paper Scissors"`
+        - `createdAt: Date` using `Date.now()`
+        - `players: [userId]` with `[]`
+        - `updatedAt: Date` with `createdAt`
+        - `actionLog: [Action]` with `[]`
+        - `progressState: String` with `AWAITING_HOST`
+    -
