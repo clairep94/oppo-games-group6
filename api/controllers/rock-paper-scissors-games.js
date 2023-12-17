@@ -1,7 +1,7 @@
 const RockPaperScissorsGame = require("../models/rock-paper-scissors-game");
 const TokenGenerator = require("../lib/token_generator");
 const {
-  getNewGame, handleGameAction, makeGameSnapshot
+  RESPONSE_CODES, getNewGame, handleGameAction, makeGameSnapshot
 } = require("../lib/game-logic/rock-paper-scissors");
 
 const RockPaperScissorsGamesController = {
@@ -43,7 +43,7 @@ const RockPaperScissorsGamesController = {
       } else {
         // `findById` returns `null` if there is no document with the matching id.
         if (game === null) {
-          res.status(204).json({ }); // 204 No Content
+          res.status(204).json({ token: token }); // 204 No Content
         } else {
           // Use `makeGameSnapshot` to redact any data the client isn't allowed to know.
           const gameSnapshot = makeGameSnapshot(game, clientUserId);
@@ -75,12 +75,60 @@ const RockPaperScissorsGamesController = {
           // (Will share some code with DoGameAction)
         }
         // Respond with the id of the new game.
-        res.status(201).json({ message: 'OK', token: token, gameId: game.id })
+        res.status(201).json({ message: 'OK', token: token, gameId: game.id });
       }
     });
   },
 
-  DoGameAction: (req, res) => {},
+  DoGameAction: (req, res) => {
+    const clientUserId = req.user_id;
+    const token = TokenGenerator.jsonwebtoken(clientUserId);
+    // Get the game id, operation, and arguments
+    const gameId = req.params.id;
+    const operation = req.params.op;
+    const operationArgs = req.body.args;
+
+    // First DB access: Find the game
+    RockPaperScissorsGame.findById(req.params.id)
+    /*.populate('players', 'username')*/ // DO NOT USE with `handleGameAction`!
+    .exec((err, game) => {
+      if (err) {
+        res.status(500).json({ error: err, token: token });
+      } else {
+        // Use a game logic function to process the action request
+        const result = handleGameAction(game, {
+          op: operation, args: operationArgs, playerId: clientUserId,
+        });
+        // Use the result response code to determine next steps
+        if (result.response === RESPONSE_CODES.OK) {
+          // The action was successful.
+          // Second DB access: Overwrite the game with the updated version.
+          RockPaperScissorsGame.findOneAndReplace({ _id: gameId }, result.game)
+          .populate('players', 'username')
+          .exec((err, updatedGame) => {
+            if (err) {
+              res.status(500).json({ error: err, token: token });
+            } else {
+              // Respond with a game snapshot
+              const updatedGameSnapshot = makeGameSnapshot(updatedGame, clientUserId);
+              res.status(200).json({ message: 'OK', game: updatedGameSnapshot, token: token });
+            }
+          });
+        } else if (result.response === RESPONSE_CODES.INVALID) {
+          // The action was rejected (for instance, trying to make a move out-of-turn).
+          res.status(409).json({ message: 'REJECTED', token: token }); // 409 Conflict
+        } else if (result.response === RESPONSE_CODES.UNKNOWN_TOKEN) {
+          // The action was incomprehensible (e.g. misspelled op in endpoint URL).
+          res.status(404).json({ message: 'NOT_FOUND', token: token}); // 404 Not Found
+        } else {
+          // Response code unknown ==> That's an Internal Server Error
+          const msg = `Unrecognised game logic response code: ${result.response}`;
+          res.status(500).json({ error: new Error(msg), token: token });
+        }
+      }
+    });
+
+  },
 
   //Delete: (req, res) => {},
 
