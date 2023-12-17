@@ -33,13 +33,14 @@
                 - The idea is that `actionLog`, along with the standard initial game state, can be used to reconstruct the exact game state. So it will be useful for debugging.
                 - Random generation doesn't feature in RPS because there isn't even a random first player as turns are simultaneous. This makes it a good candidate for testing out implementing the history feature, since we don't have to define the randomness syntax yet.
     - Waiting for game start (code `AWAITING_GAME`)
-        - Ops allowed in this state: `JOIN`, `SETUP`, `READY`; in future: `QUIT`, `KICK`
+        - Ops allowed in this state: `JOIN`, `SETUP (settings)`, `READY (agreedSettings)`; in future: `QUIT`, `KICK (playerId)`
             - `JOIN`: Allows players to join up to the player limit for RPS of 2 players.
                 - Implementation detail: Players are stored in an array.
             - `SETUP`: Allows the host to change game settings.
                 - Currently the only setting is `gameLength`, which can be set to `1` for a best-of-1 game or `3` for a best-of-3 game. Default is `1`.
                 - The game setting values are visible to all players in the pre-game UI, but only the host can change the settings. (This works fine due to the chat feature: other player(s) can ask for the host to do specific settings - **interesting idea for the demo?**)
-            - `READY`: For the moment, have this be *idempotent* in setting a ready-to-start bool in an array to `true`, but also set all these bools to false (sending messages) if `SETUP` alters game settings 
+            - `READY`: For the moment, have this be *idempotent* in setting a ready-to-start bool in an array to `true` IF the settings are as described in `agreedSettings`, but also set all these bools to false (sending messages) if `SETUP` alters game settings
+                - The client should send `agreedSettings` to match the settings it's displaying to the client via the UI.
             - *(Future)* `QUIT`: Quitting as a non-host player allows another player to join. Quitting as the host cancels the game.
                 - Maybe cancelling the game deletes it from the DB? Would need to check it's fine for a **PUT** request to do this.
                 - This must also remove the bool in the ready-to-start array.
