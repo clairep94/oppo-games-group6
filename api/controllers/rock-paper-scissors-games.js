@@ -10,6 +10,7 @@ const RockPaperScissorsGamesController = {
   // },
 
   Index: (req, res) => {
+    const clientUserId = req.user_id;
     RockPaperScissorsGame.find()
     // The following line uses mongoose's "field name syntax" to select specific fields for the populated documents.
     // This avoids the issue with using .populate when the child schema is updated; 
@@ -18,13 +19,36 @@ const RockPaperScissorsGamesController = {
     // DO NOT POPULATE `hostId` - the host's username will already be in the `players` array,
     // and during the AWAITING_HOST state the hostId property will be null.
     .exec((err, games) => {
+      const token = TokenGenerator.jsonwebtoken(clientUserId);
       if (err) {
-        res.status(500).json({ error: err });
+        res.status(500).json({ error: err, token: token });
       } else {
         // Use `makeGameSnapshot` to redact any data the client isn't allowed to know.
-        const gameSnapshots = games.map((game) => makeGameSnapshot(game, req.user_id));
-        const token = TokenGenerator.jsonwebtoken(req.user_id);
+        const gameSnapshots = games.map((game) => makeGameSnapshot(game, clientUserId));
         res.status(200).json({ games: gameSnapshots, token: token });
+      }
+    });
+  },
+
+  FindById: (req, res) => {
+    const clientUserId = req.user_id;
+    const gameId = req.params.id;
+    RockPaperScissorsGame.findById(gameId)
+    // See above for what this .populate function call does
+    .populate('players', 'username')
+    .exec((err, game) => {
+      const token = TokenGenerator.jsonwebtoken(clientUserId);
+      if (err) {
+        res.status(500).json({ error: err, token: token });
+      } else {
+        // `findById` returns `null` if there is no document with the matching id.
+        if (game === null) {
+          res.status(204).json({ }); // 204 No Content
+        } else {
+          // Use `makeGameSnapshot` to redact any data the client isn't allowed to know.
+          const gameSnapshot = makeGameSnapshot(game, clientUserId);
+          res.status(200).json({ game: gameSnapshot, token: token });
+        }
       }
     });
   },
