@@ -71,8 +71,6 @@ const findPlayerIndex = (game, playerId) => {
   }
 };
 
-// Placeholder "do-nothing" functions
-
 const getNewGame = () => {
   // Refer to schema & docs for info on what this should return.
   const now = Date.now();
@@ -127,9 +125,34 @@ const makeGameSnapshot = (game, playerId) => {
   return game;
 };
 
+
+
+// const handleGameAction = (game, action) => {
+//   return { game: game, response: {code: RESPONSE_CODES.OK } };
+// };
+
 const handleGameAction = (game, action) => {
-  return { game: game, response: {code: RESPONSE_CODES.OK } };
+  try {
+    validateProgressState(game);
+    validateRequestedOperation(action);
+  } catch (e) {
+    return { game: game, response: {
+      code: RESPONSE_CODES.UNKNOWN_TOKEN, error: e,
+    }};
+  }
+  try {
+    getStateManager(game.progressState)(game, action);
+  } catch (e) {
+    return { game: game, response: {
+      code: RESPONSE_CODES.INVALID, error: e,
+    }};
+  }
+  return { game: game, response: { code: RESPONSE_CODES.OK }};
 };
+
+
+
+
 
 module.exports = {
   RESPONSE_CODES,

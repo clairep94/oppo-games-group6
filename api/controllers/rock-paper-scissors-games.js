@@ -119,10 +119,10 @@ const RockPaperScissorsGamesController = {
           });
         } else if (result.response === RESPONSE_CODES.INVALID) {
           // The action was rejected (for instance, trying to make a move out-of-turn).
-          res.status(409).json({ message: 'REJECTED', token: token }); // 409 Conflict
+          res.status(409).json({ message: 'REJECTED', error: result.response.error, token: token }); // 409 Conflict
         } else if (result.response === RESPONSE_CODES.UNKNOWN_TOKEN) {
           // The action was incomprehensible (e.g. misspelled op in endpoint URL).
-          res.status(404).json({ message: 'NOT_FOUND', token: token}); // 404 Not Found
+          res.status(404).json({ message: 'NOT_FOUND', error: result.response.error, token: token}); // 404 Not Found
         } else {
           // Response code unknown ==> That's an Internal Server Error
           const msg = `Unrecognised game logic response code: ${result.response}`;
