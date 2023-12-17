@@ -92,6 +92,18 @@ const registerSuccessfulAction = (game, action) => {
   // and push to actionLog
 };
 
+const findPointsForRound = (thisSign, otherSign) => {
+  if (
+    (thisSign === HAND_SIGNS.ROCK && otherSign === HAND_SIGNS.SCISSORS) ||
+    (thisSign === HAND_SIGNS.PAPER && otherSign === HAND_SIGNS.ROCK) ||
+    (thisSign === HAND_SIGNS.SCISSORS && otherSign === HAND_SIGNS.PAPER)
+  ) {
+    return 1;  // Win awards 1 point
+  } else {
+    return 0;  // Draw and loss both award 0 points
+  }
+};
+
 // ============================= STATE MANAGERS =============================
 
 const getStateManager = (progressState) => {
@@ -235,11 +247,22 @@ const doThrowHandSignEvent = (game, action) => {
 
 const doNextRoundEvent = (game, action) => {
   // Evaluate result of round
+  const signsThisRound = game.signsThrown[game.currentRound - 1];
+  game.scores[0] += findPointsForRound(signsThisRound[0], signsThisRound[1]);
+  game.scores[1] += findPointsForRound(signsThisRound[1], signsThisRound[0]);
+  if (
+    (game.scores[0] >= game.settings.pointsObjective) ||
+    (game.scores[1] >= game.settings.pointsObjective)
+  ) {
+    doWinTransition(game, action);
+  } else { // Clean up for next round
+    game.currentRound += 1;
+    game.signsThrown.push([HAND_SIGNS.NONE, HAND_SIGNS.NONE]);
+  }
+};
 
-}
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
-
 
 const getNewGame = () => {
   // Refer to schema & docs for info on what this should return.
