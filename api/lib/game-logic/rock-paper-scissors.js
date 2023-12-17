@@ -1,5 +1,7 @@
 // Rock Paper Scissors game logic
 
+const { update } = require("../../models/rock-paper-scissors-game");
+
 // Things this file should export:
 // object RESPONSE_CODES
 // function getNewGame() -> game
@@ -55,6 +57,12 @@ const validateProgressState = (game) => {
   }
 };
 
+const validateSettingsObject = (settings) => {
+  if (!(settings.gameLength === 1 || settings.gameLength === 3)) {
+    throw new Error(`Invalid settings.gameLength of ${settings.gameLength}`);
+  }
+};
+
 
 // ===================== MISCELLANEOUS UTILITY FUNCTIONS ====================
 
@@ -70,6 +78,9 @@ const findPlayerIndex = (game, playerId) => {
   }
 };
 
+const checkSettingsEqual = (game, settings) => {
+  return (game.settings.gameLength === settings.gameLength);
+};
 
 // ============================= STATE MANAGERS =============================
 
@@ -85,7 +96,7 @@ const getStateManager = (progressState) => {
   }
 };
 
-const awaitingHostManager = (game, action) => {
+const awaitingHostManager = (game, action) => { // Valid ops: JOIN
   if (action.op === OPS.JOIN) {
     // Join as host
     doJoinGameEvent(game, action);
@@ -94,7 +105,39 @@ const awaitingHostManager = (game, action) => {
   }
 };
 
-
+const awaitingGameManger = (game, action) => {
+  // Valid ops: JOIN, SETUP (settings), READY (agreedSettings); future: QUIT, KICK (playerId)
+  if (action.op === OPS.JOIN) {
+    if (game.players.length < 2 && findPlayerIndex(action.playerId) === -1) {
+      doJoinGameEvent(game, action);
+    } else {
+      throw new Error(`JOIN failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+  } else if (action.op === SETUP) {
+    // Must be the host in order to change settings.
+    if (game.hostId !== action.playerId) {
+      throw new Error(`SETUP failed (playerId: ${action.playerId}, game.hostId: ${game.hostId})`);
+    }
+    validateSettingsObject(action.args.settings);
+    doUpdateSettingsEvent(game, action.args.settings);
+  } else if (action.op === READY) {
+    if (findPlayerIndex(game, playerId) === -1 ) {
+      throw new Error(`READY failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+    validateSettingsObject(action.args.settings);
+    if (checkSettingsEqual(game, action.args.settings)) {
+      doMarkAsReadyEvent(game, action);
+    } else {
+      throw new Error(`READY failed (args.settings: ${action.args.settings}, game.settings: ${game.settings})`);
+    }
+  // } else if (action.op === QUIT) {
+  //   // QUIT logic
+  // } else if (action.op === KICK) {
+  //   // KICK logic
+  } else {
+    throw new Error(`Op invalid while AWAITING_HOST: ${action.op}`);
+  }
+};
 
 const getNewGame = () => {
   // Refer to schema & docs for info on what this should return.
