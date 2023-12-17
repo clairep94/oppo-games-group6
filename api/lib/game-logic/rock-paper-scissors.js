@@ -182,7 +182,13 @@ const concludedManager = (game, action) => {
 
 // ====================== TRANSITION & EVENT FUNCTIONS ======================
 
-
+const doJoinGameEvent = (game, action) => {
+  game.players.push(action.playerId);
+  game.isReady.push(false);
+  if (game.progressState === STATE_CODES.AWAITING_HOST) {
+    doBecomeHostTransition(game, action);
+  }
+}
 
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
@@ -202,7 +208,7 @@ const getNewGame = () => {
     settings: {
       gameLength: null,
     },
-    isReady: null,
+    isReady: [],
     currentRound: null,
     signsThrown: null,
     scores: null,
