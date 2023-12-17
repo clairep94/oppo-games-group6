@@ -36,9 +36,23 @@ const getNewGame = () => {
   // Refer to schema & docs for info on what this should return.
   const now = Date.now();
   const newGame = {
+    progressState: STATE_CODES.AWAITING_HOST,
     title: "Rock Paper Scissors",
     createdAt: now,
     updatedAt: now,
+    players: [],
+    actionLog: [],
+    hostId: null,
+    settings: {
+      gameLength: null,
+    },
+    isReady: null,
+    currentRound: null,
+    signsThrown: null,
+    scores: null,
+    concludedAt: null,
+    conclusionType: null,
+    playerResults: null,
   };
   return newGame;
 };
@@ -47,7 +61,12 @@ const handleGameAction = (game, action) => {
   return { game: game, response: {code: RESPONSE_CODES.OK } };
 };
 
+// IMPORTANT: The `players` property of `game` passed to `makeGameSnapshot`
+// will have been populated, so must use e.g. `game.players[0].id`
+// instead of `game.players[0]`.
 const makeGameSnapshot = (game, playerId) => {
+  // Private information in this game:
+  // - During the game
   return game;
 };
 
