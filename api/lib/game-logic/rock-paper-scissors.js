@@ -174,6 +174,20 @@ const playingGameManager = (game, action) => {
   }
 };
 
+const concludedManager = (game, action) => {
+  // No ops are valid in this state, as it's a terminal state
+  throw new Error(`Op invalid while CONCLUDED: ${action.op}`);
+}
+
+
+// ====================== TRANSITION & EVENT FUNCTIONS ======================
+
+
+
+
+// ======================== INPUT & OUTPUT FUNCTIONS ========================
+
+
 const getNewGame = () => {
   // Refer to schema & docs for info on what this should return.
   const now = Date.now();
