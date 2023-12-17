@@ -59,10 +59,15 @@ const validateProgressState = (game) => {
 
 const validateSettingsObject = (settings) => {
   if (!(settings.gameLength === 1 || settings.gameLength === 3)) {
-    throw new Error(`Invalid settings.gameLength of ${settings.gameLength}`);
+    throw new Error(`settings.gameLength of ${settings.gameLength} is invalid`);
   }
 };
 
+const validateHandSign = (handSign) => {
+  if (!Object.values(HAND_SIGNS).includes(handSign)) {
+    throw new Error(`Hand sign <${handSign}> is invalid`);
+  }
+};
 
 // ===================== MISCELLANEOUS UTILITY FUNCTIONS ====================
 
@@ -105,7 +110,7 @@ const awaitingHostManager = (game, action) => { // Valid ops: JOIN
   }
 };
 
-const awaitingGameManger = (game, action) => {
+const awaitingGameManager = (game, action) => {
   // Valid ops: JOIN, SETUP (settings), READY (agreedSettings); future: QUIT, KICK (playerId)
   if (action.op === OPS.JOIN) {
     if (game.players.length < 2 && findPlayerIndex(action.playerId) === -1) {
@@ -136,6 +141,36 @@ const awaitingGameManger = (game, action) => {
   //   // KICK logic
   } else {
     throw new Error(`Op invalid while AWAITING_HOST: ${action.op}`);
+  }
+};
+
+const playingGameManager = (game, action) => {
+  // Valid ops: THROW (roundNumber, handSign), RESIGN
+  if (action.op === OPS.THROW) {
+    const playerIndex = findPlayerIndex(game, playerId);
+    if (playerIndex === -1) {
+      throw new Error(`THROW failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+    if (args.roundNumber !== game.currentRound) {
+      throw new Error(`THROW failed (args.roundNumber: ${action.args.roundNumber}, game.currentRound: ${game.currentRound})`);
+    }
+    validateHandSign(action.args.handSign);
+    // Can't change hand sign to NONE or change hand sign once it's something other than NONE
+    if (
+      action.args.handSign === HAND_SIGNS.NONE ||
+      game.signsThrown[game.roundNumber - 1][playerIndex] !== HAND_SIGNS.NONE
+    ) {
+      throw new Error(`THROW failed (args.handSign: ${action.args.handSign}, game.signsThrown[${game.roundNumber - 1}][${playerIndex}]: ${game.signsThrown[game.roundNumber - 1][playerIndex]})`);
+    }
+    doThrowHandSignEvent(game, action);
+  } else if (action.op === "RESIGN") {
+    const playerIndex = findPlayerIndex(game, playerId);
+    if (playerIndex === -1) {
+      throw new Error(`RESIGN failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+    doResignTransition(game, action);
+  } else {
+    throw new Error(`Op invalid while PLAYING_GAME: ${action.op}`);
   }
 };
 
