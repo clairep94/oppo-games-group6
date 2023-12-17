@@ -37,7 +37,7 @@
             - `JOIN`: Allows players to join up to the player limit for RPS of 2 players.
                 - Implementation detail: Players are stored in an array.
             - `SETUP`: Allows the host to change game settings.
-                - Currently the only setting is `gameLength`, which can be set to `1` for a best-of-1 game or `3` for a best-of-3 game. Default is `1`.
+                - Currently the only setting is `pointsObjective`, which can be set to `1` for a first-to-1 game or `3` for a first-to-3 game. Default is `1`. (Ties give zero points to both players)
                 - The game setting values are visible to all players in the pre-game UI, but only the host can change the settings. (This works fine due to the chat feature: other player(s) can ask for the host to do specific settings - **interesting idea for the demo?**)
             - `READY`: For the moment, have this be *idempotent* in setting a ready-to-start bool in an array to `true` IF the settings are as described in `agreedSettings`, but also set all these bools to false (sending messages) if `SETUP` alters game settings
                 - The client should send `agreedSettings` to match the settings it's displaying to the client via the UI.
@@ -111,7 +111,7 @@
     - **First needed for AWAITING_GAME**
         - `hostId: UserId` with UserId of host
         - `settings: Object` with default settings; properties:
-            - `gameLength: Number` with `1`
+            - `pointsObjective: Number` with `1`
         - `isReady: [Boolean]` with `[false]`
     - **First needed for PLAYING_GAME**
         - `signsThrown: [[String]]` with `[["none", "none"]]`

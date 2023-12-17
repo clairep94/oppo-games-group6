@@ -33,7 +33,7 @@ const RockPaperScissorsGameSchema = new mongoose.Schema({
     ref: 'User',
   },
   settings: {
-    gameLength: Number,
+    pointsObjective: Number,
   },
   isReady: [Boolean],
 

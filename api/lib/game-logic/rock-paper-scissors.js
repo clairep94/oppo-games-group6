@@ -58,8 +58,8 @@ const validateProgressState = (game) => {
 };
 
 const validateSettingsObject = (settings) => {
-  if (!(settings.gameLength === 1 || settings.gameLength === 3)) {
-    throw new Error(`settings.gameLength of ${settings.gameLength} is invalid`);
+  if (!(settings.pointsObjective === 1 || settings.pointsObjective === 3)) {
+    throw new Error(`settings.pointsObjective of ${settings.pointsObjective} is invalid`);
   }
 };
 
@@ -84,7 +84,7 @@ const findPlayerIndex = (game, playerId) => {
 };
 
 const checkSettingsEqual = (game, settings) => {
-  return (game.settings.gameLength === settings.gameLength);
+  return (game.settings.pointsObjective === settings.pointsObjective);
 };
 
 const registerSuccessfulAction = (game, action) => {
@@ -199,7 +199,7 @@ const doBecomeHostTransition = (game, action) => {
   game.hostId = action.playerId;
   // Initialise game object values for new state
   game.progressState = STATE_CODES.AWAITING_GAME;
-  game.settings = { gameLength: 1 };
+  game.settings = { pointsObjective: 1 };
 };
 
 const doUpdateSettingsEvent = (game, action) => {
@@ -207,7 +207,7 @@ const doUpdateSettingsEvent = (game, action) => {
   if (!checkSettingsEqual(game, action.args.settings)) {
     game.isReady = game.isReady.map((previous) => false);
   }
-  game.settings.gameLength = action.args.settings.gameLength;
+  game.settings.pointsObjective = action.args.settings.pointsObjective;
 };
 
 const doMarkAsReadyEvent = (game, action) => {
@@ -233,6 +233,10 @@ const doThrowHandSignEvent = (game, action) => {
   }
 };
 
+const doNextRoundEvent = (game, action) => {
+  // Evaluate result of round
+
+}
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
@@ -249,7 +253,7 @@ const getNewGame = () => {
     actionLog: [],
     hostId: null,
     settings: {
-      gameLength: null,
+      pointsObjective: null,
     },
     isReady: [],
     currentRound: null,
