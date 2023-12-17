@@ -1,7 +1,5 @@
 // Rock Paper Scissors game logic
 
-const { update } = require("../../models/rock-paper-scissors-game");
-
 // Things this file should export:
 // object RESPONSE_CODES
 // function getNewGame() -> game
@@ -88,8 +86,12 @@ const checkSettingsEqual = (game, settings) => {
 };
 
 const registerSuccessfulAction = (game, action) => {
-  // TODO: hould change updatedAt timestamp
-  // and push to actionLog
+  const now = Date.now();
+  game.updatedAt = now;
+  game.actionLog.push({
+    performedAt: now,
+    action: action,
+  });
 };
 
 const findPointsForRound = (thisSign, otherSign) => {
@@ -263,6 +265,7 @@ const doNextRoundEvent = (game, action) => {
 
 const doWinTransition = (game, action) => {
   game.progressState = STATE_CODES.CONCLUDED;
+  game.concludedAt = Date.now();
   game.conclusionType = "normal";
   game.playerResults = [
     { outcome: null, finalScore: game.scores[0] },
@@ -279,6 +282,7 @@ const doWinTransition = (game, action) => {
 
 const doResignTransition = (game, action) => {
   game.progressState = STATE_CODES.CONCLUDED;
+  game.concludedAt = Date.now();
   game.conclusionType = "by-resignation";
   game.playerResults = [
     { outcome: null, finalScore: game.scores[0] },
