@@ -65,7 +65,7 @@
 
 - Game controller API:
     - function `Create`: handles **POST** requests to `/`, creating a new game.
-        - By default, it joins the requesting client's user to the game (setting them as host), and respond with the full JSON object of the game.
+        - By default, it joins the requesting client's user to the game (setting them as host), and respond with the id of the newly created game.
         - For testing purposes, in order to create an empty game with no players and where the host hasn't been assigned, you should put `JSON.stringify({ shouldJoin: false })` in the request body.
     - function `Index`: handles **GET** requests to `/`, listing games.
         - Currently, this will respond with a list of all game documents of that title (including concluded games), but it should be easy to implement filtering options (using params) later, so this is fine for our MVP.
