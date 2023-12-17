@@ -202,6 +202,14 @@ const doBecomeHostTransition = (game, action) => {
   game.settings = { gameLength: 1 };
 };
 
+const doUpdateSettingsEvent = (game, action) => {
+  // As a side effect, set Ready bools to false if the settings changed
+  if (!checkSettingsEqual(game, action.args.settings)) {
+    game.isReady = game.isReady.map((previous) => false);
+  }
+  game.settings.gameLength = action.args.settings.gameLength;
+};
+
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
