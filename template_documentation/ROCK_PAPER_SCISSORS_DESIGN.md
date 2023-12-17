@@ -54,7 +54,7 @@
                     - Game engine note: Both player's submissions will cause something like `doThrowSignEvent` to be called in the game engine, but only the later one will cause that function to call `doEvaluateRoundTransition` in turn.
             - `RESIGN`: Instantly ends the game, with a loss for the player resigning. Isn't dependent on e.g. whose turn it is (not that RPS, as a simultaneous game, has traditional turns).
                 - Game engine note: Calls `doResignTransition`; across different game titles, this should be the standard name for the function that does this.
-        - Properties required to enter state: `hasThrownSign: [Boolean]` with all `false` (also resets to this each new round), `currentRound` with `1`, `signThrown: [String]`, `scores: [Number]` with all `0`
+        - Properties required to enter state: `currentRound` with `1`, `signThrown: [String]` (includes "none yet" value), `scores: [Number]` with all `0`
     - Post-game (code `CONCLUDED`)
         - Ops allowed in this state: None. This is a terminal state which exists for the purpose of marking the game as complete and immutable.
             - API: Functionality such as deleting completed games should be done via a **DELETE** request, not a **PUT** request.
@@ -103,8 +103,16 @@
         - `_id` auto-assigned on game creation
         - `title: String` with `"Rock Paper Scissors"`
         - `createdAt: Date` using `Date.now()`
-        - `players: [userId]` with `[]`
+        - `players: [UserId]` with `[]`
         - `updatedAt: Date` with `createdAt`
         - `actionLog: [Action]` with `[]`
         - `progressState: String` with `AWAITING_HOST`
-    -
+    - **First needed for AWAITING_GAME**
+        - `hostId: UserId` with UserId of host
+        - `settings: Object` with default settings
+        - `isReady: [Boolean]` with `[false]`
+    - **First needed for PLAYING_GAME**
+        - `signThrown: [String]` with `["none", "none"]`
+        - `currentRound` with 1
+        - `scores: [Number]` with `[0, 0]`
+    - 
