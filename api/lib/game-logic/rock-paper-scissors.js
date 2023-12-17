@@ -225,6 +225,14 @@ const doBeginGameTransition = (game, action) => {
   game.scores = [0, 0];
 };
 
+const doThrowHandSignEvent = (game, action) => {
+  const playerIndex = findPlayerIndex(game, playerId);
+  game.signsThrown[game.currentRound - 1][playerIndex] = action.args.handSign;
+  if (game.signsThrown[game.currentRound - 1].every((sign) => (sign !== HAND_SIGNS.NONE))) {
+    doNextRoundEvent(game, action);
+  }
+};
+
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
