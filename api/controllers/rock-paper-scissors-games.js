@@ -64,16 +64,19 @@ const RockPaperScissorsGamesController = {
       return;
     }
     // `getNewGame` also handles timestamps
-    const game = new RockPaperScissorsGame(getNewGame());
+    let game = new RockPaperScissorsGame(getNewGame());
+    if (shouldJoin) {
+      const result = handleGameAction(game, { op: "JOIN", args: { }, playerId: clientUserId });
+      // Response code should always be OK here
+      if (result.response.code !== RESPONSE_CODES.OK) {
+        throw new Error("MAJOR PROBLEM: handleGameAction rejected a host join action!");
+      }
+      game = result.game;
+    }
     game.save((err, game) => {
       if (err) {
         res.status(500).json({ error: err, token: token });
       } else {
-        // Depending on the value of shouldJoin, join the game (as host) or not
-        if (shouldJoin) {
-          // TODO: Write the equivalent of a PUT /:id/JOIN request
-          // (Will share some code with DoGameAction)
-        }
         // Respond with the id of the new game.
         res.status(201).json({ message: 'OK', token: token, gameId: game.id });
       }
