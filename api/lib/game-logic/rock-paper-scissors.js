@@ -17,6 +17,13 @@ const OPS = {
   RESIGN: "resign",
 };
 
+const STATE_CODES = {
+  AWAITING_HOST: "awaiting-host",
+  AWAITING_GAME: "awaiting-game",
+  PLAYING_GAME: "playing-game",
+  CONCLUDED: "concluded",
+};
+
 const RESPONSE_CODES = {
   OK: "ok",
   INVALID: "invalid",

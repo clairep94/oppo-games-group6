@@ -85,7 +85,7 @@
 
     - We will probably also have `Delete` (**DELETE** to `/:id`, allows you to delete if you were the game host OR a site administrator) in the future, but it's not needed for now.
 
-- Game logic functions: **FOR NOW: SEE COMMENTS IN /api/lib/game-logic/rock-paper-scissors**
+- Game logic functions:
     - Each game needs three key game logic functions: `getNewGame`, `handleGameAction`, and `makeGameSnapshot`.
         - `getNewGame` takes no arguments and always returns a new, correctly initialised game object.
             - This should be called by the controller `Create` function, which should save the returned object.
