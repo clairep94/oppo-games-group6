@@ -85,6 +85,14 @@ const getStateManager = (progressState) => {
   }
 };
 
+const awaitingHostManager = (game, action) => {
+  if (action.op === OPS.JOIN) {
+    // Join as host
+    doJoinGameEvent(game, action);
+  } else {
+    throw new Error(`Op invalid while AWAITING_HOST: ${action.op}`);
+  }
+};
 
 
 
