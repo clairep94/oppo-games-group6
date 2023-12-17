@@ -261,6 +261,22 @@ const doNextRoundEvent = (game, action) => {
   }
 };
 
+const doWinTransition = (game, action) => {
+  game.progressState = STATE_CODES.CONCLUDED;
+  game.conclusionType = "normal";
+  if (game.scores[0] >= game.settings.pointsObjective) { // First player wins
+    game.playerResults = [
+      { outcome: "won", finalScore: game.scores[0] },
+      { outcome: "lost", finalScore: game.scores[1] }
+    ];
+  } else { // Second player wins
+    game.playerResults = [
+      { outcome: "lost", finalScore: game.scores[0] },
+      { outcome: "won", finalScore: game.scores[1] }
+    ];
+  }
+};
+
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
