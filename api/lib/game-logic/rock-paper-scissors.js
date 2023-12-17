@@ -87,6 +87,11 @@ const checkSettingsEqual = (game, settings) => {
   return (game.settings.gameLength === settings.gameLength);
 };
 
+const registerSuccessfulAction = (game, action) => {
+  // TODO: hould change updatedAt timestamp
+  // and push to actionLog
+};
+
 // ============================= STATE MANAGERS =============================
 
 const getStateManager = (progressState) => {
@@ -190,6 +195,13 @@ const doJoinGameEvent = (game, action) => {
   }
 }
 
+const doBecomeHostTransition = (game, action) => {
+  game.hostId = action.playerId;
+  // Initialise game object values for new state
+  game.progressState = STATE_CODES.AWAITING_GAME;
+  game.settings = { gameLength: 1 };
+};
+
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
@@ -270,6 +282,7 @@ const handleGameAction = (game, action) => {
       code: RESPONSE_CODES.INVALID, error: e,
     }};
   }
+  registerSuccessfulAction(game, action);
   return { game: game, response: { code: RESPONSE_CODES.OK }};
 };
 
