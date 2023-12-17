@@ -30,6 +30,13 @@ const RESPONSE_CODES = {
   UNKNOWN_TOKEN: "unknown-token",
 };
 
+const HAND_SIGNS = {
+  NONE: "none", // i.e. pending
+  ROCK: "rock",
+  PAPER: "paper",
+  SCISSORS: "scissors",
+};
+
 // Placeholder "do-nothing" functions
 
 const getNewGame = () => {
