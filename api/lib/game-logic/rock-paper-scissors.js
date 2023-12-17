@@ -214,9 +214,16 @@ const doMarkAsReadyEvent = (game, action) => {
   const playerIndex = findPlayerIndex(game, playerId);
   game.isReady[playerIndex] = true;
   if (game.isReady.every((x) => (x === true))) {
-    doBeginGameTransition();
+    doBeginGameTransition(game, action);
   }
-}
+};
+
+const doBeginGameTransition = (game, action) => {
+  game.progressState = STATE_CODES.PLAYING_GAME;
+  game.currentRound = 1;
+  game.signsThrown = [[HAND_SIGNS.NONE, HAND_SIGNS.NONE]];
+  game.scores = [0, 0];
+};
 
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
