@@ -7,6 +7,9 @@
 // function makeGameSnapshot(game, playerId) -> gameSnapshot
 // (See /template_documentation/ROCK_PAPER_SCISSORS_DESIGN.md for details)
 
+
+// ================================ CONSTANTS ===============================
+
 const OPS = {
   JOIN: "join",
   SETUP: "setup", // args: (settings)
@@ -36,6 +39,23 @@ const HAND_SIGNS = {
   PAPER: "paper",
   SCISSORS: "scissors",
 };
+
+
+// =============================== VALIDATION ===============================
+
+const validateRequestedOperation = (action) => {
+  if (!Object.values(OPS).includes(action.op)) {
+    throw new Error(`Operation <${action.op}> is undefined`);
+  }
+};
+
+const validateProgressState = (game) => {
+  if (!Object.values(STATE_CODES).includes(game.progressState.code)) {
+    throw new Error(`State <${game.progressState.code}> is undefined`);
+  }
+};
+
+
 
 // Utility functions
 
@@ -78,10 +98,6 @@ const getNewGame = () => {
   return newGame;
 };
 
-const handleGameAction = (game, action) => {
-  return { game: game, response: {code: RESPONSE_CODES.OK } };
-};
-
 // IMPORTANT: The `players` property of `game` passed to `makeGameSnapshot`
 // will have been populated, so must use e.g. `game.players[0].id`
 // instead of `game.players[0]`.
@@ -109,6 +125,10 @@ const makeGameSnapshot = (game, playerId) => {
     game.actionLog = null;
   }
   return game;
+};
+
+const handleGameAction = (game, action) => {
+  return { game: game, response: {code: RESPONSE_CODES.OK } };
 };
 
 module.exports = {
