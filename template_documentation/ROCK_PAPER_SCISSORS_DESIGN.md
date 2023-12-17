@@ -47,14 +47,14 @@
                 - Redirecting them automatically (after a short delay?) might be possible but a little tricky because `navigate` is passed to the `GamePage` component but not the game component itself.
         - Properties required to enter state: `players` with `[<id of host>]`, `hostId: userId` with `<id of host>` (for now: can't change host), `settings: Object` with `<the default settings>`, `isReady: [Boolean]` (starts `[false]`)
     - In-game (code `PLAYING_GAME`)
-        - Ops allowed in this state: `THROW (handSign)`, `RESIGN`
+        - Ops allowed in this state: `THROW (roundNumber, handSign)`, `RESIGN`
             - `THROW`: Takes a hand sign as a property in the request body (`"rock"`, `"paper"` or `"scissors"`). Request body also contains the round number (1-indexed for inspect readability) just to be safe, with a response code of `INVALID` returned if this doesn't match the current round number.
-                - This can't be overwritten (i.e. first choice is final - UI: grey out buttons once one is pressed?) but perhaps the UI could let you click around a bit (highlighting your last choice) and then click "confirm" to send your selection to the server. Sending a `THROW` op with e.g. `{handSign: null}` to the server might need to result (for generalisation purposes) in a response code of `ERROR`/`ERROR_TOKEN_UNDEFINED`/etc. rather than `INVALID`, so perhaps the `handSignSelected` variable (or equivalent) should be initialised to `"default"` or `"selection-pending"`.
+                - This can't be overwritten (i.e. first choice is final - UI: grey out buttons once one is pressed?) but perhaps the UI could let you click around a bit (highlighting your last choice) and then click "confirm" to send your selection to the server. Sending a `THROW` op with e.g. `{roundNumber: 1, handSign: null}` to the server might need to result (for generalisation purposes) in a response code of `ERROR`/`ERROR_TOKEN_UNDEFINED`/etc. rather than `INVALID`, so perhaps the `handSignSelected` variable (or equivalent) should be initialised to `"default"` or `"selection-pending"`. (Maybe just `"none"`?)
                 - When both players have submitted `THROW`, then the result is evaluated, messages are sent, etc.
                     - Game engine note: Both player's submissions will cause something like `doThrowSignEvent` to be called in the game engine, but only the later one will cause that function to call `doEvaluateRoundTransition` in turn.
             - `RESIGN`: Instantly ends the game, with a loss for the player resigning. Isn't dependent on e.g. whose turn it is (not that RPS, as a simultaneous game, has traditional turns).
                 - Game engine note: Calls `doResignTransition`; across different game titles, this should be the standard name for the function that does this.
-        - Properties required to enter state: `currentRound` with `1`, `signThrown: [String]` (includes "none yet" value), `scores: [Number]` with all `0`
+        - Properties required to enter state: `currentRound` with `1`, `signsThrown: [[String]]` (includes "none yet" value; top level indexing is by round number), `scores: [Number]` with all `0`
     - Post-game (code `CONCLUDED`)
         - Ops allowed in this state: None. This is a terminal state which exists for the purpose of marking the game as complete and immutable.
             - API: Functionality such as deleting completed games should be done via a **DELETE** request, not a **PUT** request.
@@ -109,10 +109,18 @@
         - `progressState: String` with `AWAITING_HOST`
     - **First needed for AWAITING_GAME**
         - `hostId: UserId` with UserId of host
-        - `settings: Object` with default settings
+        - `settings: Object` with default settings; properties:
+            - `gameLength: Number` with `1`
         - `isReady: [Boolean]` with `[false]`
     - **First needed for PLAYING_GAME**
-        - `signThrown: [String]` with `["none", "none"]`
+        - `signsThrown: [[String]]` with `[["none", "none"]]`
+            - *This is (static) private information! While the game is in progress, don't show the other client what was picked, instead responding to client 1 with e.g. [["scissors", "rock"], ["paper", null]] if client 1 picked paper in round 2 and is waiting for client 2's pick.*
         - `currentRound` with 1
         - `scores: [Number]` with `[0, 0]`
-    - 
+    - **First needed for CONCLUDED**
+        - `concludedAt: Date` with `Date.now()` on conclusion
+        - `conclusionType: String` with `"normal"` or `"by-resignation"`
+        - `playerResults: [Object]` with description of results; properties:
+            - `outcome: String` with `"won"`, `"lost"`, or `"resigned"`
+            - `finalScore: Number` with `0` or `1` for a best-of-1 game, up to `2` for a best-of-3 game
+
