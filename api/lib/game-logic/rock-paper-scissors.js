@@ -1,11 +1,17 @@
 // Rock Paper Scissors game logic
 
-// Functions this file should export:
-// getNewGame() -> game
-// handleGameAction(game, action) -> game, response
-// makeGameSnapshot(game, playerId) -> gameSnapshot
+// Things this file should export:
+// object RESPONSE_CODES
+// function getNewGame() -> game
+// function handleGameAction(game, action) -> game, response
+// function makeGameSnapshot(game, playerId) -> gameSnapshot
 // (See /template_documentation/ROCK_PAPER_SCISSORS_DESIGN.md for details)
 
+const RESPONSE_CODES = {
+  OK: "ok",
+  INVALID: "invalid",
+  UNKNOWN_TOKEN: "unknown-token",
+};
 
 // Placeholder "do-nothing" functions
 
@@ -20,7 +26,7 @@ const getNewGame = () => {
 };
 
 const handleGameAction = (game, action) => {
-  return { game: game, response: {code: "placeholder"} };
+  return { game: game, response: {code: RESPONSE_CODES.OK } };
 };
 
 const makeGameSnapshot = (game, playerId) => {
@@ -29,6 +35,7 @@ const makeGameSnapshot = (game, playerId) => {
 
 
 module.exports = {
+  RESPONSE_CODES,
   getNewGame,
   handleGameAction,
   makeGameSnapshot,
