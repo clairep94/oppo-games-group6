@@ -210,6 +210,14 @@ const doUpdateSettingsEvent = (game, action) => {
   game.settings.gameLength = action.args.settings.gameLength;
 };
 
+const doMarkAsReadyEvent = (game, action) => {
+  const playerIndex = findPlayerIndex(game, playerId);
+  game.isReady[playerIndex] = true;
+  if (game.isReady.every((x) => (x === true))) {
+    doBeginGameTransition();
+  }
+}
+
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
