@@ -37,6 +37,20 @@ const HAND_SIGNS = {
   SCISSORS: "scissors",
 };
 
+// Utility functions
+
+const findPlayerIndex = (game, playerId) => {
+  if (game.players.length === 0) { return -1; }
+  // Autodetect if `game.players` was populated
+  if (game.players[0].username === undefined) {
+    // Not populated
+    return game.players.indexOf(playerId);
+  } else {
+    // Populated
+    return game.players.map((player) => player.id).indexOf(playerId);
+  }
+};
+
 // Placeholder "do-nothing" functions
 
 const getNewGame = () => {
@@ -73,10 +87,29 @@ const handleGameAction = (game, action) => {
 // instead of `game.players[0]`.
 const makeGameSnapshot = (game, playerId) => {
   // Private information in this game:
-  // - During the game
+  // - During the game, while in round X, you shouldn't be able to see
+  //   any other player's choices for round X (previous rounds are OK to see).
+  // - During the game, if you're not part of the game, you should only
+  //   be able to see hand signs for round X after round X has finished.
+  // - Because it's for development purposes, the actionLog is private to
+  //   all players until the game has concluded. (This isn't final!)
+  if (game.progressState === STATE_CODES.PLAYING_GAME) {
+    const playerIndex = findPlayerIndex(game, playerId);
+    if (playerIndex === -1) { // Player is spectator
+      game.signsThrown[game.currentRound - 1] = [HAND_SIGNS.NONE, HAND_SIGNS.NONE];
+    } else {
+      if (playerIndex === 0) { // First player; redact second player's sign
+        game.signsThrown[game.currentRound - 1][1] = HAND_SIGNS.NONE;
+      } else if (playerIndex === 1) { // Second player; redact first player's sign
+        game.signsThrown[game.currentRound - 1][0] = HAND_SIGNS.NONE;
+      }
+    }
+  }
+  if (game.progressState !== STATE_CODES.CONCLUDED) {
+    game.actionLog = null;
+  }
   return game;
 };
-
 
 module.exports = {
   RESPONSE_CODES,
