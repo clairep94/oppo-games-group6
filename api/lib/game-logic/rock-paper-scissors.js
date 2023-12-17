@@ -56,8 +56,7 @@ const validateProgressState = (game) => {
 };
 
 
-
-// Utility functions
+// ===================== MISCELLANEOUS UTILITY FUNCTIONS ====================
 
 const findPlayerIndex = (game, playerId) => {
   if (game.players.length === 0) { return -1; }
@@ -70,6 +69,24 @@ const findPlayerIndex = (game, playerId) => {
     return game.players.map((player) => player.id).indexOf(playerId);
   }
 };
+
+
+// ============================= STATE MANAGERS =============================
+
+const getStateManager = (progressState) => {
+  if (progressState.code === STATE_CODES.AWAITING_HOST) {
+    return awaitingHostManager;
+  } else if (progressState.code === STATE_CODES.AWAITING_GAME) {
+    return awaitingGameManager;
+  } else if (progressState.code === STATE_CODES.PLAYING_GAME) {
+    return playingGameManager;
+  } else if (progressState.code === STATE_CODES.CONCLUDED) {
+    return concludedManager;
+  }
+};
+
+
+
 
 const getNewGame = () => {
   // Refer to schema & docs for info on what this should return.
