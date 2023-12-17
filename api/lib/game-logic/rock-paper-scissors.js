@@ -264,16 +264,33 @@ const doNextRoundEvent = (game, action) => {
 const doWinTransition = (game, action) => {
   game.progressState = STATE_CODES.CONCLUDED;
   game.conclusionType = "normal";
+  game.playerResults = [
+    { outcome: null, finalScore: game.scores[0] },
+    { outcome: null, finalScore: game.scores[1] }
+  ];
   if (game.scores[0] >= game.settings.pointsObjective) { // First player wins
-    game.playerResults = [
-      { outcome: "won", finalScore: game.scores[0] },
-      { outcome: "lost", finalScore: game.scores[1] }
-    ];
+    game.playerResults[0].outcome = "won";
+    game.playerResults[1].outcome = "lost";
   } else { // Second player wins
-    game.playerResults = [
-      { outcome: "lost", finalScore: game.scores[0] },
-      { outcome: "won", finalScore: game.scores[1] }
-    ];
+    game.playerResults[0].outcome = "lost";
+    game.playerResults[1].outcome = "won";
+  }
+};
+
+const doResignTransition = (game, action) => {
+  game.progressState = STATE_CODES.CONCLUDED;
+  game.conclusionType = "by-resignation";
+  game.playerResults = [
+    { outcome: null, finalScore: game.scores[0] },
+    { outcome: null, finalScore: game.scores[1] }
+  ];
+  const playerIndex = findPlayerIndex(game, action.playerId);
+  if (playerIndex === 0) {
+    game.playerResults[0].outcome = "resigned";
+    game.playerResults[1].outcome = "won";
+  } else if (playerIndex === 1) {
+    game.playerResults[0].outcome = "won";
+    game.playerResults[1].outcome = "resigned";
   }
 };
 
