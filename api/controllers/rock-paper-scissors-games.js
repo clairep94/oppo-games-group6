@@ -108,25 +108,21 @@ const RockPaperScissorsGamesController = {
           // The action was successful.
           // Second DB access: Overwrite the game with the updated version.
           result.game.save()
-          .then((savedGame) => {
-            const updatedGameSnapshot = makeGameSnapshot(savedGame, clientUserId);
-            res.status(200).json({ message: 'OK', game: updatedGameSnapshot, token: token });
+          .then((_) => {
+            // Third DB access [ouch - we only need to do this in order to have
+            // access to .populate()]:
+            RockPaperScissorsGame.findById(req.params.id)
+            .populate('players', 'username')
+            .exec((err, updatedGame) => {
+              if (err) {
+                res.status(500).json({ error: err, token: token });
+              } else {
+                // Respond with a game snapshot
+                const updatedGameSnapshot = makeGameSnapshot(updatedGame, clientUserId);
+                res.status(200).json({ message: 'OK', game: updatedGameSnapshot, token: token });
+              }
+            });
           });
-
-/*
-          RockPaperScissorsGame.findOneAndReplace({ _id: gameId }, result.game)
-          .populate('players', 'username')
-          .exec((err, updatedGame) => {
-            if (err) {
-              res.status(500).json({ error: err, token: token });
-            } else {
-              // Respond with a game snapshot
-              const updatedGameSnapshot = makeGameSnapshot(updatedGame, clientUserId);
-              res.status(200).json({ message: 'OK', game: updatedGameSnapshot, token: token });
-            }
-          });
-*/
-
         } else if (result.response.code === RESPONSE_CODES.INVALID) {
           // The action was rejected (for instance, trying to make a move out-of-turn).
           res.status(409).json({ message: 'REJECTED', error: result.response.error, token: token }); // 409 Conflict
