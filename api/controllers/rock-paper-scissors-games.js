@@ -66,9 +66,10 @@ const RockPaperScissorsGamesController = {
     // `getNewGame` also handles timestamps
     let game = new RockPaperScissorsGame(getNewGame());
     if (shouldJoin) {
-      const result = handleGameAction(game, { op: "JOIN", args: { }, playerId: clientUserId });
+      const result = handleGameAction(game, { op: "join", args: { }, playerId: clientUserId });
       // Response code should always be OK here
       if (result.response.code !== RESPONSE_CODES.OK) {
+        console.log(result);
         throw new Error("MAJOR PROBLEM: handleGameAction rejected a host join action!");
       }
       game = result.game;
@@ -103,9 +104,16 @@ const RockPaperScissorsGamesController = {
           op: operation, args: operationArgs, playerId: clientUserId,
         });
         // Use the result response code to determine next steps
-        if (result.response === RESPONSE_CODES.OK) {
+        if (result.response.code === RESPONSE_CODES.OK) {
           // The action was successful.
           // Second DB access: Overwrite the game with the updated version.
+          result.game.save()
+          .then((savedGame) => {
+            const updatedGameSnapshot = makeGameSnapshot(savedGame, clientUserId);
+            res.status(200).json({ message: 'OK', game: updatedGameSnapshot, token: token });
+          });
+
+/*
           RockPaperScissorsGame.findOneAndReplace({ _id: gameId }, result.game)
           .populate('players', 'username')
           .exec((err, updatedGame) => {
@@ -117,15 +125,17 @@ const RockPaperScissorsGamesController = {
               res.status(200).json({ message: 'OK', game: updatedGameSnapshot, token: token });
             }
           });
-        } else if (result.response === RESPONSE_CODES.INVALID) {
+*/
+
+        } else if (result.response.code === RESPONSE_CODES.INVALID) {
           // The action was rejected (for instance, trying to make a move out-of-turn).
           res.status(409).json({ message: 'REJECTED', error: result.response.error, token: token }); // 409 Conflict
-        } else if (result.response === RESPONSE_CODES.UNKNOWN_TOKEN) {
+        } else if (result.response.code === RESPONSE_CODES.UNKNOWN_TOKEN) {
           // The action was incomprehensible (e.g. misspelled op in endpoint URL).
           res.status(404).json({ message: 'NOT_FOUND', error: result.response.error, token: token}); // 404 Not Found
         } else {
           // Response code unknown ==> That's an Internal Server Error
-          const msg = `Unrecognised game logic response code: ${result.response}`;
+          const msg = `Unrecognised game logic response code: ${result.response.code}`;
           res.status(500).json({ error: new Error(msg), token: token });
         }
       }

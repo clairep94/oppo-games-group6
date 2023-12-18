@@ -45,13 +45,13 @@ const HAND_SIGNS = {
 
 const validateRequestedOperation = (action) => {
   if (!Object.values(OPS).includes(action.op)) {
-    throw new Error(`Operation <${action.op}> is undefined`);
+    throw new Error(`Operation ${action.op} is undefined`);
   }
 };
 
 const validateProgressState = (game) => {
-  if (!Object.values(STATE_CODES).includes(game.progressState.code)) {
-    throw new Error(`State <${game.progressState.code}> is undefined`);
+  if (!Object.values(STATE_CODES).includes(game.progressState)) {
+    throw new Error(`State ${game.progressState} is undefined`);
   }
 };
 
@@ -109,13 +109,13 @@ const findPointsForRound = (thisSign, otherSign) => {
 // ============================= STATE MANAGERS =============================
 
 const getStateManager = (progressState) => {
-  if (progressState.code === STATE_CODES.AWAITING_HOST) {
+  if (progressState === STATE_CODES.AWAITING_HOST) {
     return awaitingHostManager;
-  } else if (progressState.code === STATE_CODES.AWAITING_GAME) {
+  } else if (progressState === STATE_CODES.AWAITING_GAME) {
     return awaitingGameManager;
-  } else if (progressState.code === STATE_CODES.PLAYING_GAME) {
+  } else if (progressState === STATE_CODES.PLAYING_GAME) {
     return playingGameManager;
-  } else if (progressState.code === STATE_CODES.CONCLUDED) {
+  } else if (progressState === STATE_CODES.CONCLUDED) {
     return concludedManager;
   }
 };
@@ -132,7 +132,7 @@ const awaitingHostManager = (game, action) => { // Valid ops: JOIN
 const awaitingGameManager = (game, action) => {
   // Valid ops: JOIN, SETUP (settings), READY (agreedSettings); future: QUIT, KICK (playerId)
   if (action.op === OPS.JOIN) {
-    if (game.players.length < 2 && findPlayerIndex(action.playerId) === -1) {
+    if (game.players.length < 2 && findPlayerIndex(game, action.playerId) === -1) {
       doJoinGameEvent(game, action);
     } else {
       throw new Error(`JOIN failed (playerId: ${action.playerId}, game.players: ${game.players})`);
@@ -373,6 +373,7 @@ const handleGameAction = (game, action) => {
   try {
     getStateManager(game.progressState)(game, action);
   } catch (e) {
+    console.log(e);
     return { game: game, response: {
       code: RESPONSE_CODES.INVALID, error: e,
     }};
