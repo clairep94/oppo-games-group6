@@ -46,12 +46,12 @@ const tokenChecker = (req, res, next) => {
 app.use("/tokens", authenticationRouter);
 
 // routes with no authentication:
-// app.use("/users", usersRouter); // TODO change to "/users/new"
 app.use("/signup", signUpRouter);
 
 // routes with authentication:
 app.use("/posts", tokenChecker, postsRouter);
 app.use("/tictactoe", tokenChecker, tictactoeRouter);
+// app.use("/users", usersRouter);
 
 
 // catch 404 and forward to error handler
