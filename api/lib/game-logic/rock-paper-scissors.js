@@ -249,7 +249,10 @@ const doBeginGameTransition = (game, action) => {
 
 const doThrowHandSignEvent = (game, action) => {
   const playerIndex = findPlayerIndex(game, action.playerId);
+  console.log(`Throwing sign ${action.args.handSign} for player of index ${playerIndex}`);
+  console.log(game.signsThrown);
   game.signsThrown[game.currentRound - 1][playerIndex] = action.args.handSign;
+  console.log(game.signsThrown);
   if (game.signsThrown[game.currentRound - 1].every((sign) => (sign !== HAND_SIGNS.NONE))) {
     doNextRoundEvent(game, action);
   }
@@ -268,7 +271,15 @@ const doNextRoundEvent = (game, action) => {
     doWinTransition(game, action);
   } else { // Clean up for next round
     game.currentRound += 1;
-    game.signsThrown.push([HAND_SIGNS.NONE, HAND_SIGNS.NONE]);
+    console.log(`In doNextRoundEvent: before push: ${game.signsThrown}`);
+    // Due to a quirk of how Mongoose tracks changes to document properties,
+    // pushing onto a nested array after setting a element of one of its previous
+    // sub-arrays will cause the element set on the sub-array to *NOT* be saved.
+    // For this reason, use concat instead.
+    // game.signsThrown.push([HAND_SIGNS.NONE, HAND_SIGNS.NONE]);
+    game.signsThrown = game.signsThrown.concat([[HAND_SIGNS.NONE, HAND_SIGNS.NONE]]);
+    game.markModified('signsThrown');
+    console.log(`After push: ${game.signsThrown}`);
   }
   game.markModified('scores');
 };
@@ -355,8 +366,10 @@ const makeGameSnapshot = (game, playerId) => {
       game.signsThrown[game.currentRound - 1] = [HAND_SIGNS.NONE, HAND_SIGNS.NONE];
     } else {
       if (playerIndex === 0) { // First player; redact second player's sign
+        console.log("Redacting second player's hand sign");
         game.signsThrown[game.currentRound - 1][1] = HAND_SIGNS.NONE;
       } else if (playerIndex === 1) { // Second player; redact first player's sign
+        console.log("Redacting first player's hand sign");
         game.signsThrown[game.currentRound - 1][0] = HAND_SIGNS.NONE;
       }
     }
