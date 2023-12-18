@@ -3,6 +3,18 @@ const mongoose = require("mongoose");
 const TicTacToeGameSchema = new mongoose.Schema({
     
     // =========== Game properties used by all games =============== :
+
+    // ----------- Endpoint and Title for component mapping on the Games Lobby Page --------
+    endpoint: { 
+        type: String,
+        default: 'tictactoe' // URL endpoint for FE and BE for this specific game
+    },
+    title: { 
+        type: String,
+        default: 'Tic-Tac-Toe'
+    },
+
+    // ----------- Players & Open Game Properties ------------    
     player_one: { // for TicTacToe, player one will be X
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
@@ -19,6 +31,7 @@ const TicTacToeGameSchema = new mongoose.Schema({
         default: true
     },
 
+    // ----------- Active Game Properties ------------    
     whose_turn: {
         type: mongoose.Schema.Types.ObjectId,
         default: null,
@@ -28,10 +41,15 @@ const TicTacToeGameSchema = new mongoose.Schema({
         type:Date
     },
 
+    // ----------- Finished Game Properties ------------    
     winner: { // if [], no winner yet, if winner.length === 1, find winner._ID, if winner.length === 2: draw
         type: [mongoose.Schema.Types.ObjectId],
         default: [],
         ref:'User'
+    },
+    finished: {
+        type: Boolean,
+        default: false
     },
     date_completed: {
         type: Date
@@ -68,7 +86,7 @@ const TicTacToeGameSchema = new mongoose.Schema({
     },
     
 
-    // --------------- Active TicTacToe Properties --------------- :
+    // --------------- Fluid TicTacToe Properties --------------- :
     turn: { // after a player moves, turn ++; if turn === 9: draw
         type: Number,
         default: 0
@@ -91,9 +109,6 @@ const TicTacToeGameSchema = new mongoose.Schema({
             C: { type: { 1: String, 2: String, 3: String } },
         },
         default: {
-            // A: { 1: "X", 2: "O", 3: "X" },
-            // B: { 1: "X", 2: "O", 3: "X" },
-            // C: { 1: "O", 2: "X", 3: "O" },
             A: { 1: " ", 2: " ", 3: " " },
             B: { 1: " ", 2: " ", 3: " " },
             C: { 1: " ", 2: " ", 3: " " },
