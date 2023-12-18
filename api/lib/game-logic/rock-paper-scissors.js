@@ -225,12 +225,19 @@ const doUpdateSettingsEvent = (game, action) => {
 };
 
 const doMarkAsReadyEvent = (game, action) => {
+  // /*game.isReady[playerIndex] = true;*/ <-- IF YOU DO IT THIS WAY WITH MONGOOSE 5.x
+  // AND YOU INTEND TO .save() THE RESULTING OBJECT (Fine for making objects to respond with)
+  // THEN MAKE SURE TO PUT e.g. `game.markModified['isReady']` IN THAT FUNCTION!
+  
+  // game.isReady.set(playerIndex, true); <-- This way also works for non-nested arrays
+  // but is an absolute monster to get working with nested arrays, so be warned.
+
   const playerIndex = findPlayerIndex(game, action.playerId);
-  /*game.isReady[playerIndex] = true; <-- DO *NOT* DO IT THIS WAY WITH MONGOOSE 5.x */
-  game.isReady.set(playerIndex, true);
-  if (game.isReady.every((x) => (x === true))) {
+  game.isReady[playerIndex] = true;
+  if (game.players.length === 2 && game.isReady.every((x) => (x === true))) {
     doBeginGameTransition(game, action);
   }
+  game.markModified('isReady');
 };
 
 const doBeginGameTransition = (game, action) => {
@@ -246,6 +253,7 @@ const doThrowHandSignEvent = (game, action) => {
   if (game.signsThrown[game.currentRound - 1].every((sign) => (sign !== HAND_SIGNS.NONE))) {
     doNextRoundEvent(game, action);
   }
+  game.markModified('signsThrown');
 };
 
 const doNextRoundEvent = (game, action) => {
@@ -262,6 +270,7 @@ const doNextRoundEvent = (game, action) => {
     game.currentRound += 1;
     game.signsThrown.push([HAND_SIGNS.NONE, HAND_SIGNS.NONE]);
   }
+  game.markModified('scores');
 };
 
 const doWinTransition = (game, action) => {
@@ -279,6 +288,7 @@ const doWinTransition = (game, action) => {
     game.playerResults[0].outcome = "lost";
     game.playerResults[1].outcome = "won";
   }
+  game.markModified('playerResults');
 };
 
 const doResignTransition = (game, action) => {
@@ -297,6 +307,7 @@ const doResignTransition = (game, action) => {
     game.playerResults[0].outcome = "won";
     game.playerResults[1].outcome = "resigned";
   }
+  game.markModified('playerResults');
 };
 
 
