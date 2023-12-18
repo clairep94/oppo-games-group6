@@ -15,6 +15,20 @@ const HAND_SIGNS = {
   SCISSORS: "scissors",
 };
 
+const isPlayerThisGame = (gameSnapshot, playerId) => {
+  return gameSnapshot.players.map(p => p._id).includes(playerId);
+};
+
+const findPlayerIndex = (gameSnapshot, playerId) => {
+  const index = gameSnapshot.players.map(p => p._id).indexOf(playerId);
+  if (index === -1) { throw new Error(`playerId ${playerId} not participating`); }
+  return index;
+};
+
+const findPlayerUsername = (gameSnapshot, playerId) => {
+  return gameSnapshot.players[findPlayerIndex(gameSnapshot, playerId)].username;
+};
+
 const RockPaperScissors = ({ gameId }) => {
   const [token, setToken] = useState(window.localStorage.getItem("token"));
   const clientUserId = getSessionUserID(token);
@@ -201,7 +215,15 @@ const ClientInfo = ({ props }) => {
   return (
     <div className="rock-paper-scissors/client-info">
       <p>Your clientUserId is: {clientUserId}</p>
-      <p>Are you a player in this game? {gameSnapshot.players.map((player) => player._id).includes(clientUserId) ? "Yes" : "No"}</p>
+      <p>Are you a player in this game? {
+        isPlayerThisGame(gameSnapshot, clientUserId)
+        ? `Yes (player index: ${
+            findPlayerIndex(gameSnapshot, clientUserId)
+          }, username: ${
+            findPlayerUsername(gameSnapshot, clientUserId)
+          })`
+        : "No"
+      }</p>
       <p>Are you this game's host? {gameSnapshot.hostId === clientUserId ? "Yes" : "No"}</p>
     </div>
   );
@@ -241,8 +263,8 @@ const SettingsUI = ({ props }) => {
       { // Show ready button if playing in this game
         gameSnapshot.players.map(p => p._id).includes(clientUserId)
         && <ReadyConfirmer props={{
-          gameSnapshot, settings, confirmReady,
-          playerIndex: gameSnapshot.players.map(p => p._id).indexOf(clientUserId)
+          settings, confirmReady,
+          /*playerIndex: gameSnapshot.players.map(p => p._id).indexOf(clientUserId)*/
         }} />
       }
     </div>
@@ -250,7 +272,7 @@ const SettingsUI = ({ props }) => {
 };
 
 const ReadyConfirmer = ({ props }) => {
-  const { gameSnapshot, settings, confirmReady, playerIndex } = props;
+  const { settings, confirmReady } = props;
   const [showConfirmationQuery, setShowConfirmationQuery] = useState(false);
   const [readiedStatus, setReadiedStatus] = useState(
     {
@@ -289,7 +311,7 @@ const ReadyConfirmer = ({ props }) => {
       }
     </div>
   );
-}
+};
 
 const BeforeHostUI = ({ props }) => {
   const { gameSnapshot, clientUserId, joinGame } = props;
