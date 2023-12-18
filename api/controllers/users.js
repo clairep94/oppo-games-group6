@@ -1,7 +1,6 @@
 const User = require("../models/user");
+const TokenGenerator = require("../lib/token_generator");
 
-// TODO Review Acebook User Controller methods and update below as a group
-// TODO Unit testing for User Controller methods
 
 const UsersController = {
   Create: (req, res) => {
