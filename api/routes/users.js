@@ -4,7 +4,7 @@ const UsersController = require("../controllers/users");
 
 // These are all authentication-only paths for the users controller
 
-router.get("/:id", UsersController.FindUser);
 router.get("/", UsersController.Index);
+router.get("/:id", UsersController.FindByID);
 
 module.exports = router;

@@ -7,7 +7,7 @@ const JWT = require("jsonwebtoken");
 const postsRouter = require("./routes/posts");
 const authenticationRouter = require("./routes/authentication");
 const signUpRouter = require("./routes/signup");
-// const usersRouter = require("./routes/users");
+const usersRouter = require("./routes/users");
 const tictactoeRouter = require("./routes/tictactoe_games");
 
 
@@ -51,7 +51,7 @@ app.use("/signup", signUpRouter);
 // routes with authentication:
 app.use("/posts", tokenChecker, postsRouter);
 app.use("/tictactoe", tokenChecker, tictactoeRouter);
-// app.use("/users", usersRouter);
+app.use("/users", tokenChecker, usersRouter);
 
 
 // catch 404 and forward to error handler
