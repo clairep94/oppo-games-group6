@@ -6,7 +6,8 @@ const JWT = require("jsonwebtoken");
 
 const postsRouter = require("./routes/posts");
 const authenticationRouter = require("./routes/authentication");
-const usersRouter = require("./routes/users");
+const signUpRouter = require("./routes/signup");
+// const usersRouter = require("./routes/users");
 const tictactoeRouter = require("./routes/tictactoe_games");
 
 
@@ -45,7 +46,8 @@ const tokenChecker = (req, res, next) => {
 app.use("/tokens", authenticationRouter);
 
 // routes with no authentication:
-app.use("/users", usersRouter); // TODO change to "/users/new"
+// app.use("/users", usersRouter); // TODO change to "/users/new"
+app.use("/signup", signUpRouter);
 
 // routes with authentication:
 app.use("/posts", tokenChecker, postsRouter);
