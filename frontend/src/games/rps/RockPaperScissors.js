@@ -347,20 +347,76 @@ const BeforeGameUI = ({ props }) => {
 const DuringGameUI = ({ props }) => {
   const { gameSnapshot, clientUserId, throwHandSign, resignGame } = props;
   const [selectedHandSign, setSelectedHandSign] = useState(HAND_SIGNS.NONE);
+  const [moveStatus, setMoveStatus] = useState({
+    round: gameSnapshot.currentRound, submitted: false, handSign: null,
+  });
+  const [moveConfirmed, setMoveConfirmed] = useState(false);
+  const [prevRoundResults, setPrevRoundResults] = useState(null);
+
+  useEffect(() => { // Confirm move when it appears in gameSnapshot
+    if (moveStatus.submitted &&
+      gameSnapshot.signsThrown[moveStatus.round - 1] === moveStatus.handSign) {
+      setMoveConfirmed(true);
+    }
+  }, [gameSnapshot, moveStatus]);
+
+  useEffect(() => { // Store results in prevRoundResults and clear moveStatus when round advances
+    if (gameSnapshot.currentRound !== moveStatus.round) {
+      setPrevRoundResults(gameSnapshot.signsThrown[moveStatus.round - 1]);
+      setMoveStatus({
+        round: gameSnapshot.currentRound, submitted: false, handSign: null,
+      });
+      setMoveConfirmed(false);
+      setSelectedHandSign(HAND_SIGNS.NONE);
+    }
+  }, [gameSnapshot, moveStatus]);
+
   return (
     <div className="rock-paper-scissors/during-game-ui">
       <h3>Now playing Rock Paper Scissors.</h3>
       <ClientInfo props={{ gameSnapshot, clientUserId }} />
+      {
+        moveConfirmed
+        ? <p>Server recieved your move {moveStatus.handSign} for round {moveStatus.round}.</p>
+        : (
+          moveStatus.submitted
+          ? <p>You selected move {moveStatus.handSign} for round {moveStatus.round}.</p>
+          : (
+            selectedHandSign === HAND_SIGNS.NONE
+            ? <p>Please select a move for round {moveStatus.round}.</p>
+            : <>
+              <p>Selected move for round {moveStatus.round}:  {moveStatus.handSign}.</p>
+              <button onClick={() => {
+                throwHandSign(gameSnapshot.currentRound, selectedHandSign);
+                setMoveStatus({
+                  round: gameSnapshot.currentRound, submitted: true, handSign: selectedHandSign,
+                });
+              }}>Confirm</button>
+            </>
+          )
+        )
+      }
       <button onClick={() => setSelectedHandSign(HAND_SIGNS.ROCK)}>Select Rock</button>
       <button onClick={() => setSelectedHandSign(HAND_SIGNS.PAPER)}>Select Paper</button>
       <button onClick={() => setSelectedHandSign(HAND_SIGNS.SCISSORS)}>Select Scissors</button>
-      {
-        selectedHandSign !== HAND_SIGNS.NONE &&
-        <button onClick={() => throwHandSign(gameSnapshot.currentRound, selectedHandSign)}>
-          Confirm move: {`${selectedHandSign}`}
-        </button>
-      }
+      <p>{gameSnapshot.players[0].username} has {gameSnapshot.scores[0]} points.</p>
+      <p>{gameSnapshot.players[1].username} has {gameSnapshot.scores[1]} points.</p>
+      <p>First to {gameSnapshot.settings.pointsObjective} points wins.</p>
       <button onClick={resignGame}>Resign the game</button>
+      {
+        prevRoundResults !== null
+        && <>
+          <p>Results of previous round (round {gameSnapshot.currentRound - 1}):</p>
+          <ul>
+            <li>{gameSnapshot.players[0].username} threw hand sign {
+              gameSnapshot.signsThrown[gameSnapshot.currentRound - 2][0]}.
+            </li>{gameSnapshot.players[1].username} threw hand sign {
+              gameSnapshot.signsThrown[gameSnapshot.currentRound - 2][1]}.
+            <li>
+            </li>
+          </ul>
+        </>
+      }
     </div>
   );
 };
