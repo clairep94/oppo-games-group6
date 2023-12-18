@@ -137,15 +137,15 @@ const awaitingGameManager = (game, action) => {
     } else {
       throw new Error(`JOIN failed (playerId: ${action.playerId}, game.players: ${game.players})`);
     }
-  } else if (action.op === SETUP) {
+  } else if (action.op === OPS.SETUP) {
     // Must be the host in order to change settings.
-    if (game.hostId !== action.playerId) {
+    if (JSON.stringify(game.hostId) !== JSON.stringify(action.playerId)) {
       throw new Error(`SETUP failed (playerId: ${action.playerId}, game.hostId: ${game.hostId})`);
     }
     validateSettingsObject(action.args.settings);
-    doUpdateSettingsEvent(game, action.args.settings);
-  } else if (action.op === READY) {
-    if (findPlayerIndex(game, playerId) === -1 ) {
+    doUpdateSettingsEvent(game, action);
+  } else if (action.op === OPS.READY) {
+    if (findPlayerIndex(game, action.playerId) === -1 ) {
       throw new Error(`READY failed (playerId: ${action.playerId}, game.players: ${game.players})`);
     }
     validateSettingsObject(action.args.settings);
@@ -154,9 +154,9 @@ const awaitingGameManager = (game, action) => {
     } else {
       throw new Error(`READY failed (args.settings: ${action.args.settings}, game.settings: ${game.settings})`);
     }
-  // } else if (action.op === QUIT) {
+  // } else if (action.op === OPS.QUIT) {
   //   // QUIT logic
-  // } else if (action.op === KICK) {
+  // } else if (action.op === OPS.KICK) {
   //   // KICK logic
   } else {
     throw new Error(`Op invalid while AWAITING_HOST: ${action.op}`);
@@ -166,7 +166,7 @@ const awaitingGameManager = (game, action) => {
 const playingGameManager = (game, action) => {
   // Valid ops: THROW (roundNumber, handSign), RESIGN
   if (action.op === OPS.THROW) {
-    const playerIndex = findPlayerIndex(game, playerId);
+    const playerIndex = findPlayerIndex(game, action.playerId);
     if (playerIndex === -1) {
       throw new Error(`THROW failed (playerId: ${action.playerId}, game.players: ${game.players})`);
     }
@@ -182,8 +182,8 @@ const playingGameManager = (game, action) => {
       throw new Error(`THROW failed (args.handSign: ${action.args.handSign}, game.signsThrown[${game.roundNumber - 1}][${playerIndex}]: ${game.signsThrown[game.roundNumber - 1][playerIndex]})`);
     }
     doThrowHandSignEvent(game, action);
-  } else if (action.op === "RESIGN") {
-    const playerIndex = findPlayerIndex(game, playerId);
+  } else if (action.op === OPS.RESIGN) {
+    const playerIndex = findPlayerIndex(game, action.playerId);
     if (playerIndex === -1) {
       throw new Error(`RESIGN failed (playerId: ${action.playerId}, game.players: ${game.players})`);
     }
@@ -225,8 +225,9 @@ const doUpdateSettingsEvent = (game, action) => {
 };
 
 const doMarkAsReadyEvent = (game, action) => {
-  const playerIndex = findPlayerIndex(game, playerId);
-  game.isReady[playerIndex] = true;
+  const playerIndex = findPlayerIndex(game, action.playerId);
+  /*game.isReady[playerIndex] = true; <-- DO *NOT* DO IT THIS WAY WITH MONGOOSE 5.x */
+  game.isReady.set(playerIndex, true);
   if (game.isReady.every((x) => (x === true))) {
     doBeginGameTransition(game, action);
   }
@@ -240,7 +241,7 @@ const doBeginGameTransition = (game, action) => {
 };
 
 const doThrowHandSignEvent = (game, action) => {
-  const playerIndex = findPlayerIndex(game, playerId);
+  const playerIndex = findPlayerIndex(game, action.playerId);
   game.signsThrown[game.currentRound - 1][playerIndex] = action.args.handSign;
   if (game.signsThrown[game.currentRound - 1].every((sign) => (sign !== HAND_SIGNS.NONE))) {
     doNextRoundEvent(game, action);
