@@ -177,10 +177,8 @@ const RockPaperScissors = ({ gameId }) => {
   }
   return (
     <div className="rock-paper-scissors">
-      <p>Hi there!</p>
-      <button onClick={() => setShouldDoPolling(false)}>Stop polling</button>
-      <button onClick={() => setShouldDoPolling(true)}>Start polling</button>
-      <p>Currently polling? {shouldDoPolling ? "Yes" : "No"}</p>
+      <h2>{gameSnapshot.title}</h2>
+
 
       {/* SECTION 1: AWAITING_HOST */
         gameSnapshot.progressState === STATE_CODES.AWAITING_HOST &&
@@ -202,8 +200,17 @@ const RockPaperScissors = ({ gameId }) => {
         <AfterGameUI props={{ gameSnapshot, clientUserId }} />
       }
 
-      {/* DEBUG SECTION: Just display the whole game snapshot */}
-      <p>{JSON.stringify(gameSnapshot)}</p>
+      {/* DEBUG SECTION */}
+      <details>
+        <summary>(Dev tools) Server connection</summary>
+        <button onClick={() => setShouldDoPolling(false)}>Stop polling</button>
+        <button onClick={() => setShouldDoPolling(true)}>Start polling</button>
+        <p>Currently polling? {shouldDoPolling ? "Yes" : "No"}</p>
+      </details>
+      <details>
+        <summary>(Dev info) gameSnapshot object</summary>
+        <p>{JSON.stringify(gameSnapshot)}</p>
+      </details>
     </div>
   );
 };
@@ -227,7 +234,7 @@ const ClientInfo = ({ props }) => {
       <p>Are you this game's host? {gameSnapshot.hostId === clientUserId ? "Yes" : "No"}</p>
     </div>
   );
-}
+};
 
 const SettingsUI = ({ props }) => {
   const { gameSnapshot, clientUserId, assignSettings, confirmReady } = props;
@@ -385,7 +392,7 @@ const DuringGameUI = ({ props }) => {
             selectedHandSign === HAND_SIGNS.NONE
             ? <p>Please select a move for round {moveStatus.round}.</p>
             : <>
-              <p>Selected move for round {moveStatus.round}:  {moveStatus.handSign}.</p>
+              <p>Selected move for round {moveStatus.round}: {selectedHandSign}.</p>
               <button onClick={() => {
                 throwHandSign(gameSnapshot.currentRound, selectedHandSign);
                 setMoveStatus({
@@ -410,9 +417,9 @@ const DuringGameUI = ({ props }) => {
           <ul>
             <li>{gameSnapshot.players[0].username} threw hand sign {
               gameSnapshot.signsThrown[gameSnapshot.currentRound - 2][0]}.
-            </li>{gameSnapshot.players[1].username} threw hand sign {
+            </li>
+            <li>{gameSnapshot.players[1].username} threw hand sign {
               gameSnapshot.signsThrown[gameSnapshot.currentRound - 2][1]}.
-            <li>
             </li>
           </ul>
         </>
@@ -421,14 +428,64 @@ const DuringGameUI = ({ props }) => {
   );
 };
 
+const ParticipantGameOverAnnouncement = ({ props }) => {
+  // Render this if the player participated
+  const { gameSnapshot, clientUserId } = props;
+  const playerIndex = findPlayerIndex(gameSnapshot, clientUserId);
+  const playerUsername = findPlayerUsername(gameSnapshot, clientUserId);
+  const opponentUsername = findPlayerUsername(
+    gameSnapshot, gameSnapshot.players[1 - playerIndex]._id
+  );
+  const playerResult = gameSnapshot.playerResults[playerIndex];
+  if (playerResult.outcome === "won") {
+    return (
+      <div className="rock-paper-scissors/participant-game-over-announcement">
+        <h3>Congratulations, {playerUsername}!</h3>
+        <p>You won this game of {gameSnapshot.title} against {opponentUsername}.</p>
+      </div>
+    );
+  } else if (playerResult.outcome === "lost") {
+    return (
+      <div className="rock-paper-scissors/participant-game-over-announcement">
+        <h3>Better luck next time, {playerUsername}.</h3>
+        <p>You lost this game of {gameSnapshot.title} against {opponentUsername}.</p>
+      </div>
+    );
+  } else if (playerResult.outcome === "resigned") {
+    return (
+      <div className="rock-paper-scissors/participant-game-over-announcement">
+        <h3>{playerUsername}, you have resigned from this game.</h3>
+        <p>You were playing {gameSnapshot.title} against {opponentUsername}.</p>
+      </div>
+    );
+  }
+};
+
 const AfterGameUI = ({ props }) => {
   const { gameSnapshot, clientUserId } = props;
   return (
     <div className="rock-paper-scissors/after-game-ui">
       <h3>Finished playing Rock Paper Scissors.</h3>
       <ClientInfo props={{ gameSnapshot, clientUserId }} />
+      {
+        isPlayerThisGame(gameSnapshot, clientUserId)
+        && <ParticipantGameOverAnnouncement props={{ gameSnapshot, clientUserId }}/>
+      }
       <p>Game conclusion type: {gameSnapshot.conclusionType}</p>
-      <p>Game results: {JSON.stringify(gameSnapshot.playerResults)}</p>
+      <ul>
+        <li>
+          {gameSnapshot.players[0].username}: {gameSnapshot.playerResults[0].outcome}.
+          Their final score was {gameSnapshot.playerResults[0].finalScore}.
+        </li>
+        <li>
+          {gameSnapshot.players[1].username}: {gameSnapshot.playerResults[1].outcome}.
+          Their final score was {gameSnapshot.playerResults[1].finalScore}.
+        </li>
+      </ul>
+      <details>
+        <summary>(Dev info) playerResults object</summary>
+        <p>{JSON.stringify(gameSnapshot.playerResults)}</p>
+      </details>
     </div>
   );
 };
