@@ -367,15 +367,14 @@ const handleGameAction = (game, action) => {
     validateRequestedOperation(action);
   } catch (e) {
     return { game: game, response: {
-      code: RESPONSE_CODES.UNKNOWN_TOKEN, error: e,
+      code: RESPONSE_CODES.UNKNOWN_TOKEN, error: e.toString(),
     }};
   }
   try {
     getStateManager(game.progressState)(game, action);
   } catch (e) {
-    console.log(e);
     return { game: game, response: {
-      code: RESPONSE_CODES.INVALID, error: e,
+      code: RESPONSE_CODES.INVALID, error: e.toString(),
     }};
   }
   registerSuccessfulAction(game, action);
