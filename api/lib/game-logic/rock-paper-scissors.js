@@ -16,7 +16,7 @@ const OPS = {
   READY: "ready",
   // QUIT: "quit", // QUIT and KICK don't need to be implemented yet
   // KICK: "kick", // args: (playerId)
-  THROW: "throw", // args: (roundNumber, handSign)
+  THROW: "throw", // args: (currentRound, handSign)
   RESIGN: "resign",
 };
 
@@ -164,22 +164,22 @@ const awaitingGameManager = (game, action) => {
 };
 
 const playingGameManager = (game, action) => {
-  // Valid ops: THROW (roundNumber, handSign), RESIGN
+  // Valid ops: THROW (currentRound, handSign), RESIGN
   if (action.op === OPS.THROW) {
     const playerIndex = findPlayerIndex(game, action.playerId);
     if (playerIndex === -1) {
       throw new Error(`THROW failed (playerId: ${action.playerId}, game.players: ${game.players})`);
     }
-    if (args.roundNumber !== game.currentRound) {
-      throw new Error(`THROW failed (args.roundNumber: ${action.args.roundNumber}, game.currentRound: ${game.currentRound})`);
+    if (action.args.currentRound !== game.currentRound) {
+      throw new Error(`THROW failed (args.currentRound: ${action.args.currentRound}, game.currentRound: ${game.currentRound})`);
     }
     validateHandSign(action.args.handSign);
     // Can't change hand sign to NONE or change hand sign once it's something other than NONE
     if (
       action.args.handSign === HAND_SIGNS.NONE ||
-      game.signsThrown[game.roundNumber - 1][playerIndex] !== HAND_SIGNS.NONE
+      game.signsThrown[game.currentRound - 1][playerIndex] !== HAND_SIGNS.NONE
     ) {
-      throw new Error(`THROW failed (args.handSign: ${action.args.handSign}, game.signsThrown[${game.roundNumber - 1}][${playerIndex}]: ${game.signsThrown[game.roundNumber - 1][playerIndex]})`);
+      throw new Error(`THROW failed (args.handSign: ${action.args.handSign}, game.signsThrown[${game.currentRound - 1}][${playerIndex}]: ${game.signsThrown[game.currentRound - 1][playerIndex]})`);
     }
     doThrowHandSignEvent(game, action);
   } else if (action.op === OPS.RESIGN) {
