@@ -29,7 +29,7 @@ const RockPaperScissorsGameSchema = new mongoose.Schema({
 
   // Section 2: Properties first needed for state AWAITING_GAME
   hostId: {
-    type: [mongoose.Schema.Types.ObjectId],
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
   },
   settings: {
