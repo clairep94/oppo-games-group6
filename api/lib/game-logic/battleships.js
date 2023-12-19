@@ -1,5 +1,8 @@
 // Battleships game logic
 
+
+// ================================ CONSTANTS ===============================
+
 const OPS = { // Comments describe required `args` property in PUT req body
   JOIN: "join", // { } /* empty object */
   SETUP: "setup", // { settings }
@@ -54,6 +57,30 @@ const TURN_ORDER_ASSIGNMENT_MECHANISMS = {
   INDEX_0: "index-0",
   INDEX_1: "index-1",
   RANDOM: "random",
+};
+
+
+// =============================== VALIDATION ===============================
+
+const validateRequestedOperation = (action) => {
+  if (!Object.values(OPS).includes(action.op)) {
+    throw new Error(`Operation ${action.op} is undefined`);
+  }
+};
+
+const validateProgressState = (game) => {
+  if (!Object.values(STATE_CODES).includes(game.progressState)) {
+    throw new Error(`State ${game.progressState} is undefined`);
+  }
+};
+
+const validateSettingsObject = (settings) => {
+  if (settings.spectationPermitted !== false && settings.spectationPermitted !== true) {
+    throw new Error(`settings.spectationPermitted of ${settings.spectationPermitted} is invalid`);
+  }
+  if (!Object.values(TURN_ORDER_ASSIGNMENT_MECHANISMS).includes(settings.turnOrderAssignmentMechanism)) {
+    throw new Error(`settings.turnOrderAssignmentMechanism of ${settings.turnOrderAssignmentMechanism} is invalid`);
+  }
 };
 
 
