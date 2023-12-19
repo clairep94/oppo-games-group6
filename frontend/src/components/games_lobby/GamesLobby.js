@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import getSessionUserID from "../../utility/getSessionUserID";
 import NewGameButton from './CreateNewGameButton';
-
+import NavBar from '../navbar/NavBar';
+import GamesList from './GamesList';
 
 
 const GamesLobby = ({ navigate }) => {
 
   const [token, setToken] = useState(window.localStorage.getItem("token"));
   const sessionUserID = getSessionUserID(token);
+  // const sessionUserData = 
 
   const gamesMenu = [ // <------- LIST OF ENDPOINTS & TITLES FOR EACH GAME!!
     {title:'Tic-Tac-Toe', endpoint: 'tictactoe'},
     {title:'Rock-Paper-Scissors', endpoint: 'rockpaperscissors'},
     {title: 'Battleships', endpoint: 'battleships'}
   ] 
-
 
   const [openGames, setOpenGames] = useState(null);
   const [yourGames, setYourGames] = useState(null);
@@ -39,23 +40,20 @@ const GamesLobby = ({ navigate }) => {
   }, [])
 
 
-  // ============= LOGOUT ======================== //
-  const logout = () => {
-    window.localStorage.removeItem("token")
-    navigate('/login')
-  }
 
   // ============== JSX FOR UI ========================
 
     if(token) {
       return(
+
         <>
-        {/* TODO: ADD NAVBAR */}
+        {/* TODO: NAVBAR, add user info here later */}
+        <NavBar navigate={navigate} sessionUserID={sessionUserID}/>
+
+
+
           {/* TITLE */}
           <h2>Games Lobby</h2>
-          <button onClick={logout}>
-            Logout
-          </button>
 
           <a href={`/users/${sessionUserID}`}>
             <p>Welcome player {sessionUserID}</p>
@@ -116,6 +114,8 @@ const GamesLobby = ({ navigate }) => {
               <br/>
               {allGames ? `${allGames.length} games found` : 'games not found'}
               {allGames && <AllGames allGames={allGames} sessionUserID={sessionUserID}/>}
+
+              {allGames && <GamesList gamesList={allGames} sessionUserID={sessionUserID}/>}
           </div>
 
           <br/>
@@ -129,55 +129,6 @@ const GamesLobby = ({ navigate }) => {
 
 
 // ============== SUPPORTIVE COMPONENTS ============================================== //
-
-// ----------- NEW GAME BUTTON ---------------------- //
-// const NewGameButton = (props) => {
-//   const game = props.game
-//   const token = props.token
-//   const navigate = props.navigate
-//   // const gameTitle = props.gameTitle
-
-//   const createNewGame = async (event) => {
-//     event.preventDefault()
-
-//     try {
-//       const response = await fetch(`/${game}`, {
-//         method: 'post',
-//         headers: {
-//           'Content-Type': 'application/json',
-//           'Authorization': `Bearer ${token}`
-//         },
-//         body: JSON.stringify({}),
-//       });
-  
-//       if (response.status === 201) {
-//         const data = await response.json();
-//         const gameID = data.game._id;
-//         navigate(`/${game}/${gameID}`);
-//       } else {
-//         navigate('/login');
-//       }
-//     } catch (error) {
-//       console.error(`Error creating new ${game} game:`, error);
-//       navigate('/login');
-//     }
-//   };
-
-
-//   return (
-//     <button
-//       aria-label={`create ${game} game button`}
-//       onClick={createNewGame}
-//       className={`create-${game}-game-button`}
-//       id={`create-${game}-game-button`}
-//       style={{width: "200px", height: "50px"}}
-//     >
-//       {`New ${game} game`}
-//       {/* TODO: Fix this string to be title case */}
-//     </button>
-//   )
-
-//   };
 
 
 // ---------- TEMP ALL GAMES ------------------ //
@@ -207,19 +158,39 @@ const SingleGame = (props) => {
   const game = props.game
   const sessionUserID = props.sessionUserID
 
+  // return (
+  //   <>
+  //   <a href={`/tictactoe/${game._id}`}>Tictactoe #{game._id}: {game.player_two ? `${game.player_one} vs. ${game.player_two}` : `${game.player_one} awaiting opponent`}</a>
+  //   {/* TODO: add join button, if open game; forfeit button if your game & not awaiting challenger */}
+  //   {game.awaiting_challenger && <> <button>Join Game</button> <button>Delete Game</button></>}
+  //   {/* {game.player_one === sessionUserID && <button>Delete Game</button>} */}
+  //   {game.player_one === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
+  //   {game.player_two === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
+
+
+
+  //   </>
+  // )
+
   return (
     <>
-    <a href={`/tictactoe/${game._id}`}>Tictactoe #{game._id}: {game.player_two ? `${game.player_one} vs. ${game.player_two}` : `${game.player_one} awaiting opponent`}</a>
-    {/* TODO: add join button, if open game; forfeit button if your game & not awaiting challenger */}
-    {game.awaiting_challenger && <> <button>Join Game</button> <button>Delete Game</button></>}
-    {/* {game.player_one === sessionUserID && <button>Delete Game</button>} */}
-    {game.player_one === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
-    {game.player_two === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
+        <a href={`/${game.endpoint}/${game._id}`}>
+            {game.title} #{game._id}: 
+            {game.player_two ? 
+                `${game.player_one.username} vs. ${game.player_two.username}` : 
+                `${game.player_one.username} awaiting opponent`}
+        </a>
 
+        {game.player_one !== sessionUserID && game.awaiting_challenger && <button>Join Game</button>}
 
+        {game.player_one === sessionUserID && game.awaiting_challenger && <button>Delete Game</button>}
+
+        {game.player_one === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
+        {game.player_two === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
 
     </>
-  )
+    )
+
 }
 
 
