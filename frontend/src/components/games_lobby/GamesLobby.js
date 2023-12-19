@@ -113,7 +113,6 @@ const GamesLobby = ({ navigate }) => {
               {allGames ? 'games exist' : 'games not found'}
               <br/>
               {allGames ? `${allGames.length} games found` : 'games not found'}
-              {allGames && <AllGames allGames={allGames} sessionUserID={sessionUserID}/>}
 
               {allGames && <GamesList gamesList={allGames} sessionUserID={sessionUserID}/>}
           </div>
@@ -128,70 +127,6 @@ const GamesLobby = ({ navigate }) => {
 }
 
 
-// ============== SUPPORTIVE COMPONENTS ============================================== //
-
-
-// ---------- TEMP ALL GAMES ------------------ //
-const AllGames = (props) => {
-  const allGames = props.allGames
-  const sessionUserID = props.sessionUserID
-
-
-
-  return(
-    <>
-    <div style={{ height: '200px', overflowY: 'scroll', border: '1px solid #ccc', padding: '5px', width: '70%' }}>
-
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {allGames.map((game, index) => (
-          <li key={index} style={{ borderBottom: '1px solid #eee', padding: '5px' }}>
-            <SingleGame game={game} sessionUserID={sessionUserID}/>
-          </li>
-        ))}
-      </ul>
-    </div>
-    </>
-  )
-
-}
-const SingleGame = (props) => {
-  const game = props.game
-  const sessionUserID = props.sessionUserID
-
-  // return (
-  //   <>
-  //   <a href={`/tictactoe/${game._id}`}>Tictactoe #{game._id}: {game.player_two ? `${game.player_one} vs. ${game.player_two}` : `${game.player_one} awaiting opponent`}</a>
-  //   {/* TODO: add join button, if open game; forfeit button if your game & not awaiting challenger */}
-  //   {game.awaiting_challenger && <> <button>Join Game</button> <button>Delete Game</button></>}
-  //   {/* {game.player_one === sessionUserID && <button>Delete Game</button>} */}
-  //   {game.player_one === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
-  //   {game.player_two === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
-
-
-
-  //   </>
-  // )
-
-  return (
-    <>
-        <a href={`/${game.endpoint}/${game._id}`}>
-            {game.title} #{game._id}: 
-            {game.player_two ? 
-                `${game.player_one.username} vs. ${game.player_two.username}` : 
-                `${game.player_one.username} awaiting opponent`}
-        </a>
-
-        {game.player_one !== sessionUserID && game.awaiting_challenger && <button>Join Game</button>}
-
-        {game.player_one === sessionUserID && game.awaiting_challenger && <button>Delete Game</button>}
-
-        {game.player_one === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
-        {game.player_two === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
-
-    </>
-    )
-
-}
 
 
 export default GamesLobby;
