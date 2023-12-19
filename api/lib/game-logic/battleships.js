@@ -56,6 +56,22 @@ const TURN_ORDER_ASSIGNMENT_MECHANISMS = {
   RANDOM: "random",
 };
 
+
+// ===================== MISCELLANEOUS UTILITY FUNCTIONS ====================
+
+const findPlayerIndex = (game, playerId) => {
+  if (game.players.length === 0) { return -1; }
+  // Autodetect if `game.players` was populated
+  if (game.players[0].username === undefined) {
+    // Not populated
+    return game.players.indexOf(playerId);
+  } else {
+    // Populated
+    return game.players.map((player) => player.id).indexOf(playerId);
+  }
+};
+
+
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
 const getNewGame = () => {
@@ -63,6 +79,7 @@ const getNewGame = () => {
   const randomSeed = Math.random();
   const newGame = {
     progressState: STATE_CODES.AWAITING_HOST,
+    randomSeed: randomSeed,
     title: "Battleships",
     createdAt: now,
     updatedAt: now,
@@ -114,11 +131,47 @@ const getNewGame = () => {
   return newGame;
 };
 
-const makeGameSnapshot = (game, playerId) => { return game; }; // placeholder
+const makeGameSnapshot = (game, playerId) => {
+  if ((game.progressState === STATE_CODES.PLACING_SHIPS) ||
+    (game.progressState === STATE_CODES.TAKING_TURNS)
+  ) {
+    const playerIndex = findPlayerIndex(game, playerId);
+    if (playerIndex === -1) {
+      if (game.settings.spectationPermitted) {
+        // Don't redact anything. Spectators are allowed during the game.
+      } else {
+        // Redact almost everything. No spectators are allowed during the game.
+        // The client should check the spectation settings and show a message.
+        game.shipPieces = null;
+        game.oceanGrids = null;
+        game.currentRound = null;
+        game.currentTurnWithinRound = null;
+        game.movesTaken = null;
+        game.publicCommunications = null;
+      }
+    } else if (playerIndex === 0 || playerIndex === 1) {
+      const opponentIndex = 1 - playerIndex;
+      game.shipPieces[opponentIndex] = null;
+      for (let row = 0; row < 10; row++ ) {
+        for (let col = 0; col < 10; col++ ) {
+          oceanGrids[opponentIndex][row][col].locationIndexInShip = null; // Always redact
+          if (oceanGrids[opponentIndex][row][col].hitStatus === false) {
+            oceanGrids[opponentIndex][row][col].occupiedByShip = null;
+            oceanGrids[opponentIndex][row][col].indexInFleet = null;
+          }
+        }
+      }
+    }
+  }
+  if (game.progressState !== STATE_CODES.CONCLUDED) {
+    game.actionLog = null;
+  }
+  return game;
+};
 
 const handleGameAction = (game, action) => { // placeholder
   return { game: game, response: { code: RESPONSE_CODES.OK }};
-}
+};
 
 
 module.exports = {
