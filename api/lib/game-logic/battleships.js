@@ -98,6 +98,46 @@ const findPlayerIndex = (game, playerId) => {
   }
 };
 
+const checkSettingsEqual = (game, settings) => {
+  return (
+    (game.settings.spectationPermitted === settings.spectationPermitted)
+    && (game.settings.turnOrderAssignmentMechanism === settings.turnOrderAssignmentMechanism)
+  );
+};
+
+const registerSuccessfulAction = (game, action) => {
+  const now = Date.now();
+  game.updatedAt = now;
+  game.actionLog.push({
+    performedAt: now,
+    op: action.op,
+    args: JSON.stringify(action.args),
+    playerId: action.playerId,
+  });
+};
+
+
+// ============================= STATE MANAGERS =============================
+
+// const getStateManager = (progressState) => {
+//   if (progressState === STATE_CODES.AWAITING_HOST) {
+//     return awaitingHostManager;
+//   } else if (progressState === STATE_CODES.AWAITING_GAME) {
+//     return awaitingGameManager;
+//   } else if (progressState === STATE_CODES.PLAYING_GAME) {
+//     return playingGameManager;
+//   } else if (progressState === STATE_CODES.CONCLUDED) {
+//     return concludedManager;
+//   }
+// };
+
+const getStateManager = (progressState) => {
+  return (game, action) => {
+    // Do nothing, don't modify `game`
+  }; // TODO Placeholder
+}
+
+
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
@@ -205,6 +245,14 @@ const handleGameAction = (game, action) => { // TODO
       code: RESPONSE_CODES.UNKNOWN_TOKEN, error: e.toString(),
     }};
   }
+  try {
+    getStateManager(game.progressState)(game, action);
+  } catch (e) {
+    return { game: game, response: {
+      code: RESPONSE_CODES.INVALID, error: e.toString(),
+    }};
+  }
+  registerSuccessfulAction(game, action);
   return { game: game, response: { code: RESPONSE_CODES.OK }};
 };
 
