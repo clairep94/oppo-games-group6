@@ -74,11 +74,6 @@ const getNewGame = () => {
       turnOrderAssignmentMechanism: TURN_ORDER_ASSIGNMENT_MECHANISMS.RANDOM,
     },
     isReady: [false, false],
-    shipPieces: [0, 1].map( // playerIndex
-      [0, 1, 2, 3, 4].map({ // indexInFleet
-        shipName: SHIP_DATA.SHIP_NAMES
-      })
-    ),
     shipPieces: [0, 1].map(playerIndex => {
       // This is how you make an array containing a range in javascript. Wow.
       return Array.from({ length: 5 }, (_, i) => i).map(indexInFleet => {
@@ -116,6 +111,7 @@ const getNewGame = () => {
     conclusionType: null,
     playerResults: null
   };
+  return newGame;
 };
 
 const makeGameSnapshot = (game, playerId) => { return game; }; // placeholder
