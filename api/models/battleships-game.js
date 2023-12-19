@@ -78,7 +78,7 @@ const BattleshipsGameSchema = new mongoose.Schema({
   // Section 4: Properties first needed for state TAKING_TURNS
   currentRound: Number, // Starts at 0 (THIS IS DIFFERENT FROM RPS)
   currentTurnWithinRound: Number, // (0 ~ 1), starts at 0
-  turnOrderEachRound: [Number], // assuming 0 is playerIndex of host:
+  turnOrder: [Number], // assuming 0 is playerIndex of host:
   // [0, 1] for host starting, [1, 0] for non-host starting
   movesTaken: {
     type: [{

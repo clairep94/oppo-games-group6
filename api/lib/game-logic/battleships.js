@@ -7,9 +7,10 @@ const OPS = { // Comments describe required `args` property in PUT req body
   PLACE: "place", // { indexInFleet, topLeftCornerLocation: { row, col },
   // orientation /* "horizontal", "vertical" */ }
   UNPLACE: "unplace", // { indexInFleet }
-  PREPARE: "prepare", // { clientShipPieces:
+  PREPARE: "prepare", // { completedShipPlacements : 
   // [{ topLeftCornerLocation, orientation }] /* array of length 5 */ }
-  FIRE: "fire", // { currentRound, /* (0~1) */ currentTurn /* (0~1) */ }
+  FIRE: "fire", // { currentRound, /* (0~1) */ currentTurn, /* (0~1) */ 
+  // targetLocation: {row, col} }
   RESIGN: "resign", // { } /* empty object */
 };
 
