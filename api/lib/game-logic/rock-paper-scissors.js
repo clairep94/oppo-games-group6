@@ -90,7 +90,9 @@ const registerSuccessfulAction = (game, action) => {
   game.updatedAt = now;
   game.actionLog.push({
     performedAt: now,
-    action: action,
+    op: action.op,
+    args: JSON.stringify(action.args),
+    playerId: action.playerId,
   });
 };
 

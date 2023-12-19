@@ -90,8 +90,11 @@ const RockPaperScissorsGamesController = {
     // Get the game id, operation, and arguments
     const gameId = req.params.id;
     const operation = req.params.op;
-    const operationArgs = req.body.args;
-
+    const operationArgs = (
+      (req.body.args === undefined)
+      ? { } // Always pass in an object to handleGameAction, even an empty one
+      : req.body.args
+    );
     // First DB access: Find the game
     RockPaperScissorsGame.findById(req.params.id)
     /*.populate('players', 'username')*/ // DO NOT USE with `handleGameAction`!
