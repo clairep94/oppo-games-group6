@@ -32,10 +32,14 @@ const TicTacToeGameSchema = new mongoose.Schema({
     },
 
     // ----------- Active Game Properties ------------    
-    whose_turn: {
+    whose_turn: { 
         type: mongoose.Schema.Types.ObjectId,
         default: null,
         ref:'User'
+    },
+    turn: { // after a player moves, turn ++; if turn === 9: draw
+        type: Number,
+        default: 0
     },
     date_of_last_move: {
         type:Date
@@ -87,10 +91,7 @@ const TicTacToeGameSchema = new mongoose.Schema({
     
 
     // --------------- Fluid TicTacToe Properties --------------- :
-    turn: { // after a player moves, turn ++; if turn === 9: draw
-        type: Number,
-        default: 0
-    },
+    
     x_placements: { // after player 1 moves, add their coordinate here and to the game board
         type: [String],
         default: []

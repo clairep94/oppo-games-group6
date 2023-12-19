@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import getSessionUserID from "../../utility/getSessionUserID";
+import NewGameButton from './CreateNewGameButton';
 
 
 
@@ -7,7 +8,14 @@ const GamesLobby = ({ navigate }) => {
 
   const [token, setToken] = useState(window.localStorage.getItem("token"));
   const sessionUserID = getSessionUserID(token);
-  const games = ['tictactoe'] // <------- LIST OF ENDPOINTS FOR EACH GAME!!
+
+  const gamesMenu = [ // <------- LIST OF ENDPOINTS & TITLES FOR EACH GAME!!
+    {title:'Tic-Tac-Toe', endpoint: 'tictactoe'},
+    {title:'Rock-Paper-Scissors', endpoint: 'rockpaperscissors'},
+    {title: 'Battleships', endpoint: 'battleships'}
+  ] 
+
+
   const [openGames, setOpenGames] = useState(null);
   const [yourGames, setYourGames] = useState(null);
   const [allGames, setAllGames] = useState(null);
@@ -42,23 +50,61 @@ const GamesLobby = ({ navigate }) => {
     if(token) {
       return(
         <>
+        {/* TODO: ADD NAVBAR */}
+          {/* TITLE */}
           <h2>Games Lobby</h2>
+          <button onClick={logout}>
+            Logout
+          </button>
+
           <a href={`/users/${sessionUserID}`}>
             <p>Welcome player {sessionUserID}</p>
           </a>
+          {/* TITLE */}
+
+          <br></br>
+
+          {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
+          <div id='your-games-section'>
+            <h3>Your games:</h3>
+            TODO: Your games. Each game has a link, and shows the Game Type, GameID + Forfeit or Delete button based on if there's an opponent
+          </div>
+          {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
+
+          <br/>
+          <hr></hr>
+          <br/>
+
+          {/* CREATE A GAME - BUTTON FOR EACH GAME TYPE - gameType.urlEndpoint & gameType.title */}
           <div id='create-game-section'>
             <h3>Create a game:</h3>
-
             <div id='create-game-buttons'>
-              {games.map((game) => <>
-              <NewGameButton key={game} game={game} token={token} navigate={navigate} />
+              {gamesMenu.map((game) => <>
+              <NewGameButton 
+                key={game.title} 
+                gameTitle={game.title} 
+                gameEndpoint={game.endpoint} 
+                token={token} 
+                navigate={navigate} />
               <br/>
               </>)}
             </div>
-
           </div>
+          {/* CREATE A GAME - BUTTON FOR EACH GAME TYPE - gameType.urlEndpoint & gameType.title */}
 
           <br/>
+          <hr></hr>
+          <br/>
+
+          {/* OPEN GAMES SECTION  */}
+          <div id='open-games-section'>
+            <h3>Join a game:</h3>
+              TODO: Open games. Each game has a join button and a link, and shows the Game Type, GameID + Host ID
+          </div>
+          {/* OPEN GAMES SECTION  */}
+
+          <br/>
+          <hr></hr>
           <br/>
 
           <div id='temp-all-games'>
@@ -69,47 +115,11 @@ const GamesLobby = ({ navigate }) => {
               {allGames ? 'games exist' : 'games not found'}
               <br/>
               {allGames ? `${allGames.length} games found` : 'games not found'}
-
-
               {allGames && <AllGames allGames={allGames} sessionUserID={sessionUserID}/>}
-              {/* <div id='available_games' role="available_games">
-                  {games.map(
-                    (game) => ( <Game game={ game } key={ game._id } /> )
-                  )}
-              </div> */}
           </div>
 
           <br/>
           <br/>
-
-
-          <div id='open-games-section'>
-            <h3>Join a game:</h3>
-              TODO: Open games. Each game has a join button and a link, and shows the Game Type, GameID + Host ID
-              {/* <div id='available_games' role="available_games">
-                  {games.map(
-                    (game) => ( <Game game={ game } key={ game._id } /> )
-                  )}
-              </div> */}
-          </div>
-
-          <br/>
-          <br/>
-
-          <div id='your-games-section'>
-            <h3>Your games:</h3>
-            TODO: Your games. Each game has a link, and shows the Game Type, GameID + Forfeit or Delete button based on if there's an opponent
-
-          </div>
-
-          <br/>
-          <br/>
-
-          
-
-          <button onClick={logout}>
-            Logout
-          </button>
         </>
       )
     } else {
@@ -121,53 +131,53 @@ const GamesLobby = ({ navigate }) => {
 // ============== SUPPORTIVE COMPONENTS ============================================== //
 
 // ----------- NEW GAME BUTTON ---------------------- //
-const NewGameButton = (props) => {
-  const game = props.game
-  const token = props.token
-  const navigate = props.navigate
-  // const gameTitle = props.gameTitle
+// const NewGameButton = (props) => {
+//   const game = props.game
+//   const token = props.token
+//   const navigate = props.navigate
+//   // const gameTitle = props.gameTitle
 
-  const createNewGame = async (event) => {
-    event.preventDefault()
+//   const createNewGame = async (event) => {
+//     event.preventDefault()
 
-    try {
-      const response = await fetch(`/${game}`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({}),
-      });
+//     try {
+//       const response = await fetch(`/${game}`, {
+//         method: 'post',
+//         headers: {
+//           'Content-Type': 'application/json',
+//           'Authorization': `Bearer ${token}`
+//         },
+//         body: JSON.stringify({}),
+//       });
   
-      if (response.status === 201) {
-        const data = await response.json();
-        const gameID = data.game._id;
-        navigate(`/${game}/${gameID}`);
-      } else {
-        navigate('/login');
-      }
-    } catch (error) {
-      console.error(`Error creating new ${game} game:`, error);
-      navigate('/login');
-    }
-  };
+//       if (response.status === 201) {
+//         const data = await response.json();
+//         const gameID = data.game._id;
+//         navigate(`/${game}/${gameID}`);
+//       } else {
+//         navigate('/login');
+//       }
+//     } catch (error) {
+//       console.error(`Error creating new ${game} game:`, error);
+//       navigate('/login');
+//     }
+//   };
 
 
-  return (
-    <button
-      aria-label={`create ${game} game button`}
-      onClick={createNewGame}
-      className={`create-${game}-game-button`}
-      id={`create-${game}-game-button`}
-      style={{width: "200px", height: "50px"}}
-    >
-      {`New ${game} game`}
-      {/* TODO: Fix this string to be title case */}
-    </button>
-  )
+//   return (
+//     <button
+//       aria-label={`create ${game} game button`}
+//       onClick={createNewGame}
+//       className={`create-${game}-game-button`}
+//       id={`create-${game}-game-button`}
+//       style={{width: "200px", height: "50px"}}
+//     >
+//       {`New ${game} game`}
+//       {/* TODO: Fix this string to be title case */}
+//     </button>
+//   )
 
-  };
+//   };
 
 
 // ---------- TEMP ALL GAMES ------------------ //

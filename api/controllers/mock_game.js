@@ -1,14 +1,15 @@
-const TicTacToeGame = require("../models/tictactoe_game");
+const MockGame = require("../models/mock_game");
 const TokenGenerator = require("../lib/token_generator");
-const User = require("../models/user"); // TODO add user integration
 
-const TicTacToeGameController = {
+const MockGameController = {
     Index: (req, res) => {
-        TicTacToeGame.find()
+        MockGame.find()
         .populate('player_one', '-password')
         .populate('player_two', '-password')
-        .populate('whose_turn', '-password') //not sure if necessary
-        .populate('winner', '-password') //not sure if necessary
+        .populate('')
+    //     // .populate('user_id', '-password') // Populate the 'user_id' field with the entire User document
+    //     // .populate('likes', '-password')
+    //     // .populate('comments')
         .sort({ date_created: -1 }) // reverse-chronological order
         .exec((err, games) => {
             if (err) {
@@ -19,13 +20,24 @@ const TicTacToeGameController = {
         });
         
     },
+    // FindByID: (req, res) => {
+    //     const gameID = req.params.id;
+    //     TicTacToeGame.findById(gameID)
+    //     // .populate('user_id', '-password') // Populate the 'user_id' field with the entire User document
+    //     // .populate('likes', '-password')
+    //     // .populate('comments')
+    //     .exec((err, game) => {
+    //         if (err) {
+    //             throw err;
+    //         }
+    //         const token = TokenGenerator.jsonwebtoken(req.user_id)
+    //         res.status(200).json({ game: game, token: token });
+    //     });
+    
+    // },
+
     FindByID: (req, res) => {
         TicTacToeGame.findById(req.params.id)
-        .populate('player_one', '-password')
-        .populate('player_two', '-password')
-        .populate('whose_turn', '-password') //not sure if necessary
-        .populate('winner', '-password') //not sure if necessary
-
         .exec((err, game) => {
             if (err) {
                 throw err;
@@ -88,12 +100,7 @@ const TicTacToeGameController = {
                     $push: { [placementField]: coordinate }
                 },
                 { new: true }
-            )
-            .populate('player_one', '-password')
-            .populate('player_two', '-password')
-            .populate('whose_turn', '-password') //not sure if necessary
-            .populate('winner', '-password') //not sure if necessary;
-
+            );
             console.log(updatedGame);
 
             const token = TokenGenerator.jsonwebtoken(req.user_id);
@@ -149,15 +156,9 @@ const TicTacToeGameController = {
                 );
                 const wonGame = await TicTacToeGame.findByIdAndUpdate(
                     gameID,
-                    { $set: { date_completed: now } }, // TODO set: finished: true
+                    { $set: {date_completed: now} },
                     { new: true }
-                )
-                .populate('player_one', '-password')
-                .populate('player_two', '-password')
-                .populate('whose_turn', '-password') //not sure if necessary
-                .populate('winner', '-password') //not sure if necessary        
-                ;
-
+                );
                 // TODO - USER INTEGRATION --> do this above or below?? Do not return user info:
                 // add points to User.points 
                 const token = TokenGenerator.jsonwebtoken(req.user_id);
@@ -171,14 +172,9 @@ const TicTacToeGameController = {
                 );
                 const wonGame = await TicTacToeGame.findByIdAndUpdate(
                     gameID,
-                    { $set: {date_completed: now} },  // TODO set: finished: true
+                    { $set: {date_completed: now} },
                     { new: true }
-                )
-                .populate('player_one', '-password')
-                .populate('player_two', '-password')
-                .populate('whose_turn', '-password') //not sure if necessary
-                .populate('winner', '-password') //not sure if necessary        
-                ;
+                );
                 // TODO - USER INTEGRATION:
                 // add points to User.points 
                 const token = TokenGenerator.jsonwebtoken(req.user_id);
@@ -203,16 +199,11 @@ const TicTacToeGameController = {
                     )
                     const finalDrawGame = await TicTacToeGame.findByIdAndUpdate(
                         gameID,
-                        { $set: {date_completed: now} }, // TODO set: finished: true
+                        { $set: {date_completed: now} },
                         { new: true }
                     )
-                    .populate('player_one', '-password')
-                    .populate('player_two', '-password')
-                    .populate('whose_turn', '-password') //not sure if necessary
-                    .populate('winner', '-password') //not sure if necessary            
                     const token = TokenGenerator.jsonwebtoken(req.user_id);
                     res.status(201).json({ message: 'OK', game: finalDrawGame, token: token });
-                
                 } else {
 
                     const nextPlayer = addedTurnGame.turn % 2 === 0 ? game.player_one : game.player_two;
@@ -228,11 +219,6 @@ const TicTacToeGameController = {
                         { $set: {whose_turn: nextPlayer} },
                         { new: true }
                     )
-                    .populate('player_one', '-password')
-                    .populate('player_two', '-password')
-                    .populate('whose_turn', '-password') //not sure if necessary
-                    .populate('winner', '-password') //not sure if necessary            
-
                     const token = TokenGenerator.jsonwebtoken(req.user_id);
                     res.status(201).json({ message: 'OK', game: finalNextTurnGame, token: token });
                 }
@@ -260,15 +246,9 @@ const TicTacToeGameController = {
             );
             const wonGame = await TicTacToeGame.findByIdAndUpdate(
                 gameID,
-                { $set: {date_completed: now} }, // TODO set: finished: true
+                { $set: {date_completed: now} },
                 { new: true }
-            )
-            .populate('player_one', '-password')
-            .populate('player_two', '-password')
-            .populate('whose_turn', '-password') //not sure if necessary
-            .populate('winner', '-password') //not sure if necessary            
-
-            ;
+            );
             // TODO - USER INTEGRATION:
             // add points to User.points 
             const token = TokenGenerator.jsonwebtoken(req.user_id);
@@ -283,8 +263,7 @@ const TicTacToeGameController = {
     },
 
 
-    //TODO: JOIN GAME
-    // TODO: DELETE GAME
+    //TODO: SEND INVITE
 
     //TODO: ACCEPT INVITE or JOIN GAME
 }
