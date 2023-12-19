@@ -15,8 +15,8 @@ const OceanGridLocationContents = new mongoose.Schema({
   occupiedByShip: Boolean,
   // if occupiedByShip, these won't be null:
   indexInFleet: Number,
-  sectionIndex: Number, // Doesn't change during game turns: include to avoid recalculation
-  // WARNING: sectionIndex can allow a player to cheat if leaked to the wrong client,
+  locationIndexInShip: Number, // Doesn't change during game turns: include to avoid recalculation
+  // WARNING: locationIndexInShip can allow a player to cheat if leaked to the wrong client,
   // so make sure to redact it in that case.
 });
 
@@ -46,7 +46,9 @@ const BattleshipsGameSchema = new mongoose.Schema({
     ref: 'User',
   },
   settings: {
-    spectationPermitted: Boolean, // Spectators will see all private info.
+    spectationPermitted: Boolean,
+    // Spectators (i.e. all non-participants) will see all private info
+    // except the random seed.
     turnOrderAssignmentMechanism: String, // Agreed or random both available
     /*salvoVariation: Boolean,*/ // Definitely a stretch goal!!
   },
@@ -57,13 +59,13 @@ const BattleshipsGameSchema = new mongoose.Schema({
     type: [[{ // 1st index: playerIndex (0 ~ 1), 2nd index: indexInFleet of ship (0 ~ 4)
       shipName: String, // Carrier Battleship Cruiser Submarine Destroyer (resp'ly)
       shipLength: Number, //     5          4       3         3         2
-      orientation: String,
-      // "horizontal"  ==>  ROW stays the SAME      |  COL VARIES low to high
-      // "vertical"    ==>  ROW VARIES low to high  |  COL stays the SAME
       onOceanGrid: Boolean,
       topLeftCornerLocation: { // This has the lowest (row + col) value
         type: { row: Number, col: Number, }, // Each (0 ~ 9)
       },
+      orientation: String,
+      // "horizontal"  ==>  ROW stays the SAME      |  COL VARIES low to high
+      // "vertical"    ==>  ROW VARIES low to high  |  COL stays the SAME
       sectionHitStatus: [Boolean], // starts all false. when all true, ship has sunk.
       hasSunk: Boolean,
     }]],
