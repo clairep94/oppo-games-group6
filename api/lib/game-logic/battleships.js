@@ -89,7 +89,7 @@ const getNewGame = () => {
           topLeftCornerLocation: null,
           orientation: null,
           sectionHitStatus: Array.from(
-            { length: SHIP_DATA.SHIP_LENGTHS[indexInFleet] }, (_, _) => false
+            { length: SHIP_DATA.SHIP_LENGTHS[indexInFleet] }, (_1, _2) => false
           ),
           hasSunk: false,
         };
@@ -97,7 +97,7 @@ const getNewGame = () => {
     }),
     oceanGrids: [0, 1].map(playerIndex => {
       return Array.from({ length: 10 }, (_, i) => {
-        return Array.from({ length: 10 }, (_, _) => {
+        return Array.from({ length: 10 }, (_1, _2) => {
           return {
             hitStatus: false,
             occupiedByShip: false,
@@ -117,6 +117,13 @@ const getNewGame = () => {
     playerResults: null
   };
 };
+
+const makeGameSnapshot = (game, playerId) => { return game; }; // placeholder
+
+const handleGameAction = (game, action) => { // placeholder
+  return { game: game, response: { code: RESPONSE_CODES.OK }};
+}
+
 
 module.exports = {
   RESPONSE_CODES,
