@@ -24,6 +24,10 @@ const BattleshipsGameSchema = new mongoose.Schema({
   // progressState stores a code corresponding to the game object's high-level state
   progressState: String,
 
+  // randomSeed stores a secret random value (for Battleships, this is only used
+  // (after a PREPARE op) if the setting to randomly pick turn order is chosen.)
+  randomSeed: Number,
+
   // Section 1: Properties first needed for state AWAITING_HOST
   title: String,
   createdAt: Date,
@@ -42,7 +46,8 @@ const BattleshipsGameSchema = new mongoose.Schema({
     ref: 'User',
   },
   settings: {
-    spectationPermitted: Boolean,
+    spectationPermitted: Boolean, // Spectators will see all private info.
+    turnOrderAssignmentMechanism: String, // Agreed or random both available
     /*salvoVariation: Boolean,*/ // Definitely a stretch goal!!
   },
   isReady: [Boolean],
@@ -73,7 +78,8 @@ const BattleshipsGameSchema = new mongoose.Schema({
   // Section 4: Properties first needed for state TAKING_TURNS
   currentRound: Number, // Starts at 0 (THIS IS DIFFERENT FROM RPS)
   currentTurnWithinRound: Number, // (0 ~ 1), starts at 0
-  turnOrderEachRound: [Number], // [0, 1] for host starting, [1, 0] for non-host starting
+  turnOrderEachRound: [Number], // assuming 0 is playerIndex of host:
+  // [0, 1] for host starting, [1, 0] for non-host starting
   movesTaken: {
     type: [{
       round: Number,
