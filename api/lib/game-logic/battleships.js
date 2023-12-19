@@ -196,7 +196,15 @@ const makeGameSnapshot = (game, playerId) => {
   return game;
 };
 
-const handleGameAction = (game, action) => { // placeholder
+const handleGameAction = (game, action) => { // TODO
+  try {
+    validateProgressState(game);
+    validateRequestedOperation(action);
+  } catch (e) {
+    return { game: game, response: {
+      code: RESPONSE_CODES.UNKNOWN_TOKEN, error: e.toString(),
+    }};
+  }
   return { game: game, response: { code: RESPONSE_CODES.OK }};
 };
 
