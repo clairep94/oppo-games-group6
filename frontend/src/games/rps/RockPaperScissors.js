@@ -192,7 +192,7 @@ const RockPaperScissors = ({ gameId }) => {
 
       {/* SECTION 3: PLAYING_GAME */
         gameSnapshot.progressState === STATE_CODES.PLAYING_GAME &&
-        <DuringGameUI props={{ gameSnapshot, clientUserId, joinGame, throwHandSign, resignGame }} />
+        <DuringGameUI props={{ gameSnapshot, clientUserId, /*joinGame,*/ throwHandSign, resignGame }} />
       }
 
       {/* SECTION 4: CONCLUDED */
