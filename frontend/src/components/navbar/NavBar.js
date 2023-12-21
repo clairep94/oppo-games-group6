@@ -15,7 +15,9 @@ const NavBar = (props) => {
     return(
         <>
         THIS IS MY PLACEHOLDER NAVBAR: {sessionUserID}
-        <a href='/lobby'>LOBBY</a>
+        <a href='/lobby'> LOBBY </a>
+        <a href={`/users/${sessionUserID}`}>PROFILE </a>
+
         <button onClick={logout}>
             Logout
         </button>
