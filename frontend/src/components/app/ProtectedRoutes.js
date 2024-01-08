@@ -62,7 +62,7 @@ const ProtectedRoutes = ({navigate}) => {
   
 
       {/* =============== MAIN PAGE ============================= */}
-      <div className='h-full w-full flex flex-col overflow-none ml-[10rem] text-gray-50 m-[3rem]'>
+      <div className='h-full w-full flex flex-col overflow-none ml-[10.5rem] text-gray-50 m-[3rem]'>
   
         <Routes>
           {/* ------ Lobby ------  */}

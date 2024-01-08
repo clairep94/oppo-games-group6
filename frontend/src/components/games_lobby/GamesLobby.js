@@ -41,21 +41,41 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
     if(token) {
       return(
-        <>
-          {/* TITLE */}
-          <h1 className='text-6xl font-bold'>
-            Welcome to Oppo Games
-          </h1>
+        <div className='mr-10'>
+          {/* TITLE CARD */}
 
-          <p></p>
-          <br></br>
+        
+        <div className='h-[10rem] pl-12 py-6 relative
+          bg-gradient-to-r from-gray-300/20 via-purple-100/20 to-purple-900/20
+          -translate-x-2 backdrop-blur-sm
+          shadow-lg shadow-[#363b54] rounded-[1.5rem] border-[3px] border-white/10'>
+          <h3 className='text-[2.7rem] font-semibold'>
+              {`Hello, @${sessionUser.username}`}
+          </h3>
+          <p className='text-white/40 text-[1.4rem]'>
+              Welcome back to our platform
+          </p>
+        </div>
+        <img src='triangles.jpg' className='h-[9.5rem] rounded-[1.5rem] -translate-x-5 absolute -z-10 w-[88%] -translate-y-[10rem]'></img>
 
-          {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
-          <div id='your-games-section'>
-            <h3>Your games:</h3>
-            TODO: Your games. Each game has a link, and shows the Game Type, GameID + Forfeit or Delete button based on if there's an opponent
-          </div>
-          {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
+        <h1 className='text-6xl font-bold my-10'>
+          GAME LOBBY
+        </h1>
+
+        <div className='w-[5rem] h-[5rem] border-[0.3rem] rounded-full border-white/80 shadow-lg opacity-80'>
+          <img src={`https://api.dicebear.com/7.x/rings/svg?seed=${sessionUserID}`} alt="avatar" />
+        </div>
+
+        <img src='gameControllers.png' className='w-[20rem]'/>
+                <img src='tictactoe.png' className='w-[20rem]'/>
+
+
+        {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
+        <div id='your-games-section'>
+          <h3>Your games:</h3>
+          TODO: Your games. Each game has a link, and shows the Game Type, GameID + Forfeit or Delete button based on if there's an opponent
+        </div>
+        {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
 
           <br/>
           <hr></hr>
@@ -107,7 +127,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
           <br/>
           <br/>
-        </>
+        </div>
       )
     } else {
       navigate('/login')
