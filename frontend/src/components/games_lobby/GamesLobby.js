@@ -44,13 +44,14 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
         <div className='mr-10'>
           {/* TITLE CARD */}
 
+        <img src='gameControllers.png' className='w-[36rem] absolute right-2 bottom-0 -z-10 opacity-80'/>
         
         <div className='h-[10rem] pl-12 py-6 relative
           bg-gradient-to-r from-gray-300/20 via-purple-100/20 to-purple-900/20
           -translate-x-2 backdrop-blur-sm
           shadow-lg shadow-[#363b54] rounded-[1.5rem] border-[3px] border-white/10'>
           <h3 className='text-[2.7rem] font-semibold'>
-              {`Hello, @${sessionUser.username}`}
+              {`Hello, @${sessionUser?.username}`}
           </h3>
           <p className='text-white/40 text-[1.4rem]'>
               Welcome back to our platform
@@ -66,8 +67,18 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
           <img src={`https://api.dicebear.com/7.x/rings/svg?seed=${sessionUserID}`} alt="avatar" />
         </div>
 
-        <img src='gameControllers.png' className='w-[20rem]'/>
-                <img src='tictactoe.png' className='w-[20rem]'/>
+
+
+<br></br>
+<div class="h-[18rem] w-[18rem] rounded-[3.4rem] bg-gradient-to-br from-pink-300 via-pink-500 to-pink-500 p-2">
+        <img src='tictactoe.png' alt='Tic Tac Toe' className='w-[17rem] z-20 absolute -translate-y-[5rem] translate-x-6' />
+        <h2 className='absolute z-20 font-semibold text-[2.5rem] translate-x-6 translate-y-[12.5rem]'>Tic-Tac-Toe</h2>
+    <div class="flex h-full w-full items-center justify-center bg-pink-400 rounded-[3rem] relative shadow-pink-400 shadow-md opacity-80">
+        
+        <div class="absolute inset-0 backdrop-blur-sm rounded-[3rem]"></div>
+    </div>
+</div>
+
 
 
         {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}

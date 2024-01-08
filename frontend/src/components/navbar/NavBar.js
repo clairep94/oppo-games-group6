@@ -2,6 +2,9 @@ import { FaGamepad } from "react-icons/fa6";
 import { FaUserCircle, FaUserFriends } from "react-icons/fa";
 import { IoLogOut } from "react-icons/io5";
 
+import { CgGames } from "react-icons/cg";
+
+
 
 const NavBar = (props) => {
 
@@ -30,6 +33,8 @@ const NavBar = (props) => {
         " >
 
             <div className="w-[6rem] h-[25rem] flex flex-col items-center justify-between">
+
+
                 <div className="w-[5rem] h-[5rem] hover:bg-white/30 bg-white/20 rounded-xl items-center justify-center flex hover:cursor-pointer">
                     <a href='/lobby' className="text-[2rem] text-[#e5dbea]">
                         <FaGamepad />
