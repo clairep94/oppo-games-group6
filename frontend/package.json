@@ -19,7 +19,8 @@
     "test": "npm run test:unit && npm run test:feature",
     "test:unit": "cypress run --component",
     "test:feature": "cypress run",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "build:css": "tailwind build src/index.css -o src/components/auth/LoginForm.module.css"
   },
   "eslintConfig": {
     "extends": [
@@ -38,5 +39,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
   }
 }

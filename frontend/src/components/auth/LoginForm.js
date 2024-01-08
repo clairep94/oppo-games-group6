@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 // import { useLocation } from 'react-router-dom'; // use this for login-popup when timed-out
-import styles from './LoginForm.module.css'
+// import styles from './LoginForm.module.css'
 
 const LogInForm = ({ navigate }) => {
 
@@ -74,7 +74,7 @@ const LogInForm = ({ navigate }) => {
     return (
       <>
 
-      <h2>Login</h2>
+      <h2 className="text-purple-700 font-bold">Login</h2>
       
       {/* LOGIN FORM */}
       <form onSubmit={handleSubmit}>
@@ -86,7 +86,7 @@ const LogInForm = ({ navigate }) => {
       </form>
 
       {/* BUTTON TO TOGGLE PW VISIBILITY */}
-      <button
+      <button 
         aria-label="Toggle Password Visibility Button"
         onClick={handleSetPasswordHidden}
         id="toggle-pw-visibility-button"
@@ -96,12 +96,12 @@ const LogInForm = ({ navigate }) => {
       </button>
 
       {/* ERROR MESSAGES */}
-      {error && <p aria-label="Login Error Message" className={styles.errorMessage} >{error}</p>}
+      {error && <p aria-label="Login Error Message"  >{error}</p>}
 
       <br/>
       <p aria-label="Don't have an account? Register">
         <font color="#505050 ">Don't have an account? </font>
-        <a aria-label="Link to Register" href="/signup" font color="#003163" className={styles.link}>Register</a>
+        <a aria-label="Link to Register" href="/signup" font color="#003163">Register</a>
       </p>
 
       </>
