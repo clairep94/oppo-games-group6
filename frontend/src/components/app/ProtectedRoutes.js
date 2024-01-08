@@ -42,7 +42,7 @@ const ProtectedRoutes = ({navigate}) => {
 
   // =================== JSX FOR COMPONENT =================================== 
   return (
-  <div className='h-screen w-screen bg-slate-100 dark:bg-gray-900 flex flex-col'> 
+  <div className='h-screen w-screen bg-[#2d2f44] flex flex-row '> 
   {/* FULL PAGE */}
 
     {/* LOGGED OUT POPUP */}
@@ -53,7 +53,7 @@ const ProtectedRoutes = ({navigate}) => {
       }
 
     {/* NAV BAR */}
-    <div className='z-30'>
+    <div className='z-30 absolute'>
       <NavBar navigate={navigate} token={token} setToken={setToken} 
         sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}
       />
