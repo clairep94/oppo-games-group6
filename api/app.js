@@ -3,18 +3,16 @@ const express = require("express");
 const path = require("path");
 const logger = require("morgan");
 const JWT = require("jsonwebtoken");
-const cors = require('cors');
 const dotenv = require ('dotenv');
-const socketio = require ('socket.io');
+
 
 const postsRouter = require("./routes/posts");
 const authenticationRouter = require("./routes/authentication");
 const usersRouter = require("./routes/users");
-const messageRouter = require("./routes/messages");
+
 
 const app = express();
 const server = require('http').Server(app);
-const io = socketio(server);
 
 dotenv.config();
 const port = process.env.PORT || 5001;
@@ -26,7 +24,7 @@ app.use(express.json())
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
-app.use(cors());
+
 
 // middleware function to check for valid tokens
 const tokenChecker = (req, res, next) => {
@@ -70,26 +68,6 @@ app.use((err, req, res) => {
   // respond with details of the error
   res.status(err.status || 500).json({message: 'server error'})
 });
-
-//start socket
-server.listen(port,() =>{
-  console.log(`Server running on port ${port}`);
-});
-
-//socket.io
-
-io.on('connection', (socket) => {
-  console.log(`Socket ${socket.id} connected`);
-
-  socket.on('sendMessage', (message) => {
-    io.emit('message', message);
-  });
-
-  socket.on('disconnect', () => {
-    console.log(`Socket ${socket.id} disconnected`);
-  });
-});
-
 
 
 module.exports = app;
