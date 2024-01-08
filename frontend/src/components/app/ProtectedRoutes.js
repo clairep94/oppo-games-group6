@@ -53,18 +53,18 @@ const ProtectedRoutes = ({navigate}) => {
       }
 
     {/* NAV BAR */}
-    <div className='z-30 absolute'>
+    <div className='z-30'>
       <NavBar navigate={navigate} token={token} setToken={setToken} 
         sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}
       />
     </div>
 
     {/* =============== MAIN PAGE ============================= */}
-    <div className='h-full w-full flex flex-row overflow-auto'>
+    <div className='h-full w-full flex flex-col overflow-auto text-[#8187a9] m-10'>
 
       <Routes>
         {/* ------ Lobby ------  */}
-        <Route path='/lobby'  element={<GamesLobby navigate={navigate} token={token} setToken={setToken} 
+        <Route path='/'  element={<GamesLobby navigate={navigate} token={token} setToken={setToken} 
             sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
         
         {/* ------ Tictactoe ------  */}
