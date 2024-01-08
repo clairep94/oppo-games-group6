@@ -50,7 +50,7 @@ const SignUpForm = ({ navigate }) => {
     }
     
 
-    fetch( '/users', {
+    fetch( '/signup', {
       method: 'post',
       headers: {
         'Content-Type': 'application/json',
