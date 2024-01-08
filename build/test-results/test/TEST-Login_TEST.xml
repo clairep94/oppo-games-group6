@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Login_TEST" tests="10" skipped="0" failures="0" errors="0" timestamp="2024-01-08T10:40:10" hostname="MASTUDENT-Romain-GRUDE-W7JGKXKG9H.local" time="4.52">
+  <properties/>
+  <testcase name="testWithInvalidCredentials()" classname="Login_TEST" time="0.964"/>
+  <testcase name="checkPageTitleName()" classname="Login_TEST" time="0.047"/>
+  <testcase name="checkErrorMessageWithInvalidOrEmptyFields()" classname="Login_TEST" time="0.603"/>
+  <testcase name="checksPasswordIsDisplayed()" classname="Login_TEST" time="0.09"/>
+  <testcase name="testWithEmptyFields()" classname="Login_TEST" time="0.621"/>
+  <testcase name="checksRegisterLinkIsPresentAndRedirectsToSignupPage()" classname="Login_TEST" time="0.07"/>
+  <testcase name="userLogsInRedirectedToLobby()" classname="Login_TEST" time="0.617"/>
+  <testcase name="checksPasswordIsHidden()" classname="Login_TEST" time="0.072"/>
+  <testcase name="[1] test@test.com, 55555" classname="Login_TEST" time="0.614"/>
+  <testcase name="[2] test@gmail.com, 123" classname="Login_TEST" time="0.607"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[SLF4J: No SLF4J providers were found.
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See https://www.slf4j.org/codes.html#noProviders for further details.
+Starting ChromeDriver 120.0.6099.109 (3419140ab665596f21b385ce136419fde0924272-refs/branch-heads/6099@{#1483}) on port 43929
+Only local connections are allowed.
+Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+ChromeDriver was started successfully.
+Jan 08, 2024 10:40:10 AM org.openqa.selenium.devtools.CdpVersionFinder findNearestMatch
+WARNING: Unable to find CDP implementation matching 120
+Jan 08, 2024 10:40:10 AM org.openqa.selenium.chromium.ChromiumDriver lambda$new$3
+WARNING: Unable to find version of CDP to use for . You may need to include a dependency on a specific version of the CDP using something similar to `org.seleniumhq.selenium:selenium-devtools-v86:4.9.0` where the version ("v86") matches the version of the chromium-based browser you're using and the version number of the artifact is the same as Selenium's.
+]]></system-err>
+</testsuite>
