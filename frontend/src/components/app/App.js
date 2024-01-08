@@ -11,7 +11,7 @@ import {
   Routes,
   Route,
 } from "react-router-dom";
-import Message from '../messages/Message';
+//import Message from '../messages/Message';
 
 const App = () => {
     return (
@@ -19,7 +19,7 @@ const App = () => {
           <Route path='/lobby'  element={<GamesLobby navigate={ useNavigate() }/>}/>
           <Route path='/login'  element={<LoginForm  navigate={ useNavigate() }/>}/>
           <Route path='/signup' element={<SignUpForm navigate={ useNavigate() }/>}/>
-          <Route path='/message' element={<Message navigate={ useNavigate() }/>}/>
+          {/*<Route path='/message' element={<Message navigate={ useNavigate() }/>}/>*/}
 
         </Routes>
     );
