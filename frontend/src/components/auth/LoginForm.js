@@ -66,6 +66,7 @@ const LogInForm = ({ navigate }) => {
     setPasswordHidden(!passwordHidden)
   }
 
+  const solidborder = "border-solid border-2 border-indigo-400"
   // Enter a valid email or password
 
 
@@ -74,13 +75,29 @@ const LogInForm = ({ navigate }) => {
     return (
       <>
 
-      <h2 className="text-purple-700 font-bold">Login</h2>
+      <h2>Login</h2>
       
       {/* LOGIN FORM */}
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} >
         {/* <label for="Email" class="accessible_visuallyhidden">Email: </label> */}
-        <input aria-label="Email Field" placeholder='Email' id="email" type='text' value={ email } onChange={handleEmailChange} />
-        <input aria-label="Password Field" placeholder='Password' id="password" type={passwordHidden ? 'password': 'text'} value={ password } onChange={handlePasswordChange} />
+        {/* EMAIL FIELD */}
+        <input
+        aria-label="Email Field" 
+        placeholder='Email' 
+        id="email" 
+        type='text' 
+        value={ email } 
+        onChange={handleEmailChange} 
+        />
+        {/* PASSWORD FIELD */}
+        <input 
+        aria-label="Password Field" 
+        placeholder='Password' 
+        id="password" 
+        type={passwordHidden ? 'password': 'text'} 
+        value={ password } 
+        onChange={handlePasswordChange} 
+        />
 
         <input aria-label="Login Button" role='login-button' id='login-button' type="submit" value="Login" />
       </form>
@@ -103,7 +120,6 @@ const LogInForm = ({ navigate }) => {
         <font color="#505050 ">Don't have an account? </font>
         <a aria-label="Link to Register" href="/signup" font color="#003163">Register</a>
       </p>
-
       </>
     );
 }
