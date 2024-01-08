@@ -47,8 +47,6 @@ const GamesLobby = ({ navigate }) => {
       return(
 
         <>
-        {/* TODO: NAVBAR, add user info here later */}
-        <NavBar navigate={navigate} sessionUserID={sessionUserID}/>
 
 
 
