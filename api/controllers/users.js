@@ -6,7 +6,10 @@ const UsersController = {
   Create: (req, res) => {
     const user = new User(req.body);
     user.save((err) => {
-      if (err) {
+      if (err === 11000) {
+        res.status(11000).json({message: 'Duplicate email or username'})
+      }
+      else if (err) {
         res.status(400).json({message: 'Bad request'})
       } else {
         res.status(201).json({ message: 'OK' });
