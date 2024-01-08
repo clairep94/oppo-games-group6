@@ -41,44 +41,57 @@ const ProtectedRoutes = ({navigate}) => {
 
 
   // =================== JSX FOR COMPONENT =================================== 
-  return (
-  <div className='h-screen w-screen bg-[#2d2f44] flex flex-row '> 
-  {/* FULL PAGE */}
-
-    {/* LOGGED OUT POPUP */}
-    {showLoginPopup && 
-      <div className='z-40 absolute h-full w-full'>
-        <LoginPopup navigate={navigate} />
+  if(token && sessionUserID) {
+    return (
+    <div className='h-screen w-screen flex flex-row overflow-clip'> 
+    {/* FULL PAGE */}
+  
+      {/* LOGGED OUT POPUP */}
+      {showLoginPopup && 
+        <div className='z-40 absolute h-full w-full'>
+          <LoginPopup navigate={navigate} />
+        </div>
+        }
+  
+      {/* NAV BAR */}
+      <div className='z-30 absolute h-full flex py-[1rem]'>
+        <NavBar navigate={navigate} token={token} setToken={setToken} 
+          sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}
+        />
       </div>
-      }
+  
 
-    {/* NAV BAR */}
-    <div className='z-30'>
-      <NavBar navigate={navigate} token={token} setToken={setToken} 
-        sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}
-      />
-    </div>
+      {/* =============== MAIN PAGE ============================= */}
+      <div className='h-full w-full flex flex-col overflow-none ml-[10rem] text-gray-50 m-[3rem]'>
+  
+        <Routes>
+          {/* ------ Lobby ------  */}
+          <Route path='/'  element={<GamesLobby navigate={navigate} token={token} setToken={setToken} 
+              sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
+          
+          {/* ------ Tictactoe ------  */}
+          <Route path='/tictactoe/:id'  element={<TicTacToe navigate={navigate} token={token} setToken={setToken} 
+              sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
+  
+          {/* ------ User Profile ------  */}
+          <Route path='/users/:id'  element={<ProfilePage navigate={navigate} token={token} setToken={setToken} 
+              sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
+  
+        </Routes>
 
-    {/* =============== MAIN PAGE ============================= */}
-    <div className='h-full w-full flex flex-col overflow-auto text-[#8187a9] m-10'>
-
-      <Routes>
-        {/* ------ Lobby ------  */}
-        <Route path='/'  element={<GamesLobby navigate={navigate} token={token} setToken={setToken} 
-            sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
+      </div>
+      
+      {/* BACKGROUND GRADIENTS */}
+      <div className="-z-10 absolute top-[6rem] right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[10rem] sm:w-[68.75rem] bg-[#8e6464]/90"></div>
+      <div className="-z-10 absolute top-[1rem]  left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] bg-[#4f4c6e]"></div>
+      {/* BACKGROUND COLOUR */}
+      <div className='absolute -z-20 h-screen w-screen bg-gray-900 '></div>
         
-        {/* ------ Tictactoe ------  */}
-        <Route path='/tictactoe/:id'  element={<TicTacToe navigate={navigate} token={token} setToken={setToken} 
-            sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
-
-        {/* ------ User Profile ------  */}
-        <Route path='/users/:id'  element={<ProfilePage navigate={navigate} token={token} setToken={setToken} 
-            sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
-
-      </Routes>
-    </div>
+        
     </div>
     );
+
+  }
 }
 
 export default ProtectedRoutes;

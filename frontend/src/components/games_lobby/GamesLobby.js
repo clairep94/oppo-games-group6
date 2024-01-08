@@ -5,11 +5,7 @@ import NavBar from '../navbar/NavBar';
 import GamesList from './GamesList';
 
 
-const GamesLobby = ({ navigate }) => {
-
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
-  const sessionUserID = getSessionUserID(token);
-  // const sessionUserData = 
+const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, setSessionUser }) => {
 
   const gamesMenu = [ // <------- LIST OF ENDPOINTS & TITLES FOR EACH GAME!!
     {title:'Tic-Tac-Toe', endpoint: 'tictactoe'},
@@ -45,19 +41,13 @@ const GamesLobby = ({ navigate }) => {
 
     if(token) {
       return(
-
         <>
-
-
-
           {/* TITLE */}
-          <h2>Games Lobby</h2>
+          <h1 className='text-6xl font-bold'>
+            Welcome to Oppo Games
+          </h1>
 
-          <a href={`/users/${sessionUserID}`}>
-            <p>Welcome player {sessionUserID}</p>
-          </a>
-          {/* TITLE */}
-
+          <p></p>
           <br></br>
 
           {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
