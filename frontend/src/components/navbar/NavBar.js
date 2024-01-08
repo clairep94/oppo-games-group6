@@ -22,7 +22,7 @@ const NavBar = (props) => {
 
     return (
         <div className="flex flex-col  items-center justify-center h-screen w-[8rem] bg-[#22233a] text-[#b4bceb]
-        shadow-xl shadow-[#bac4ff]/20
+        shadow-xl shadow-[#4d547d]
         " >
 
             <div className="w-[6rem] h-[28rem] flex flex-col items-center space-y-3">
