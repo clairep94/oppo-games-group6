@@ -74,15 +74,15 @@ const LogInForm = ({ navigate }) => {
   // ========= JSX FOR THE UI OF THE COMPONENT =====================
   // for all styling: use className={styles.Button}
 
-
-  const basicFont = "pt-3 text-white text-lg font-extralight tracking-widest text-wrap"
   const bgGradient = "bg-gradient-to-br from-gray-900 via-customPurple to-customIndigo "
+  const bgGradientDark = "bg-gradient-to-br from-gray-900 via-customIndigo to-customPink "
+  const bgGradientLight = "bg-gradient-to-br from-customPink via-customIndigo to-customBlack "
   const h2Style = "pt-3 pb-3 text-7xl text-white font-extrabold"
   const buttonStyle = "w-2/5 bg-customPink text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-pink-600 focus:outline-none focus:shadow-outline-pink active:bg-pink-700"
 
     return (
       <>
-      <div className={`flex h-screen ${bgGradient}`}>
+      <div className={`flex h-screen ${bgGradientDark}`}>
 
       {/* LEFT side with image */}
       <div className="flex-1 hidden lg:flex items-center justify-center w-1/2">
@@ -140,7 +140,7 @@ const LogInForm = ({ navigate }) => {
       {error && <p aria-label="Login Error Message" className="text-red-500 mt-4">{error}</p>}
 
       {/* Register Link */}
-      <p aria-label="Don't have an account? Register" className="mt-4 text-gray-500">
+      <p aria-label="Don't have an account? Register" className="mt-4 text-white">
         Don't have an account?{' '}
         <a aria-label="Link to Register" href="/signup" className="text-blue-600">Register</a>
       </p>
