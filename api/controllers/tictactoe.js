@@ -61,27 +61,37 @@ const TicTacToeController = {
   PlacePiece: async (req, res) => {
     const gameID = req.params.id;
     const userID = req.user_id;
-    const { row, col} = req.body;
+    // const userID = req.body.userID; // postman testing purposes only
+    const row = req.body.row;
+    const col = req.body.col;
     const coordinate = `${row}${col}`
 
     try {
-      // 1) =========== Find the current game and check whose turn it is =================
-      const game = await TicTacToeGame.findById(gameID); // NOT .populated document
+      // 1) =========== Find the current game and check whose turn it is and for errors =================
+      const game = await TicTacToe.findById(gameID); // NOT .populated document
       const whoseTurnID = (game.turn % 2 === 0) ? game.playerOne : game.playerTwo
+      if (game.finished === true) {
+        console.log("ERROR: GAME FINISHED");
+        return res.status(403).json({error: 'Game already finished.', game: game});
+      }
       // Throw error if not userID's turn
-      if (userID !== whoseTurnID) { // NOTE by Claire: this is != and not !== on purpose. game.whose_turn and userID are not the same datatype but can be compared this way.
+      if (userID != whoseTurnID) { // NOTE by Claire: this is != and not !== on purpose. game.whose_turn and userID are not the same datatype but can be compared this way.
         console.log("ERROR: IT IS NOT YOUR TURN");
         return res.status(403).json({ error: 'It is not your turn.', game: game }); //return the old game so as to not mess up the rendering
+      } // Throw error if tile is already occupied
+      if (game.xPlacements.includes(coordinate) || game.oPlacements.includes(coordinate)){
+        console.log("ERROR: THERE IS ALREADY A PIECE HERE");
+        return res.status(403).json({ error: 'Cannot place piece on occupied tile.', game: game }); //return the old game so as to not mess up the rendering
       }
 
       // 2) ============ Place the piece & get the updated game data ==================
-      const piece = (userID === game.playerOne) ? "X" : "O" // NOTE by Claire: this is == and not === on purpose, see line 80. do not change.
+      const piece = (userID == game.playerOne) ? "X" : "O" // NOTE by Claire: this is == and not === on purpose, see line 80. do not change.
       const placementField = (piece === "X") ? "xPlacements" : "oPlacements";
 
       const placedPieceGame = await TicTacToe.findOneAndUpdate( // NOT .populated yet.
         { _id: gameID },
         {
-          $set: { [`game_board.${row}.${col}`]: piece },
+          $set: { [`gameBoard.${row}.${col}`]: piece },
           $push: { [placementField]: coordinate },
           $inc: { turn: 1 }  // Increment the turn property by 1
         },
@@ -90,13 +100,28 @@ const TicTacToeController = {
 
       // 3) ============= Check for wins: ===========================
       // ------- supportive functions for win-checking -------------
-      // Check if any of the game.winning_placements arrays in any order are in game.xPlacements and game.oPlacements:
-      const checkWin = (placements, winningCombination) => {
-        return winningCombination.every(coord => placements.includes(coord));
-        };
 
-      // Check if any winning combination is a subset of the corresponding placementField of the piece last played
-      const win = game.winningCombinations.some(combination => checkWin((piece === "X") ? game.xPlacements : game.oPlacements, combination))
+      // Check if any of the game.winning_placements arrays in any order are in game.xPlacements and game.oPlacements:
+      const checkWin = (array) => {
+        console.log(`checking wins for ${array}`)
+
+        const winningCombinations = [
+          ["A1", "A2", "A3"],
+          ["B1", "B2", "B3"],
+          ["C1", "C2", "C3"],
+          ["A1", "B1", "C1"],
+          ["A2", "B2", "C2"],
+          ["A3", "B3", "C3"],
+          ["A1", "B2", "C3"],
+          ["A3", "B2", "C1"]
+        ];
+
+        const isSubset = (subset, superset) => subset.every(element => superset.includes(element));
+        return winningCombinations.some(winningCombo => isSubset(winningCombo, array))
+      };
+
+      // use checkWin on the last played the relevant placementField
+      const win = checkWin((piece === "X") ? placedPieceGame.xPlacements : placedPieceGame.oPlacements) // could not do placedPieceGame.placementField directly as it is a string.
 
       // ------- IF WIN: -----------------------
       if (win) { // if a player won, update the game and return the ID
@@ -155,10 +180,10 @@ const TicTacToeController = {
 
         // ------- ELSE: -----------------------
         } else { // populate the placedPieceGame data and return the game data
-          const populatedNextTurnGame = await TicTacToe.populate(placedPieceGame, {
-            path: ['playerOne', 'playerTwo', 'winner'],
-            select: '_id username points'
-          });
+          const populatedNextTurnGame = await TicTacToe.populate(placedPieceGame, { path: 'playerOne', select: '_id username points' });
+          await TicTacToe.populate(populatedNextTurnGame, { path: 'playerTwo', select: '_id username points' });
+          await TicTacToe.populate(populatedNextTurnGame, { path: 'winner', select: '_id username points' });
+
           // const token = TokenGenerator.jsonwebtoken(req.user_id)
           // res.status(201).json({ token: token, game: populatedNextTurnGame });
           res.status(200).json({game: populatedNextTurnGame});
