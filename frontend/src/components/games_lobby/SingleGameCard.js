@@ -15,14 +15,14 @@ const SingleGameCard = (props) => {
     // FORFEIT GAME
     // DELETE GAME
 
-    if(game){
+    if(game && game.playerOne && game.playerTwo){
     return (
     <>
         <a href={`/${game.endpoint}/${game._id}`}>
             {game.title} #{game._id.substring(18)}:  
-            {game.player_two ? 
-                ` ${game.player_one.username} vs. ${game.player_two.username}` : 
-                ` ${game.player_one.username} is awaiting an opponent`}
+            {game.playerTwo ? 
+                ` ${game.playerOne.username} vs. ${game.playerTwo.username}` : 
+                ` ${game.playerOne.username} is awaiting an opponent`}
         </a>
 
         {game.player_one !== sessionUserID && game.awaiting_challenger && <button>Join Game</button>}

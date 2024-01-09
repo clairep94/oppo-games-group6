@@ -34,11 +34,11 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
         }
     };
 
+    
     // ============ LOADING THE BOARD =============
-    // Get the board from the DB once the component is loaded.
-    useEffect(() => {
-        if (token) {
-            fetchGame(token, gameID)
+    // Function to fetch the tictactoe data
+    const fetchGameData = () => {
+        fetchGame(token, gameID) //TODO fix? this version of fetchGameData always refreshes the token so the user never times out
             .then(gameData => {
                 window.localStorage.setItem("token", gameData.token);
                 setToken(window.localStorage.getItem("token"));
@@ -48,6 +48,23 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 setWhoseTurn((gameData.game.turn % 2 === 0) ? gameData.game.playerOne : gameData.game.playerTwo)
                 findWinMessage(gameData.game)
             })
+    }
+
+    // Get the board from the DB once the component is loaded.
+    useEffect(() => {
+        if (token) {
+            fetchGameData()
+
+            // fetchGame(token, gameID)
+            // .then(gameData => {
+            //     window.localStorage.setItem("token", gameData.token);
+            //     setToken(window.localStorage.getItem("token"));
+
+            //     // repeat these when player places a piece or when we receive new data from opponent
+            //     setGame(gameData.game);
+            //     setWhoseTurn((gameData.game.turn % 2 === 0) ? gameData.game.playerOne : gameData.game.playerTwo)
+            //     findWinMessage(gameData.game)
+            // })
         }
     }, [])
 
@@ -94,6 +111,27 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
 
     // ============ OPPONENT GAMEPLAY =============
     // Function to run findGame for this particular game every 2 seconds to check for opponents' moves.
+    // useEffect(() => {
+    //     let twoSecFetchGame;
+
+    //     const fetchGameWrapper = () => {
+    //         fetchGameData();
+    //         twoSecFetchGame = setInterval(fetchGameData, timeInterval);
+    //     };
+
+    //     // Check if it's not your turn
+    //     if (token && !game.finished && (sessionUserID !== whoseTurn._id)) {
+    //         fetchGameWrapper();
+    //         // Cleanup function: clear the interval when !opponentsTurn
+    //         return () => clearInterval(twoSecFetchGame);
+    //     } else {
+    //         // Clear the interval when !opponentsTurn
+    //         clearInterval(twoSecFetchGame);
+    //     }
+    //     return () => {
+    //     }
+    // },[whoseTurn]);
+
 
     // ============ FORFEIT GAME ==================
     // Function to forfeit game -- first sets warning message, then forfeits game.

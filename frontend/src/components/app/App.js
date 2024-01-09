@@ -26,11 +26,10 @@ const App = () => {
       <Route path='/login' element={ !isLoggedIn() ?
         <LoginForm navigate={navigate}/> : <Navigate to='/'/>}/>
 
-      {/* ====== AUTHENTICATION ONLY - Search, Messages, Friends, Notifications : ======== */}
+      {/* ====== AUTHENTICATION ONLY - Lobby, Games, etc. : ======== */}
       <Route path='/*'  element={ isLoggedIn() ?         
         <ProtectedRoutes navigate={navigate}/> : <Navigate to='/login'/>}/>
-
-
+        
     </Routes>
     );
 }

@@ -37,6 +37,8 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
   // ============== JSX FOR UI ========================
 
+  // CLAIRE NOTE: THE BELOW IS COMPLETELY WIP, PLEASE DO NOT TAKE AS FINAL, I WILL CLEAN THIS UP LATER
+
     if(token) {
       return(
         <div className='mr-10'>
@@ -100,7 +102,8 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
                 gameTitle={game.title} 
                 gameEndpoint={game.endpoint} 
                 token={token} 
-                navigate={navigate} />
+                navigate={navigate} 
+                sessionUserID={sessionUserID}/>
               <br/>
               </>)}
             </div>

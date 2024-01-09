@@ -36,7 +36,7 @@ const NavBar = (props) => {
 
 
                 <div className="w-[5rem] h-[5rem] hover:bg-white/30 bg-white/20 rounded-xl items-center justify-center flex hover:cursor-pointer">
-                    <a href='/lobby' className="text-[2rem] text-[#e5dbea]">
+                    <a href='/' className="text-[2rem] text-[#e5dbea]">
                         <FaGamepad />
                     </a>
                 </div>
