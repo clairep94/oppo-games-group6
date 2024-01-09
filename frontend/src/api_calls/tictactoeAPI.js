@@ -61,6 +61,8 @@ const placePiece = async (token, id, movePayload) => {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+
             },
             body: JSON.stringify(movePayload)
         });
@@ -78,6 +80,7 @@ const forfeitGame = async (token, id) => {
             method: 'put',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
         });
         const gameData = await response.json();

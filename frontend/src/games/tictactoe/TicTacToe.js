@@ -60,7 +60,16 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
 
     // ============ FORFEIT GAME ==================
     // Function to forfeit game -- first sets warning message, then forfeits game.
-
+    const handleForfeit = async (event) => {
+        event.preventDefault();
+        if (token) {
+            console.log("user has a token")
+            forfeitGame(token, gameID)
+            .then(gameData => {
+                window.localStorage.setItem("token", gameData.token);
+                setToken(window.localStorage.getItem("token"));
+                setGame(gameData.game);
+    })}}
 
     // ============ JSX FOR THE UI =============
     if (game) {
@@ -75,13 +84,17 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 <p>Player Two: {game.playerTwo.username}, Placements: {game.oPlacements}</p>
                 <p>Game Finished: {String(game.finished)}</p>
                 <p>Game Winners: {game.winner.length}</p>
-                {/* <p>Game Win Message: {winMessage}</p> */}
-                {/* <p>Game Turn Number: {game.turn}</p>
-                <p>Whose Turn is it?: {whoseTurn.username}</p>
-                <p>Forfeit Warning: {forfeitWarning}</p> */}
+                <p>Game Turn Number: {game.turn}</p>
+                <p>Token: {token? 'true': 'false'}</p>
+                <p>SessionUserID: {sessionUserID}</p>
+
+
 
                 <TicTacToeBoard gameBoard={game.gameBoard} onButtonClick={handleClick}/>
-
+                
+                <button onClick={handleForfeit} className="bg-black/80 p-4 w-[13rem] rounded-lg">
+                    Forfeit Game
+                </button>
             </>
         )
     }
@@ -100,8 +113,8 @@ const TicTacToeBoard = ({ gameBoard, onButtonClick }) => {
             {Object.keys(gameBoard[row]).map(col => (
                 <button
                 key={col}
-                className="h-[5rem] w-[5rem] bg-slate-300 border-2 text-black"
-                onClick={() => onButtonClick(row, col)}
+                    className="h-[5rem] w-[5rem] bg-slate-300 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400"
+                    onClick={() => onButtonClick(row, col)}
                 >
                 {gameBoard[row][col]}
                 </button>
