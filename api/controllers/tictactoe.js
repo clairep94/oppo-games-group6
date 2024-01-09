@@ -1,6 +1,7 @@
 const TicTacToe = require("../models/tictactoe");
 const TokenGenerator = require("../lib/token_generator");
 // TODO ADD IN GAME CONTROLLER FOR WIN CONDITIONS
+// TODO Add points for this game if there is a win condition
 
 const TicTacToeController = {
   Index: (req, res) => {
@@ -203,10 +204,18 @@ const TicTacToeController = {
 
   Forfeit: async (req, res) => {
     try {
-      const sessionUser = req.user_id;
+      // const sessionUser = req.user_id;
+      const sessionUser = req.body.user;
       const gameID = req.params.id;
       const game = await TicTacToe.findById(gameID);
-      const winner = sessionUser === game.playerOne ? game.playerTwo : game.playerOne
+
+      // Throw error if sessionUser is not in the game:
+      if (sessionUser != game.playerOne && sessionUser !== game.playerTwo){
+        console.log("ERROR: NON-PARTICIPANTS CANNOT FORFEIT");
+        return res.status(403).json({error: 'Only players can forfeit the game.', game: game}); //return the old game so as to not mess up the rendering
+      }
+
+      const winner = sessionUser == game.playerOne ? game.playerTwo : game.playerOne
 
       const forfeitedGame = await TicTacToe.findOneAndUpdate(
         { _id: gameID },

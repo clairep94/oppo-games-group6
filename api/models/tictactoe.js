@@ -2,16 +2,6 @@ const mongoose = require("mongoose");
 
 const TicTacToeSchema = new mongoose.Schema({
 
-  // =========== Game properties used by all games =============== :
-  // endpoint: { 
-  //   type: String,
-  //   default: 'tictactoe' // URL endpoint for FE and BE for this specific game
-  // },
-  // title: { 
-  //   type: String,
-  //   default: 'Tic-Tac-Toe'
-  // },
-
   // ----------- Players & Open Game Properties ------------    
   playerOne: { // games will be created once both players have joined.
     type: mongoose.Schema.Types.ObjectId,
