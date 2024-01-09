@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import { newGame, fetchGame, allGames, placePiece, forfeitGame } from "../../api_calls/tictactoeAPI";
+import io from "socket.io-client";
 
 
 const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setSessionUser }) => {
@@ -54,19 +55,9 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
     useEffect(() => {
         if (token) {
             fetchGameData()
-
-            // fetchGame(token, gameID)
-            // .then(gameData => {
-            //     window.localStorage.setItem("token", gameData.token);
-            //     setToken(window.localStorage.getItem("token"));
-
-            //     // repeat these when player places a piece or when we receive new data from opponent
-            //     setGame(gameData.game);
-            //     setWhoseTurn((gameData.game.turn % 2 === 0) ? gameData.game.playerOne : gameData.game.playerTwo)
-            //     findWinMessage(gameData.game)
-            // })
         }
     }, [])
+
 
     // ============ SESSION USER GAMEPLAY =============
     // Function to place a piece on the gameboard
@@ -99,38 +90,60 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 .then(gameData => {
                     window.localStorage.setItem("token", gameData.token);
                     setToken(window.localStorage.getItem("token"));
+
+                    const updatedGame = gameData.game;
     
                     setGame(gameData.game);
                     setWhoseTurn((gameData.game.turn % 2 === 0) ? gameData.game.playerOne : gameData.game.playerTwo)
                     findWinMessage(gameData.game)
                     setErrorMessage("")
+
+                    socket.current.emit("place-piece", {gameID, updatedGame})
                 })
             }
         }
     }
 
     // ============ OPPONENT GAMEPLAY =============
-    // Function to run findGame for this particular game every 2 seconds to check for opponents' moves.
-    // useEffect(() => {
-    //     let twoSecFetchGame;
 
-    //     const fetchGameWrapper = () => {
-    //         fetchGameData();
-    //         twoSecFetchGame = setInterval(fetchGameData, timeInterval);
-    //     };
+    // ------------ Socket setup: -------------------------------
+    const socket = useRef() //menu, chatwindow
+    const [onlineUsers, setOnlineUsers] = useState(null);
+    const [sendGame, setSendGame] = useState(null);
+    const [receivedGame, setReceivedGame] = useState(null);
 
-    //     // Check if it's not your turn
-    //     if (token && !game.finished && (sessionUserID !== whoseTurn._id)) {
-    //         fetchGameWrapper();
-    //         // Cleanup function: clear the interval when !opponentsTurn
-    //         return () => clearInterval(twoSecFetchGame);
-    //     } else {
-    //         // Clear the interval when !opponentsTurn
-    //         clearInterval(twoSecFetchGame);
-    //     }
-    //     return () => {
-    //     }
-    // },[whoseTurn]);
+    // --------- CONNECTING TO SOCKET & ONLINE USERS -----------------
+    // Connect to socket.io when users visit the messages page //TODO lift this to app after login?
+    useEffect(()=> {
+        socket.current = io('http://localhost:8800'); // this is the socket port
+        socket.current.emit("add-new-user", sessionUserID, gameID); // send the sessionUserID to the socket server
+        socket.current.emit("create-game-room", gameID);
+        socket.current.on('get-users', (users)=>{
+            setOnlineUsers(users)}) // get the onlineUsers, which should now include the sessionUserID
+        
+
+        socket.current.on("receive-game-update", ({ gameID, gameState }) => {
+            console.log("received game from socket", gameState);
+            setGame(gameState);
+            setWhoseTurn(
+                gameState.turn % 2 === 0
+                ? gameState.playerOne
+                : gameState.playerTwo
+            );
+            findWinMessage(gameState);
+            setErrorMessage("");
+        });
+    
+    }, [sessionUserID])
+
+
+
+    // MESSAGING STATES BELOW:
+    // const [onlineUsers, setOnlineUsers] = useState([]); //menu
+    // const [sendMessage, setSendMessage] = useState(null); //chatwindow
+    // const [receivedMessage, setReceivedMessage] = useState(null); //chatwindow, menu
+    // const [sendNewConversation, setSendNewConversation] = useState(null); //menu
+
 
 
     // ============ FORFEIT GAME ==================
@@ -159,6 +172,8 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 NEW TICTACTOE GAME:
                 </h1>
                 <p>Visibility Testing:</p>
+                <p>YOUR USERNAME: {sessionUser.username}</p>
+                <br></br>
                 <p>GameID: {game._id}</p>
                 <p>Player One: {game.playerOne.username}, Placements: {game.xPlacements}</p>
                 <p>Player Two: {game.playerTwo.username}, Placements: {game.oPlacements}</p>

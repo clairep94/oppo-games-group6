@@ -12,14 +12,14 @@ let activeGames = {};
 io.on("connection", (socket) => {
 
     // Adding the session user to the list of active users:
-    socket.on("add-new-user", (newUserID)=> { //in param
+    socket.on("add-new-user", (newUserID, gameID)=> { //in param
         //if user is not added previously
         if(!activeUsers.some((user) => user.userID === newUserID))
         {
             activeUsers.push({
                 userID: newUserID,
                 socketID: socket.id,
-                gameID: newUserID.gameID //add gameID to params as well.
+                gameID: gameID //add gameID to params as well.
             })
         }
 
@@ -36,18 +36,20 @@ io.on("connection", (socket) => {
     })
 
     // When a user views a certain game
-    socket.on("create-game-room", (gameID) => { //put gameID in the params
+    socket.on("create-game-room", (gameID) => {
+        console.log(gameID)
         const usersInGame = activeUsers.filter((user) => user.gameID === gameID);
 
         const game = {
             players: usersInGame
         };
 
-        // Join the game room?
         socket.join(gameID);
-        console.log("Game created: ", activeGames[gameID]);
-        console.log("All Games: ", activeGames);
+        console.log("Game created:", game);
+        console.log("All Games:", activeGames);
 
+        // Optionally, you can store the game in your activeGames object
+        activeGames[gameID] = game;
     });
 
     socket.on("place-piece", ({gameID, updatedGame}) => {
