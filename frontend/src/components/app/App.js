@@ -18,7 +18,7 @@ import Landing from '../landing_page/Landing';
 const App = () => {
     return (
         <Routes>
-          <Route path='/'  element={<Landing navigate={ useNavigate() }/>}/>
+          <Route path='/welcome'  element={<Landing navigate={ useNavigate() }/>}/>
           <Route path='/lobby'  element={<GamesLobby navigate={ useNavigate() }/>}/>
           <Route path='/login'  element={<LoginForm  navigate={ useNavigate() }/>}/>
           <Route path='/signup' element={<SignUpForm navigate={ useNavigate() }/>}/>
