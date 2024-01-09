@@ -19,11 +19,13 @@ import SignUpForm from '../sign_up/SignUpForm'
 // import GamesLobby from '../games_lobby/GamesLobby';
 // import TicTacToe from '../../games/tictactoe/TicTacToe';
 import ProfilePage from '../profile_page/ProfilePage';
+import Landing from '../landing/Landing';
 
 
 const App = () => {
     return (
         <Routes>
+          <Route path='/welcome'  element={<Landing navigate={ useNavigate() }/>}/>
           <Route path='/lobby'  element={<GamesLobby navigate={ useNavigate() }/>}/>
           <Route path='/login'  element={<LoginForm  navigate={ useNavigate() }/>}/>
           <Route path='/signup' element={<SignUpForm navigate={ useNavigate() }/>}/>
