@@ -1,318 +1,120 @@
 import React, {useState, useEffect} from "react";
 import {useParams} from "react-router-dom";
-import styles from './TicTacToe.module.css';
-import getSessionUserID from "../../utility/getSessionUserID";
+import { newGame, fetchGame, allGames, placePiece, forfeitGame } from "../../api_calls/tictactoeAPI";
 
 
-// ==================== PAGE ===================================================== //
-const TicTacToePage = ({ navigate }) => {
-
-    // TODO: Shift GameID, token, sessionUserID here.
-
-    const logout = () => {
-        window.localStorage.removeItem("token")
-        navigate('/login')
-        }
-
-    
-    return (
-        <>  
-            {/* <TicTacToe
-            tictactoeGame={tictactoeGame}
-            setTicTacToeGame={setTicTacToeGame}
-            /> */}
-
-            <button onClick={logout}>
-                Logout
-            </button>
-        </>
-
-    )
-}
-
-// ========================== MAIN: BOARD ================================================= //
-
-const TicTacToe = ({ navigate }) => {
+const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setSessionUser }) => {
 
     // =========== STATE VARIABLES ==========================
     // --------- Session & Game ID ----------
     const { id } = useParams(); // IMPORTANT: DO NOT RENAME 'id' This refers to gameID but changing it would cause issues in routes etc.
     const gameID = id; // declared gameID variable to store this info in case it is more readable for usage below:
-    const [token, setToken] = useState(window.localStorage.getItem("token"));
-    const sessionUserID = getSessionUserID(token);
 
     // ------- Game states ----------
     const [game, setGame] = useState(null); // stores game object retrieved from DB
-    const [gameBoard, setGameBoard] = useState(null); // game.game_board
-    const [winMessage, setWinMessage] = useState(null); // check if game.winner == [] or [user] or [user, user]
-    
-    const [opponentID, setOpponentID] = useState(null); // additional property to store opponent's turn -- this is to prevent re-rendering when the game is over.
-    const [opponentsTurn, setOpponentsTurn] = useState(null); // checks if game.whose_turn === opponent, if so set to True and run the 5-sec game fetch to check for opponent moves
-    const timeInterval = 5000;
-    
+
+    // const findWinMessage = (game && game.winner) => {
+    // if (game.winner.length === 0) {
+    //     return "";
+    // } else if (game.winner.length === 2) {
+    //     return "It's a draw!";
+    // } else {
+    //     return `${game.winner[0].username} wins!`;
+    // }
+    // };
+
+    // const winMessage = findWinMessage(game);
+
+    // const whoseTurn = (game.turn % 2 === 0) ? game.playerOne : game.playerTwo
+    // const [forfeitWarning, setForfeitWarning] = useState("");
+
+    const timeInterval = 2000;
     const rows = ["A", "B", "C"];
 
 
     // ============ LOADING THE BOARD =============
-    // Function 1: to fetch the tictactoe data.
-    const fetchGame = () => {
-        fetch(`/tictactoe/${id}`, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        })
-        .then((res) => res.json())
-        .then((data) => {
-            window.localStorage.setItem("token", data.token)
-            setToken(window.localStorage.getItem("token"))
-            setGame(data.game)
-            setGameBoard(data.game.game_board)
-
-            //set Win message
-            if (data.game.winner.length === 0) {
-                setWinMessage(null);
-            } else if (data.game.winner.length === 1) {
-                const winner = data.game.winner[0];
-                if (sessionUserID === winner){
-                    setWinMessage("You win!")
-                } else {
-                    setWinMessage(`${data.game.winner[0]} wins!`)
-                }
-            } else { // draw
-                if (sessionUserID === data.game.winner[0] || sessionUserID === data.game.winner[1]){
-                    setWinMessage("You have a draw!")
-                } else {
-                    setWinMessage(`${data.game.winner[0]} and ${data.game.winner[1]} draw!`)
-                }
-            }
-
-            //set if it's the opponent's turn
-            if (sessionUserID === data.game.player_one) {
-                setOpponentID(data.game.player_two)
-            } else {
-                setOpponentID(data.game.player_two)
-            }
-            setOpponentsTurn(data.game.whose_turn === opponentID) 
-        })
-    }
-
-    // Use Function 1 once page is loaded:
+    // Get the board from the DB once the component is loaded.
+    // TODO: check if I should re-run findWinMessage(game) within a hook.
     useEffect(() => {
-        if(token) {
-            fetchGame()
+        if (token) {
+            fetchGame(token, gameID)
+            .then(gameData => {
+                window.localStorage.setItem("token", gameData.token);
+                setToken(window.localStorage.getItem("token"));
+                setGame(gameData.game);
+            })
         }
-    }, []);
+    }, [])
+
 
     // ============ SESSION USER GAMEPLAY =============
-
-    // Function 2: Allows players to PlacePiece, which returns the updated game.data, and sets the updated game board.
-    const updateGameBoard = async (row, col) => { 
-        console.log(`Player ${sessionUserID} Selected: Row ${row}, Col ${col}`);
-
-        //1) Updating the GameBoard with the piece:
-        try {
-            const response = await fetch(`/tictactoe/${id}/place_piece`, {
-                method: 'put',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                    row: row, 
-                    col: col
-                })
-            })
-            const data = await response.json();
-            setGame(data.game);
-            setGameBoard(data.game.game_board);
-        } catch (error) {
-            console.error(error)
-        }
-
-        //2) Checking for a winner:
-        try {
-            const response = await fetch(`/tictactoe/${id}/check_win`, {
-                method: 'put',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                })
-            })
-            const data = await response.json();
-            //set Win message or move to next turn
-            if (data.game.winner.length === 0) {
-                setWinMessage(null);
-                setOpponentsTurn(data.game.whose_turn === opponentID); 
-            } else if (data.game.winner.length === 1) {
-                const winner = data.game.winner[0];
-                if (sessionUserID === winner){
-                    setWinMessage("You win!")
-                } else {
-                    setWinMessage(`${data.game.winner[0]} wins!`)
-                }
-            } else { // draw
-                if (sessionUserID === data.game.winner[0] || sessionUserID === data.game.winner[1]){
-                    setWinMessage("You have a draw!")
-                } else {
-                    setWinMessage(`${data.game.winner[0]} and ${data.game.winner[1]} draw!`)
-                }
-            }
-            
-
-        } catch (error) {
-            console.error(error)
-        }
-
+    // Function to place a piece on the gameboard
+    // TODO: add error message on the page for when user tries to play out of turn or if the user is not in the game.
+    const handleClick = (row, col) => {
+        console.log(`Coordinates: ${row} ${col}`)
     }
 
+
     // ============ OPPONENT GAMEPLAY =============
-
-    // TODO make a version of fetchGame where no new token is given so that users can timeout! Otherwise the user will never timeout.
-
-    // When it is the opponent's turn, we run fetchGame every 5 seconds to check for the opponent to make moves and if they win/draw/forfeit.
-    useEffect(() => {
-        let fiveSecFetchGame;
-    
-        const fetchGameWrapper = () => {
-            fetchGame(); // Call fetchGame immediately when the effect runs
-    
-            // Set up an interval to call fetchGame every 5 seconds
-            fiveSecFetchGame = setInterval(fetchGame, timeInterval);
-        };
-    
-        // Check if it's the opponent's turn
-        if (token && opponentsTurn) {
-            fetchGameWrapper();
-    
-            // Cleanup function: clear the interval when !opponentsTurn
-            return () => clearInterval(fiveSecFetchGame);
-        } else {
-            // Clear the interval when !opponentsTurn
-            clearInterval(fiveSecFetchGame);
-        }
-    
-        // Cleanup function for unmount or other cases
-        return () => {
-            // Additional cleanup logic if needed
-        };
-    }, [opponentsTurn]);
-
+    // Function to run findGame for this particular game every 2 seconds to check for opponents' moves.
 
     // ============ FORFEIT GAME ==================
-    // Note from Claire: I tried to make this show an warning message first, but it was causing bugs, may add in later.
-    // TODO: warning message? or popup.
-
-    const forfeitGame = async () => {
-            try {
-                const response = await fetch(`/tictactoe/${id}/forfeit`, {
-                    method: 'put',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({
-                    })
-                })
-                const data = await response.json();
-                setGame(data.game);
-                setGameBoard(data.game.game_board);
-                
-                //set Win message
-                if (data.game.winner.length === 0) {
-                    setWinMessage(null);
-                } else if (data.game.winner.length === 1) {
-                    const winner = data.game.winner[0];
-                    if (sessionUserID === winner){
-                        setWinMessage("You win!")
-                    } else {
-                        setWinMessage(`${data.game.winner[0]} wins!`)
-                    }
-                } else { // draw
-                    if (sessionUserID === data.game.winner[0] || sessionUserID === data.game.winner[1]){
-                        setWinMessage("You have a draw!")
-                    } else {
-                        setWinMessage(`${data.game.winner[0]} and ${data.game.winner[1]} draw!`)
-                    }
-                }
-
-            } catch (error) {
-                console.error(error)
-            }
-        }
-    
+    // Function to forfeit game -- first sets warning message, then forfeits game.
 
 
     // ============ JSX FOR THE UI =============
-    return (
-        <>
-            <h2>TicTacToe</h2>
-            <p>GAME DATA VISIBILITY:</p>
-            <p>{gameID ? gameID: "Cannot get game ID from Params"}</p>
-            <p>{game ? "Game object found" : "No game object found"}</p>
-            <p>{game ? game._id : "No game object found"}</p>
-            <p>{game ? game.whose_turn : "No game object found"}</p>
-            <p>{game ? `Winner found: ${game.winner}` : "No winner found"}</p>
-            <p>{game ? `Checking turn counter: ${game.turn}` : "No winner found"}</p>
-            <p>{game ? `Checking game.whose_turn vs. sessionUserID: ${game.whose_turn} === ${sessionUserID}? ${game.whose_turn === sessionUserID}` : 'does not find whose turn'}</p>
-            <p>{game && game.whose_turn === sessionUserID ? `Checking against opponents turn property: ${opponentsTurn}` : 'does not find whose turn'}</p>
+    if (game) {
+        return (
+            <>
+                <h1 className="text-6xl">
+                NEW TICTACTOE GAME:
+                </h1>
+                <p>Visibility Testing:</p>
+                <p>GameID: {game._id}</p>
+                <p>Player One: {game.playerOne.username}, Placements: {game.xPlacements}</p>
+                <p>Player Two: {game.playerTwo.username}, Placements: {game.oPlacements}</p>
+                <p>Game Finished: {String(game.finished)}</p>
+                <p>Game Winners: {game.winner.length}</p>
+                {/* <p>Game Win Message: {winMessage}</p> */}
+                {/* <p>Game Turn Number: {game.turn}</p>
+                <p>Whose Turn is it?: {whoseTurn.username}</p>
+                <p>Forfeit Warning: {forfeitWarning}</p> */}
 
-            <p>{sessionUserID}</p>
+                <TicTacToeBoard gameBoard={game.gameBoard} onButtonClick={handleClick}/>
 
-
-            {game && game.game_board && (
-                <div>
-                <p>Game Board:</p>
-                <table>
-                    <tbody>
-                    {Object.keys(game.game_board).map((row) => (
-                        <tr key={row}>
-                        {Object.keys(game.game_board[row]).map((col) => (
-                            <td key={col}>{game.game_board[row][col]}</td>
-                        ))}
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
-                </div>
-            )}
-
-
-            {game && gameBoard && (
-                <div id='tictactoe-board'>
-                    {rows.map((row) => (
-                        <div key={row}>
-                            {Object.keys(gameBoard[row]).map((col) => (
-                            <TicTacToeButton
-                                key={`${row}${col}`}
-                                row={row}
-                                col={col}
-                                // winner={game.winner}
-                                winMessage={winMessage}
-                                gameBoard={gameBoard}
-                                opponentsTurn={opponentsTurn}
-                                handleClick={() => updateGameBoard(row, col)}
-                            />
-                                ))}
-                        </div>
-                        ))}
-                </div>
-            )}
-        <button 
-            aria-label="Forfeit Button"
-            onClick={() => forfeitGame()}
-            disabled={winMessage}
-        >
-        Forfeit Game
-        </button>
-
-        {winMessage && <p aria-label="Winner Announcement">{winMessage}</p>}
-        </>
-    );
+            </>
+        )
+    }
 };
 
 // =========== SUPPORTIVE COMPONENTS: ==================================== //
+
+const TicTacToeBoard = ({ gameBoard, onButtonClick }) => {
+
+    const rows = Object.keys(gameBoard);
+
+    return (
+        <div className="tictactoe-board">
+        {rows.map(row => (
+            <div key={row} className="tictactoe-row">
+            {Object.keys(gameBoard[row]).map(col => (
+                <button
+                key={col}
+                className="h-[5rem] w-[5rem] bg-slate-300 border-2 text-black"
+                onClick={() => onButtonClick(row, col)}
+                >
+                {gameBoard[row][col]}
+                </button>
+            ))}
+            </div>
+        ))}
+        </div>
+    );
+};
+
+
+
+
 
 // ======== SINGLE BUTTON ===========//
 const TicTacToeButton = (props) => {

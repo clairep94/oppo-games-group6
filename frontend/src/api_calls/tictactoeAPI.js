@@ -21,7 +21,7 @@ const newGame = async (newGamePayload) => {
     }
 }
 
-const findGame = async (token, id) => {
+const fetchGame = async (token, id) => {
     try {
     const response = await fetch(`${endpoint}/${id}`, {
         headers: {
@@ -88,4 +88,4 @@ const forfeitGame = async (token, id) => {
     }
 }
 
-export { newGame, findGame, allGames, placePiece, forfeitGame }
+export { newGame, fetchGame, allGames, placePiece, forfeitGame }

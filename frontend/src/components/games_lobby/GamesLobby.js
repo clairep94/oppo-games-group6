@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import getSessionUserID from "../../utility/getSessionUserID";
 import NewGameButton from './CreateNewGameButton';
-import NavBar from '../navbar/NavBar';
 import GamesList from './GamesList';
 
 
