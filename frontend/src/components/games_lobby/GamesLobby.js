@@ -42,9 +42,9 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
     if(token) {
       return(
         <div className='mr-10'>
-          {/* TITLE CARD */}
 
-        <img src='gameControllers.png' className='w-[36rem] absolute right-2 bottom-0 -z-10 opacity-80'/>
+          {/* TITLE CARD */}
+        {/* <img src='gameControllers.png' className='w-[36rem] absolute right-2 bottom-0 -z-10 opacity-80'/> */}
         
         <div className='h-[10rem] pl-12 py-6 relative
           bg-gradient-to-r from-gray-300/20 via-purple-100/20 to-purple-900/20
@@ -63,21 +63,20 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
           GAME LOBBY
         </h1>
 
+        TESTING AVATAR API:
         <div className='w-[5rem] h-[5rem] border-[0.3rem] rounded-full border-white/80 shadow-lg opacity-80'>
           <img src={`https://api.dicebear.com/7.x/rings/svg?seed=${sessionUserID}`} alt="avatar" />
         </div>
 
 
-
-<br></br>
-<div class="h-[18rem] w-[18rem] rounded-[3.4rem] bg-gradient-to-br from-pink-300 via-pink-500 to-pink-500 p-2">
-        <img src='tictactoe.png' alt='Tic Tac Toe' className='w-[17rem] z-20 absolute -translate-y-[5rem] translate-x-6' />
-        <h2 className='absolute z-20 font-semibold text-[2.5rem] translate-x-6 translate-y-[12.5rem]'>Tic-Tac-Toe</h2>
-    <div class="flex h-full w-full items-center justify-center bg-pink-400 rounded-[3rem] relative shadow-pink-400 shadow-md opacity-80">
-        
-        <div class="absolute inset-0 backdrop-blur-sm rounded-[3rem]"></div>
-    </div>
-</div>
+        {/* GAME CARD, STILL TO WORK ON: */}
+        {/* <div class="h-[18rem] w-[18rem] rounded-[3.4rem] bg-gradient-to-br from-pink-300 via-pink-500 to-pink-500 p-2">
+          <img src='tictactoe.png' alt='Tic Tac Toe' className='w-[17rem] z-20 absolute -translate-y-[5rem] translate-x-6' />
+          <h2 className='absolute z-20 font-semibold text-[2.5rem] translate-x-6 translate-y-[12.5rem]'>Tic-Tac-Toe</h2>
+          <div class="flex h-full w-full items-center justify-center bg-pink-400 rounded-[3rem] relative shadow-pink-400 shadow-md opacity-80">
+            <div class="absolute inset-0 backdrop-blur-sm rounded-[3rem]"></div>
+          </div>
+        </div> */}
 
 
 
