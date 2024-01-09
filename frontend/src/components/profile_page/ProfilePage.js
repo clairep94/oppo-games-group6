@@ -23,7 +23,7 @@ const ProfilePage = ({ navigate }) => {
     // ============ LOADING THE PROFILE =============
     // Function to fetch userdata from the database for this specific user
     const fetchUser = () => {
-        fetch(`/users/${id}`, {
+        fetch(`/users/${targetUserID}`, {
             headers: {
                 'Authorization': `Bearer ${token}`
             }
@@ -43,6 +43,9 @@ const ProfilePage = ({ navigate }) => {
     }, []);
 
     // ============ JSX FOR THE UI =============
+    if (user) {
+
+    
     return (
         <>
             {ownProfile ? 
@@ -65,12 +68,16 @@ const ProfilePage = ({ navigate }) => {
                     <h4>Active Games:</h4>
                     <h4>Open Games:</h4>
                     <h4>Past Games:</h4>
+{/* 
+                    <img src={`https://api.dicebear.com/7.x/adventurer/svg?seed=${user.username}`}
+                        alt="avatar" />
+   */}
                 </>
             
             }
 
         </>
-    );
+    );}
 };
 
 export default ProfilePage;
