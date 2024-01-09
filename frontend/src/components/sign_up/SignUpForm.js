@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './SignUpForm.module.css';
-import loginImg from "../../assets/gaming-comuter-headphones-set.png"
+import loginImg from "../../assets/bg-gaming-console-duo-animations.png"
 
 const SignUpForm = ({ navigate }) => {
 
@@ -98,7 +98,7 @@ const SignUpForm = ({ navigate }) => {
   const h2Style = "pt-3 pb-3 text-7xl text-white font-extrabold"
   const buttonStyle = "w-2/5 bg-customPink text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-pink-600 focus:outline-none focus:shadow-outline-pink active:bg-pink-700"
   const fieldStyle = "w-4/5 p-2 rounded-lg border-2 border-gray-300 flex-col"
-  const fieldStyle2 = "w-2/5 p-2 rounded-lg border-2 border-gray-300 mr-2"
+  const fieldStyle2 = "w-2/5 p-2 rounded-lg border-2 border-gray-300 mr-1"
 
 
     return (
@@ -157,7 +157,7 @@ const SignUpForm = ({ navigate }) => {
         
         {/* BUTTON TO TOGGLE PW VISIBILITY */}
         <button
-          className="text-sm text-white text-left underline mt-2"
+          className="text-sm text-white text-left underline mt-2 flex flex-col"
           onClick={handleSetPasswordHidden} 
           id="toggle-pw-visibility-button" 
           type="button" 
@@ -181,9 +181,12 @@ const SignUpForm = ({ navigate }) => {
 
       <br/>
 
-      <p aria-label="Already have an account? Log in" className="mt-4 text-white text-left">
-        Already have an account?
-        <a aria-label="Link to Log in" href="/login" font color="#003163" className={styles.link}>Log in</a>
+      <p 
+      aria-label="Already have an account? Log in" 
+      className="mt-4 text-white text-left">Already have an account? <a 
+      aria-label="Link to Log in" 
+      href="/login" 
+      className="underline">Log in</a>
       </p>
     </div>
   </div>

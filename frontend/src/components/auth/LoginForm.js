@@ -142,7 +142,7 @@ const LogInForm = ({ navigate }) => {
       {/* Register Link */}
       <p aria-label="Don't have an account? Register" className="mt-4 text-white">
         Don't have an account?{' '}
-        <a aria-label="Link to Register" href="/signup" className="text-blue-600">Register</a>
+        <a aria-label="Link to Register" href="/signup" className="underline">Register</a>
       </p>
     </div>
 
