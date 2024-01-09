@@ -13,9 +13,9 @@ const TicTacToeController = {
       if (err) {
         throw err;
       }
-      // const token = TokenGenerator.jsonwebtoken(req.user_id)
-      // res.status(200).json({ games: tictactoeGames, token: token });
-      res.status(200).json({ games: tictactoeGames });
+      const token = TokenGenerator.jsonwebtoken(req.user_id)
+      res.status(200).json({ games: tictactoeGames, token: token });
+      // res.status(200).json({ games: tictactoeGames });
 
     });
   },
@@ -30,9 +30,9 @@ const TicTacToeController = {
       if (err) {
         throw err;
       }
-      // const token = TokenGenerator.jsonwebtoken(req.user_id)
-      // res.status(200).json({ game: tictactoe, token: token });
-      res.status(200).json({ game: tictactoe });
+      const token = TokenGenerator.jsonwebtoken(req.user_id)
+      res.status(200).json({ game: tictactoe, token: token });
+      // res.status(200).json({ game: tictactoe });
 
     });
   },
@@ -48,9 +48,9 @@ const TicTacToeController = {
       await TicTacToe.populate(populatedTicTacToe, { path: 'playerTwo', select: '_id username points' });
       await TicTacToe.populate(populatedTicTacToe, { path: 'winner', select: '_id username points' });
 
-      // const token = TokenGenerator.jsonwebtoken(req.user_id)
-      // res.status(201).json({ token: token, game: populatedTicTacToe });
-      res.status(201).json({ game: populatedTicTacToe });
+      const token = TokenGenerator.jsonwebtoken(req.user_id)
+      res.status(201).json({ token: token, game: populatedTicTacToe });
+      // res.status(201).json({ game: populatedTicTacToe });
 
 
     } catch (error) {
@@ -143,9 +143,9 @@ const TicTacToeController = {
           .populate('playerTwo', '_id username points') 
           .populate('winner', '_id username points')
 
-          // const token = TokenGenerator.jsonwebtoken(req.user_id);
-          // res.status(200).json({token: token, game: wonGame});
-          res.status(200).json({game: wonGame});
+          const token = TokenGenerator.jsonwebtoken(req.user_id);
+          res.status(200).json({token: token, game: wonGame});
+          // res.status(200).json({game: wonGame});
 
 
         } catch (error) {
@@ -173,9 +173,9 @@ const TicTacToeController = {
             .populate('playerTwo', '_id username points') 
             .populate('winner', '_id username points')
 
-            // const token = TokenGenerator.jsonwebtoken(req.user_id);
-            // res.status(200).json({token: token, game: drawGame});
-            res.status(200).json({game: drawGame});
+            const token = TokenGenerator.jsonwebtoken(req.user_id);
+            res.status(200).json({token: token, game: drawGame});
+            // res.status(200).json({game: drawGame});
 
           } catch (error) {
             console.error('Error handling draw: ', error);
@@ -189,9 +189,9 @@ const TicTacToeController = {
           await TicTacToe.populate(populatedNextTurnGame, { path: 'playerTwo', select: '_id username points' });
           await TicTacToe.populate(populatedNextTurnGame, { path: 'winner', select: '_id username points' });
 
-          // const token = TokenGenerator.jsonwebtoken(req.user_id)
-          // res.status(201).json({ token: token, game: populatedNextTurnGame });
-          res.status(200).json({game: populatedNextTurnGame});
+          const token = TokenGenerator.jsonwebtoken(req.user_id)
+          res.status(201).json({ token: token, game: populatedNextTurnGame });
+          // res.status(200).json({game: populatedNextTurnGame});
 
         }
       }
@@ -229,9 +229,9 @@ const TicTacToeController = {
       .populate('playerTwo', '_id username points') 
       .populate('winner', '_id username points')
 
-      // const token = TokenGenerator.jsonwebtoken(req.user_id);
-      // res.status(200).json({token: token, game: forfeitedGame});
-      res.status(200).json({game: forfeitedGame});
+      const token = TokenGenerator.jsonwebtoken(req.user_id);
+      res.status(200).json({token: token, game: forfeitedGame});
+      // res.status(200).json({game: forfeitedGame});
 
 
     } catch (error) {

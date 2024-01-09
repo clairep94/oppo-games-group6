@@ -47,11 +47,9 @@ app.use("/tokens", authenticationRouter);
 
 // routes with no authentication:
 app.use("/signup", signUpRouter);
-app.use("/tictactoe", tictactoeRouter);
-
 // routes with authentication:
 app.use("/posts", tokenChecker, postsRouter);
-// app.use("/tictactoe", tokenChecker, tictactoeRouter); // TODO change back after verifying methods with postman
+app.use("/tictactoe", tokenChecker, tictactoeRouter);
 app.use("/users", tokenChecker, usersRouter);
 
 
