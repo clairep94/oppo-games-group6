@@ -10,26 +10,29 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
     const { id } = useParams(); // IMPORTANT: DO NOT RENAME 'id' This refers to gameID but changing it would cause issues in routes etc.
     const gameID = id; // declared gameID variable to store this info in case it is more readable for usage below:
 
-    // ------- Game states ----------
+    // ------- Game state variables ----------
     const [game, setGame] = useState(null); // stores game object retrieved from DB
+    const [whoseTurn, setWhoseTurn] = useState(null); // this needs to be stored and updated explicitly due to issues with game.turn
 
-    // const findWinMessage = (game && game.winner) => {
-    // if (game.winner.length === 0) {
-    //     return "";
-    // } else if (game.winner.length === 2) {
-    //     return "It's a draw!";
-    // } else {
-    //     return `${game.winner[0].username} wins!`;
-    // }
-    // };
+    const [winMessage, setWinMessage] = useState(null); // same as above but with game.winner.length
+    const [errorMessage, setErrorMessage] = useState(null);
+    const [forfeitButtonMessage, setForfeitButtonMessage] = useState("Forfeit Game")
 
-    // const winMessage = findWinMessage(game);
-
-    // const whoseTurn = (game.turn % 2 === 0) ? game.playerOne : game.playerTwo
-    // const [forfeitWarning, setForfeitWarning] = useState("");
-
+    const findWinMessage = (game) => {
+        if (game.winner.length === 0) {
+            setWinMessage('');
+        } else if (game.winner.length === 2) {
+            setWinMessage("It's a draw!");
+        } else {
+            if (game.winner[0]._id === sessionUserID) {
+                setWinMessage("You win!")
+            } else {
+                setWinMessage(`${game.winner[0].username} wins!`)
+            }
+        }
+        };
+    
     const timeInterval = 2000;
-    const rows = ["A", "B", "C"];
 
 
     // ============ LOADING THE BOARD =============
@@ -42,6 +45,8 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 window.localStorage.setItem("token", gameData.token);
                 setToken(window.localStorage.getItem("token"));
                 setGame(gameData.game);
+                setWhoseTurn((gameData.game.turn % 2 === 0) ? gameData.game.playerOne : gameData.game.playerTwo)
+                findWinMessage(gameData.game)
             })
         }
     }, [])
@@ -51,9 +56,10 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
     // Function to place a piece on the gameboard
     // TODO: add error message on the page for when user tries to play out of turn or if the user is not in the game.
     const handleClick = (row, col) => {
+
+        // check if the sessionUserID === whoseTurn._id
         console.log(`Coordinates: ${row} ${col}`)
     }
-
 
     // ============ OPPONENT GAMEPLAY =============
     // Function to run findGame for this particular game every 2 seconds to check for opponents' moves.
@@ -62,14 +68,17 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
     // Function to forfeit game -- first sets warning message, then forfeits game.
     const handleForfeit = async (event) => {
         event.preventDefault();
-        if (token) {
-            console.log("user has a token")
+
+        if (forfeitButtonMessage === "Forfeit Game"){
+            setForfeitButtonMessage("Are you sure?")
+        }
+        if (token && (forfeitButtonMessage === "Are you sure?")) {
             forfeitGame(token, gameID)
             .then(gameData => {
                 window.localStorage.setItem("token", gameData.token);
                 setToken(window.localStorage.getItem("token"));
-                setGame(gameData.game);
-    })}}
+                setGame(gameData.game);})
+            }}
 
     // ============ JSX FOR THE UI =============
     if (game) {
@@ -85,16 +94,24 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 <p>Game Finished: {String(game.finished)}</p>
                 <p>Game Winners: {game.winner.length}</p>
                 <p>Game Turn Number: {game.turn}</p>
-                <p>Token: {token? 'true': 'false'}</p>
-                <p>SessionUserID: {sessionUserID}</p>
+                <p>Which player is SessionUser? : {sessionUserID === game.playerOne._id ? "Player One" : "Player Two or Observer"}</p>
+                <p>Whose Turn? {whoseTurn.username}</p>
+                <p>Is it my turn? {String(whoseTurn._id === sessionUserID)}</p>
 
+                <br></br>
 
+                {winMessage}
 
                 <TicTacToeBoard gameBoard={game.gameBoard} onButtonClick={handleClick}/>
                 
-                <button onClick={handleForfeit} className="bg-black/80 p-4 w-[13rem] rounded-lg">
-                    Forfeit Game
-                </button>
+                {/* Forfeit button -- only shows if sessionUser is a player && game is not over */}
+                {!game.finished && (sessionUserID === game.playerOne._id || sessionUserID === game.playerTwo._id) &&
+                    (<button onClick={handleForfeit} className="bg-black/70 p-4 w-[13rem] rounded-lg">
+                        {forfeitButtonMessage}
+                    </button>)
+                }
+
+                {errorMessage}
             </>
         )
     }
