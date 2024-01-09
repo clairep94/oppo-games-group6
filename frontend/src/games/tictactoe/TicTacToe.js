@@ -54,16 +54,27 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
     // ============ SESSION USER GAMEPLAY =============
     // Function to place a piece on the gameboard
     const handlePlacePiece = async(row, col) => {
-
+        const coordinates = `${row}${col}`
         console.log(`Coordinates: ${row} ${col}`)
 
+        // check if the space is already occupied:
+        if (game.xPlacements.includes(coordinates) || game.oPlacements.includes(coordinates)){
+            console.log("already a piece here")
+            setErrorMessage("There is already a piece here!")
+        
+        // check if game is already over:
+        } else if (game.finished) {
+            setErrorMessage("The game is already over!")
+
         // check if the sessionUserID === whoseTurn._id -> if not, setErrorMessage
-        if (sessionUserID !== whoseTurn._id) {
+        } else if (sessionUserID !== whoseTurn._id) {
             if (sessionUserID === game.playerOne._id || sessionUserID === game.playerTwo._id){
                 setErrorMessage("It's not your turn!")
             } else {
                 setErrorMessage("You're not in this game!")
             }
+        
+        // if all checks pass, place the piece and update game with returned game data
         } else {
             if (token) {
                 const movePayload = {row: row, col: col}
@@ -75,6 +86,7 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                     setGame(gameData.game);
                     setWhoseTurn((gameData.game.turn % 2 === 0) ? gameData.game.playerOne : gameData.game.playerTwo)
                     findWinMessage(gameData.game)
+                    setErrorMessage("")
                 })
             }
         }
