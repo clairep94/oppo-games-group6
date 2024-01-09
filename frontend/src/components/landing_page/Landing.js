@@ -23,7 +23,7 @@ const Landing = ({ navigate }) => {
         
         <div className="pt-6">
 
-        <a aria-label="Link to Register" href="/signup">
+        <a aria-label="Link to Register" href="/login">
         <button className={buttonStyle}>
         START PLAYING 
         </button>
