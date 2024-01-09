@@ -3,15 +3,30 @@ const mongoose = require("mongoose");
 const TicTacToeSchema = new mongoose.Schema({
 
   // =========== Game properties used by all games =============== :
-  
+  // endpoint: { 
+  //   type: String,
+  //   default: 'tictactoe' // URL endpoint for FE and BE for this specific game
+  // },
+  // title: { 
+  //   type: String,
+  //   default: 'Tic-Tac-Toe'
+  // },
+
   // ----------- Players & Open Game Properties ------------    
-  players: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: 'User'
+  playerOne: { // games will be created once both players have joined.
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Games must have all members confirmed to start']
+  },
+  playerTwo: { // games will be created once both players have joined.
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Games must have all members confirmed to start']
   },
 
   // ----------- Active Game Properties ------------    
-  turn: { // after a player moves, turn ++; if turn === 9: draw. (turn % 2 === 0) ? players[0] : players[1]
+  turn: { // after a player moves, turn ++; if turn === 9: draw. 
+          // whoseTurn = (turn % 2 === 0) ? players[0] : players[1]
     type: Number,
     default: 0
   },
@@ -23,12 +38,12 @@ const TicTacToeSchema = new mongoose.Schema({
     ref:'User'
   },
   finished: {
-      type: Boolean,
-      default: false
+    type: Boolean,
+    default: false
   },
-  dateCompleted: {
-      type: Date
-  },
+  // dateCompleted: {
+  //   type: Date
+  // },
 
   // =========== PROPERTIES SPECIFIC TO TICTACTOE ==================
   // --------------- Static TicTacToe Properities --------------- :
@@ -78,6 +93,6 @@ const TicTacToeSchema = new mongoose.Schema({
 }
 );
 
-const Post = mongoose.model("Post", PostSchema);
+const TicTacToe = mongoose.model("TicTacToe", TicTacToeSchema);
 
-module.exports = Post;
+module.exports = TicTacToe;
