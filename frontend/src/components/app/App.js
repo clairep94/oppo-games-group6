@@ -1,6 +1,13 @@
 import './App.css';
 import React, { useState } from 'react';
 
+// import Feed from '../feed/Feed'
+import GamesLobby from '../games_lobby/GamesLobby';
+import InfoPage from '../info-page/InfoPage';
+import GamePage from '../game-page/GamePage';
+import TicTacToe from '../../games/tictactoe/TicTacToe';
+import TicTacToeTest from '../../games/tictactoe/TicTacToeTest';
+
 import {
   useNavigate,
   Routes,
@@ -21,8 +28,9 @@ const App = () => {
           <Route path='/login'  element={<LoginForm  navigate={ useNavigate() }/>}/>
           <Route path='/signup' element={<SignUpForm navigate={ useNavigate() }/>}/>
           <Route path='/tictactoe/:id' element={<TicTacToe navigate={useNavigate()} />} />
+          <Route path='/rps' element={<InfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
+          <Route path='/rps/:gameId' element={<GamePage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
           <Route path='/users/:id' element={<ProfilePage navigate={useNavigate()}/>} />
-
         </Routes>
     );
 }
