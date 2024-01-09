@@ -204,8 +204,8 @@ const TicTacToeController = {
 
   Forfeit: async (req, res) => {
     try {
-      // const sessionUser = req.user_id;
-      const sessionUser = req.body.user;
+      const sessionUser = req.user_id;
+      // const sessionUser = req.body.user;  // postman testing purposes only
       const gameID = req.params.id;
       const game = await TicTacToe.findById(gameID);
 
