@@ -18,6 +18,8 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
     const [errorMessage, setErrorMessage] = useState(null);
     const [forfeitButtonMessage, setForfeitButtonMessage] = useState("Forfeit Game")
 
+    const timeInterval = 2000; // time interval for manual polling
+
     const findWinMessage = (game) => {
         if (game.winner.length === 0) {
             setWinMessage('');
@@ -30,20 +32,18 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 setWinMessage(`${game.winner[0].username} wins!`)
             }
         }
-        };
-    
-    const timeInterval = 2000;
-
+    };
 
     // ============ LOADING THE BOARD =============
     // Get the board from the DB once the component is loaded.
-    // TODO: check if I should re-run findWinMessage(game) within a hook.
     useEffect(() => {
         if (token) {
             fetchGame(token, gameID)
             .then(gameData => {
                 window.localStorage.setItem("token", gameData.token);
                 setToken(window.localStorage.getItem("token"));
+
+                // repeat these when player places a piece or when we receive new data from opponent
                 setGame(gameData.game);
                 setWhoseTurn((gameData.game.turn % 2 === 0) ? gameData.game.playerOne : gameData.game.playerTwo)
                 findWinMessage(gameData.game)
@@ -51,14 +51,33 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
         }
     }, [])
 
-
     // ============ SESSION USER GAMEPLAY =============
     // Function to place a piece on the gameboard
-    // TODO: add error message on the page for when user tries to play out of turn or if the user is not in the game.
-    const handleClick = (row, col) => {
+    const handlePlacePiece = async(row, col) => {
 
-        // check if the sessionUserID === whoseTurn._id
         console.log(`Coordinates: ${row} ${col}`)
+
+        // check if the sessionUserID === whoseTurn._id -> if not, setErrorMessage
+        if (sessionUserID !== whoseTurn._id) {
+            if (sessionUserID === game.playerOne._id || sessionUserID === game.playerTwo._id){
+                setErrorMessage("It's not your turn!")
+            } else {
+                setErrorMessage("You're not in this game!")
+            }
+        } else {
+            if (token) {
+                const movePayload = {row: row, col: col}
+                placePiece(token, gameID, movePayload)
+                .then(gameData => {
+                    window.localStorage.setItem("token", gameData.token);
+                    setToken(window.localStorage.getItem("token"));
+    
+                    setGame(gameData.game);
+                    setWhoseTurn((gameData.game.turn % 2 === 0) ? gameData.game.playerOne : gameData.game.playerTwo)
+                    findWinMessage(gameData.game)
+                })
+            }
+        }
     }
 
     // ============ OPPONENT GAMEPLAY =============
@@ -77,7 +96,9 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
             .then(gameData => {
                 window.localStorage.setItem("token", gameData.token);
                 setToken(window.localStorage.getItem("token"));
-                setGame(gameData.game);})
+                setGame(gameData.game)
+                findWinMessage(gameData.game)
+                ;})
             }}
 
     // ============ JSX FOR THE UI =============
@@ -102,7 +123,7 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
 
                 {winMessage}
 
-                <TicTacToeBoard gameBoard={game.gameBoard} onButtonClick={handleClick}/>
+                <TicTacToeBoard gameBoard={game.gameBoard} onButtonClick={handlePlacePiece}/>
                 
                 {/* Forfeit button -- only shows if sessionUser is a player && game is not over */}
                 {!game.finished && (sessionUserID === game.playerOne._id || sessionUserID === game.playerTwo._id) &&
