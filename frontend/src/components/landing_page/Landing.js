@@ -22,9 +22,13 @@ const Landing = ({ navigate }) => {
         <h2 className={basicFont}>Welcome to Oppo Games. An online platform to participate in retro, multiplayer games in live time. Join a game, chat with your opponent and have fun!</h2>
         
         <div className="pt-6">
+            
+        <a aria-label="Link to Register" href="/signup">
         <button className={buttonStyle}>
         START PLAYING 
         </button>
+        </a>
+
         </div>
 
             </div>
