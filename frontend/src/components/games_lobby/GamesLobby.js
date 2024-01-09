@@ -43,7 +43,9 @@ const GamesLobby = ({ navigate }) => {
       return(
         <>
           <h2>Games Lobby</h2>
-          <p>Welcome player {sessionUserID}</p>
+          <a href={`/users/${sessionUserID}`}>
+            <p>Welcome player {sessionUserID}</p>
+          </a>
           <div id='create-game-section'>
             <h3>Create a game:</h3>
 
