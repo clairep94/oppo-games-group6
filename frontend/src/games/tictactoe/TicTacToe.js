@@ -153,24 +153,23 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
 // =========== SUPPORTIVE COMPONENTS: ==================================== //
 
 const TicTacToeBoard = ({ gameBoard, onButtonClick }) => {
-
-    const rows = Object.keys(gameBoard);
+    const rows = ["A", "B", "C"];
 
     return (
         <div className="tictactoe-board">
-        {rows.map(row => (
-            <div key={row} className="tictactoe-row">
-            {Object.keys(gameBoard[row]).map(col => (
-                <button
-                key={col}
-                    className="h-[5rem] w-[5rem] bg-slate-300 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400"
-                    onClick={() => onButtonClick(row, col)}
-                >
-                {gameBoard[row][col]}
-                </button>
+            {rows.map(row => (
+                <div key={row} className="tictactoe-row">
+                    {Object.keys(gameBoard[row]).map(col => (
+                        <button
+                            key={col}
+                            className="h-[5rem] w-[5rem] bg-slate-300 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400"
+                            onClick={() => onButtonClick(row, col)}
+                        >
+                            {gameBoard[row][col]}
+                        </button>
+                    ))}
+                </div>
             ))}
-            </div>
-        ))}
         </div>
     );
 };
