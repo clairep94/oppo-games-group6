@@ -41,27 +41,8 @@ const TicTacToeSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  // dateCompleted: {
-  //   type: Date
-  // },
 
   // =========== PROPERTIES SPECIFIC TO TICTACTOE ==================
-  // --------------- Static TicTacToe Properities --------------- :
-  winningCombinations: { // used to check for winners -> check against x_placements and o_placements after a player places
-    type: [[String]],
-    default: [
-        ["A1", "A2", "A3"],
-        ["B1", "B2", "B3"],
-        ["C1", "C2", "C3"],
-        ["A1", "B1", "C1"],
-        ["A2", "B2", "C2"],
-        ["A3", "B3", "C3"],
-        ["A1", "B2", "C3"],
-        ["A3", "B2", "C1"]
-      ],
-  },
-
-  // --------------- Fluid TicTacToe Properties --------------- :
   // players[0]
   xPlacements: { // after player 1 moves, add their coordinate here and to the game board
       type: [String],

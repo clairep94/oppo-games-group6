@@ -67,18 +67,23 @@ const TicTacToeController = {
     const coordinate = `${row}${col}`
 
     try {
-      // 1) =========== Find the current game and check whose turn it is and for errors =================
+
+      // 1) =========== Find the current game and Catch Errors: =================
+
       const game = await TicTacToe.findById(gameID); // NOT .populated document
       const whoseTurnID = (game.turn % 2 === 0) ? game.playerOne : game.playerTwo
+
+      // Users cannot play on finished games.
       if (game.finished === true) {
         console.log("ERROR: GAME FINISHED");
-        return res.status(403).json({error: 'Game already finished.', game: game});
+        return res.status(403).json({error: 'Game already finished.', game: game}); //return the old game so as to not mess up the rendering
       }
-      // Throw error if not userID's turn
+      // Users cannot play outside of their turn.
       if (userID != whoseTurnID) { // NOTE by Claire: this is != and not !== on purpose. game.whose_turn and userID are not the same datatype but can be compared this way.
         console.log("ERROR: IT IS NOT YOUR TURN");
         return res.status(403).json({ error: 'It is not your turn.', game: game }); //return the old game so as to not mess up the rendering
-      } // Throw error if tile is already occupied
+
+      } // Users cannot play on occupied spaces.
       if (game.xPlacements.includes(coordinate) || game.oPlacements.includes(coordinate)){
         console.log("ERROR: THERE IS ALREADY A PIECE HERE");
         return res.status(403).json({ error: 'Cannot place piece on occupied tile.', game: game }); //return the old game so as to not mess up the rendering
@@ -100,7 +105,6 @@ const TicTacToeController = {
 
       // 3) ============= Check for wins: ===========================
       // ------- supportive functions for win-checking -------------
-
       // Check if any of the game.winning_placements arrays in any order are in game.xPlacements and game.oPlacements:
       const checkWin = (array) => {
         console.log(`checking wins for ${array}`)
