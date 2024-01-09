@@ -16,8 +16,8 @@ import {
 
 import LoginForm from '../auth/LoginForm'
 import SignUpForm from '../sign_up/SignUpForm'
-import GamesLobby from '../games_lobby/GamesLobby';
-import TicTacToe from '../../games/tictactoe/TicTacToe';
+// import GamesLobby from '../games_lobby/GamesLobby';
+// import TicTacToe from '../../games/tictactoe/TicTacToe';
 import ProfilePage from '../profile_page/ProfilePage';
 
 
