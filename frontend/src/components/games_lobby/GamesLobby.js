@@ -114,7 +114,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
           {/* OPEN GAMES SECTION  */}
           <div id='open-games-section'>
           <h3 className='text-xl font-bold pb-5'>Join a Game</h3>
-             <p className='opacity-70'>
+            <p className='opacity-70'>
               TODO: Open games. Each game has a join button and a link, and shows the Game Type, GameID + Host ID
               </p> 
           </div>
