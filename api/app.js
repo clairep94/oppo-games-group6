@@ -11,8 +11,9 @@ const postsRouter = require("./routes/posts");
 const authenticationRouter = require("./routes/authentication");
 const signUpRouter = require("./routes/signup");
 const usersRouter = require("./routes/users");
-const tictactoeRouter = require("./routes/tictactoe")
-const chatRouter = require("./routes/chat")
+const tictactoeRouter = require("./routes/tictactoe");
+const messagesRouter = require("./routes/messages");
+// const chatRouter = require("./routes/chat")
 
 const rockPaperScissorsRouter = require("./routes/rock-paper-scissors-games");
 
@@ -60,7 +61,9 @@ app.use("/tokens", authenticationRouter);
 
 // routes with no authentication:
 app.use("/signup", signUpRouter);
-app.use("/chat", chatRouter);
+// app.use("/chat", chatRouter);
+app.use("/messages", messagesRouter);
+
 
 // routes with authentication:
 app.use("/posts", tokenChecker, postsRouter);

@@ -1,22 +1,19 @@
 const mongoose = require("mongoose");
 
 const MessagesSchema = mongoose.Schema({
-    chatID: {
+    gameID: {
       type: String,
     },
 
-    senderID: {
+    author: {
       type:String
   },
 
-  text: {
+  body: {
     type:String
   },
-  
-  timestamps: true
-
 });
 
-const Message = mongoose.model("Messafe", MessagesSchema);
+const Message = mongoose.model("Message", MessagesSchema);
 
 module.exports = Message;
