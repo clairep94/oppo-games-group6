@@ -58,7 +58,10 @@ const SignUpForm = ({ navigate }) => {
       body: JSON.stringify({ username: username, email: email, password: password })
     })
       .then(response => {
-        if(response.status === 201) {
+        if (response.status === 500){
+          setError("The username or email already exists")
+        }
+        else if(response.status === 201) {
           navigate('/login')
         } else {
           navigate('/signup')

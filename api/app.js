@@ -8,8 +8,10 @@ const postsRouter = require("./routes/posts");
 const authenticationRouter = require("./routes/authentication");
 const signUpRouter = require("./routes/signup");
 const usersRouter = require("./routes/users");
-// const tictactoeRouter = require("./routes/tictactoe_games");
 const tictactoeRouter = require("./routes/tictactoe")
+
+const rockPaperScissorsRouter = require("./routes/rock-paper-scissors-games");
+
 
 const app = express();
 
@@ -50,6 +52,7 @@ app.use("/signup", signUpRouter);
 // routes with authentication:
 app.use("/posts", tokenChecker, postsRouter);
 app.use("/tictactoe", tokenChecker, tictactoeRouter);
+app.use("/rps", tokenChecker, rockPaperScissorsRouter);
 app.use("/users", tokenChecker, usersRouter);
 
 

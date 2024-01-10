@@ -1,5 +1,9 @@
 import './App.css';
 import React, { useState } from 'react';
+
+import InfoPage from '../info-page/InfoPage';
+import GamePage from '../game-page/GamePage';
+
 import {
   useNavigate,
   Routes,
@@ -20,6 +24,10 @@ const App = () => {
     
     <Routes>
       {/* ====== NO AUTHENTICATION - Sign Up or Login: ======== */}
+
+      <Route path='/rps' element={<InfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
+      <Route path='/rps/:gameId' element={<GamePage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
+
       <Route path='/signup' element={ !isLoggedIn() ?
         <SignUpForm navigate={navigate}/> : <Navigate to='/'/>}/>
       
@@ -31,7 +39,5 @@ const App = () => {
         <ProtectedRoutes navigate={navigate}/> : <Navigate to='/login'/>}/>
         
     </Routes>
-    );
-}
-
+  )}
 export default App;
