@@ -132,12 +132,38 @@ const registerSuccessfulAction = (game, action) => {
 // };
 
 const getStateManager = (progressState) => {
-  return (game, action) => {
-    // Do nothing, don't modify `game`
-  }; // TODO Placeholder
-}
+  if (progressState === STATE_CODES.AWAITING_HOST) {
+    return awaitingHostManager;
+  } else if (progressState === STATE_CODES.AWAITING_GAME) {
+    return awaitingGameManager;
+  } else if (progressState === STATE_CODES.PLACING_SHIPS) {
+    return placingShipsManager;
+  } else if (progressState === STATE_CODES.TAKING_TURNS) {
+    return takingTurnsManager;
+  } else if (progressState === STATE_CODES.CONCLUDED) {
+    return concludedManager;
+  }
+};
 
+const awaitingHostManager = (game, action) => {
+  // TODO
+};
 
+const awaitingGameManager = (game, action) => {
+  // TODO
+};
+
+const placingShipsManager = (game, action) => {
+  // TODO
+};
+
+const takingTurnsManager = (game, action) => {
+  // TODO
+};
+
+const concludedManager = (game, action) => {
+  // TODO
+};
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
