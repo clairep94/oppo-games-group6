@@ -138,6 +138,10 @@ const registerSuccessfulAction = (game, action) => {
   });
 };
 
+const countRemainingShips = (game, playerIndex) => {
+  // TODO
+};
+
 
 // ============================= STATE MANAGERS =============================
 
@@ -347,7 +351,29 @@ const doBeginTurnsTransition = (game, action) => {
 };
 
 const doResignTransition = (game, action) => {
-  // TODO
+  if (game.progressState === STATE_CODES.PLACING_SHIPS) {
+    game.playerResults = [
+      { outcome: null, shipsRemaining: 5 },
+      { outcome: null, shipsRemaining: 5 }
+    ];
+  } else if (game.progressState === STATE_CODES.TAKING_TURNS ) {
+    game.playerResults = [
+      { outcome: null, shipsRemaining: countRemainingShips(game, 0) },
+      { outcome: null, shipsRemaining: countRemainingShips(game, 1) }
+    ];
+  }
+  game.progressState = STATE_CODES.CONCLUDED;
+  game.concludedAt = Date.now();
+  game.conclusionType = "by-resignation";
+  const playerIndex = findPlayerIndex(game, action.playerId);
+  if (playerIndex === 0) {
+    game.playerResults[0].outcome = "resigned";
+    game.playerResults[1].outcome = "won";
+  } else if (playerIndex === 1) {
+    game.playerResults[0].outcome = "won";
+    game.playerResults[1].outcome = "resigned";
+  }
+  game.markModified('playerResults');
 };
 
 const doFireActionEvent = (game, action) => {
