@@ -195,6 +195,14 @@ const placingShipsManager = (game, action) => {
       throw new Error(`PREPARE failed (game.placementComplete[${playerIndex}]: ${game.placementComplete[playerIndex]})`);
     }
     doPlaceShipsEvent(game, action);
+  } else if (action.op === OPS.RESIGN) {
+    const playerIndex = findPlayerIndex(game, action.playerId);
+    if (playerIndex === -1) {
+      throw new Error(`RESIGN failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+    doResignTransition(game, action);
+  } else {
+    throw new Error(`Op invalid while PLACING_SHIPS: ${action.op}`);
   }
 };
 
@@ -226,6 +234,9 @@ const doPlaceShipsEvent = (game, action) => {
   // TODO
 };
 
+const doResignTransition = (game, action) => {
+  // TODO
+};
 
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
