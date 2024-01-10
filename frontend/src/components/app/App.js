@@ -13,7 +13,7 @@ import {
 
 import { isLoggedIn } from '../../utility/LoggedInCheck';
 
-import LoginForm from '../auth/LoginForm'
+import LoginPage from '../auth/LoginPage'
 import SignUpPage from '../sign_up/SignUpPage'
 // import GamesLobby from '../games_lobby/GamesLobby';
 // import TicTacToe from '../../games/tictactoe/TicTacToe';
@@ -30,7 +30,6 @@ const App = () => {
       {/* ====== NO AUTHENTICATION - Sign Up or Login: ======== */}
 
       <Route path='/rps' element={<InfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
-      {/* <Route path='/rps/:gameId' element={<GamePage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/> */}
 
       <Route path='/welcome'  element={!isLoggedIn() ?
       <Landing navigate={ navigate }/> : <Navigate to='/'/>}/>
@@ -39,7 +38,7 @@ const App = () => {
       <SignUpPage navigate={navigate}/> : <Navigate to='/'/>}/>
       
       <Route path='/login' element={ !isLoggedIn() ?
-        <LoginForm navigate={navigate}/> : <Navigate to='/'/>}/>
+        <LoginPage navigate={navigate}/> : <Navigate to='/'/>}/>
 
       {/* ====== AUTHENTICATION ONLY - Lobby, Games, etc. : ======== */}
       <Route path='/*'  element={ isLoggedIn() ?         

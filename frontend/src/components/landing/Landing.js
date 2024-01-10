@@ -22,7 +22,6 @@ const Landing = ({ navigate }) => {
     const viewLogin = () => setView("Login")
     const viewSignup = () => setView("Signup")
 
-    const [successMessage, setSuccessMessage] = useState(null); // success message for successful signup
 
 
     return (
@@ -52,13 +51,11 @@ const Landing = ({ navigate }) => {
                     </div>
                 </>):(
                     <>
-                    {/* LOGIN/SIGNUP CONTAINER */}
-                    <div className={frostTexture + popupContainer}>
-
-                    {view === "Signup" && (<SignUpForm navigate={navigate} viewWelcome={viewWelcome} viewLogin={viewLogin}/>)}
-                    {view === "Login" && (<LoginForm navigate={navigate} viewWelcome={viewWelcome} viewSignup={viewLogin}/>)}
-
-                    </div>
+                        {/* LOGIN/SIGNUP CONTAINER */}
+                        <div className={frostTexture + popupContainer}>
+                            {view === "Signup" && (<SignUpForm navigate={navigate} viewWelcome={viewWelcome} viewLogin={viewLogin}/>)}
+                            {view === "Login" && (<LoginForm navigate={navigate} viewWelcome={viewWelcome} viewSignup={viewSignup}/>)}
+                        </div>
                     </>
                 )}
 

@@ -11,6 +11,8 @@ const SignUpForm = ({ navigate, viewWelcome, viewLogin }) => {
   const [passwordHidden, setPasswordHidden] = useState(true);
   const [retypePassword, setRetypePassword] = useState("");
   const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState(null); // success message for successful signup
+
 
   // ============ FORM SUBMISSION FOR SIGNUP ====================
   const handleSubmit = async (event) => {
@@ -61,7 +63,8 @@ const SignUpForm = ({ navigate, viewWelcome, viewLogin }) => {
     })
       .then(response => {
         if(response.status === 201) {
-          navigate('/login')
+          // navigate('/login')
+          setSuccessMessage("Successfully signed up! Please log in.")
         } else {
           navigate('/signup')
         }
@@ -91,7 +94,7 @@ const SignUpForm = ({ navigate, viewWelcome, viewLogin }) => {
   }
 
   const h2Style = "pt-3 pb-3 text-7xl text-white font-extrabold"
-    const buttonStyle = "w-2/5 text-xl text-white font-semibold rounded-lg py-3 px-4 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
+  const buttonStyle = "w-2/5 text-xl text-white font-semibold rounded-lg py-3 px-4 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
   const fieldStyle = "w-4/5 p-2 rounded-lg border-2 border-gray-300 flex-col"
   const fieldStyle2 = "w-2/5 p-2 rounded-lg border-2 border-gray-300 mr-1"
 
@@ -175,14 +178,15 @@ const SignUpForm = ({ navigate, viewWelcome, viewLogin }) => {
         {/* ERROR MESSAGES */}
         {error && <p aria-label="Error Message" className={styles.errorMessage}>{error}</p>}
 
-        <br/>
+        {successMessage && <p className='font-semibold text-green-700/70 text-lg'>{successMessage}</p>}
+
 
         <p 
         aria-label="Already have an account? Log in" 
-        className="mt-4 text-white text-left">Already have an account? <a 
+        className="mt-4 text-white text-left">Already have an account? <span
         aria-label="Link to Log in" 
-        href="/login" 
-        className="underline">Log in</a>
+        className="underline"
+        onClick={viewLogin}>Log in</span>
         </p>
     </div>
 

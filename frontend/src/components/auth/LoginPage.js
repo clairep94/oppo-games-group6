@@ -3,7 +3,7 @@ import loginImg from "../../assets/single-console-stand.png"
 // import { useLocation } from 'react-router-dom'; // use this for login-popup when timed-out
 // import styles from './LoginForm.module.css'
 
-const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
+const LogInPage = ({ navigate }) => {
 
   // =========== STATE VARIABLES ==========================
   const [email, setEmail] = useState("");
@@ -74,23 +74,23 @@ const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
   // ========= JSX FOR THE UI OF THE COMPONENT =====================
   // for all styling: use className={styles.Button}
 
-  // const bgGradient = "bg-gradient-to-br from-gray-900 via-customPurple to-customIndigo "
-  // const bgGradientDark = "bg-gradient-to-br from-gray-900 via-customIndigo to-customPink "
-  // const bgGradientLight = "bg-gradient-to-br from-customPink via-customIndigo to-customBlack "
+  const bgGradient = "bg-gradient-to-br from-gray-900 via-customPurple to-customIndigo "
+  const bgGradientDark = "bg-gradient-to-br from-gray-900 via-customIndigo to-customPink "
+  const bgGradientLight = "bg-gradient-to-br from-customPink via-customIndigo to-customBlack "
   const h2Style = "pt-3 pb-3 text-7xl text-white font-extrabold"
-  const buttonStyle = "w-2/5 text-xl text-white font-semibold rounded-lg py-3 px-4 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
+  const buttonStyle = "w-2/5 bg-customPink text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-pink-600 focus:outline-none focus:shadow-outline-pink active:bg-pink-700"
   const fieldStyle = "w-4/5 p-2 rounded-lg border-2 border-gray-300"
     return (
       <>
+      <div className={`flex h-screen ${bgGradientDark}`}>
+
+      {/* LEFT side with image */}
+      <div className="flex-1 hidden lg:flex items-center justify-center w-1/2">
+        <img src={loginImg} alt="Login Image" className="pl-20 flex-col justify-center"></img>
+      </div>
+
       {/* RIGHT side with login form */}
-      <div className="flex-1 pl-40 pr-40 pt-[15rem] pb-[15rem] relative">
-        <button
-          className="absolute top-[3rem] right-[3rem] text-white text-3xl cursor-pointer"
-          onClick={viewWelcome}
-        >
-          X
-        </button>      
-        
+      <div className="flex-1 pl-40 pr-40 pt-80 pb-80">
       <h2 className={h2Style}>Login</h2>
       
       {/* LOGIN FORM */}
@@ -146,8 +146,9 @@ const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
       </p>
     </div>
 
+  </div>
   </>
     );
 }
 
-export default LogInForm;
+export default LogInPage;
