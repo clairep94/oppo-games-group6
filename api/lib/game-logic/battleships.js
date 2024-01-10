@@ -395,6 +395,7 @@ const doFireActionEvent = (game, action) => {
   }]);
   game.oceanGrids[opponentIndex][row][col].hitStatus = true;
   if (locationContents.occupiedByShip) {
+    // Ship hit!
     const { indexInFleet, locationIndexInShip } = locationContents;
     const hitShipPiece = game.shipPieces[opponentIndex][indexInFleet];
     hitShipPiece.sectionHitStatus[locationIndexInShip] = true;
