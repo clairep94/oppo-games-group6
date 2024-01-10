@@ -2,7 +2,7 @@ const Message = require("../models/message");
 const TokenGenerator = require("../lib/token_generator");
 
 const MessagesController = {
-    AddMessage: async (req, res) => { // returns a game doc with author.populate with _id, firstName, lastName, profilePicURL
+    AddMessage: async (req, res) => { 
         const newMessage = new Message({
             gameID: req.body.gameID,
             author: req.body.authorID,
@@ -17,8 +17,6 @@ const MessagesController = {
             });
 
             const token = TokenGenerator.jsonwebtoken(req.user_id) 
-            // res.status(201).json({ message: 'Successful New Message in Messages Controller', token:token, newMessage: populatedMessage, })
-            // res.status(201).json({ message: 'Successful New Message in Messages Controller', token:token, newMessage: populatedMessage, updatedChat: updatedChat  });
             res.status(201).json({ message: 'Successful New Message in Messages Controller', newMessage: result });
 
         } catch (error) {
@@ -26,7 +24,7 @@ const MessagesController = {
             res.status(500).json(error);
         }
     },
-    GetMessages: async (req, res) => { // Returns array of Chat docs, with author.populate with _id, firstName, lastName, profilePicURL OR []
+    GetMessages: async (req, res) => { 
         const gameID = req.params.gameID;
         try {
             const messages = await Message.find(
@@ -36,7 +34,6 @@ const MessagesController = {
                 path: 'author',
                 select: '_id username'})
             const token = TokenGenerator.jsonwebtoken(req.user_id) 
-            // res.status(200).json({ message: 'Successful All Messages in Messages Controller', allMessages: messages, token: token }); 
             res.status(200).json({ message: 'Successful All Messages in Messages Controller', allMessages: messages }); 
 
         } catch (error) {
