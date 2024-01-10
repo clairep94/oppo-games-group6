@@ -138,8 +138,13 @@ const Landing = ({ navigate }) => {
 
 
 
-
+    <div class="bg-black/50 relative left-2/4 transform -translate-x-2/4 text-center -translate-x-2/4 px-6 shadow-lg saturate-200 backdrop-blur-sm">
+      <footer class="text-center py-7 text-white">
+      <p>&copy; 2024 OTTO Games. All rights reserved. A web development project by Claire, Onuora, Perran, Ray, Romain, Sudhansh & Tej</p>
+        </footer>
+      </div>
     </div>
+    
     
     </>
     );

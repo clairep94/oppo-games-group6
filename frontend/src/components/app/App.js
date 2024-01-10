@@ -19,6 +19,8 @@ import SignUpForm from '../sign_up/SignUpForm'
 import ProfilePage from '../profile_page/ProfilePage';
 import Landing from '../landing/Landing';
 import ProtectedRoutes from './ProtectedRoutes';
+import TttInfoPage from '../InfoPage/TttInfoPage';
+import BattleInfoPage from '../InfoPage/BattleshipsInfoPage';
 
 const App = () => {
   const navigate = useNavigate();
@@ -29,6 +31,8 @@ const App = () => {
       {/* ====== NO AUTHENTICATION - Sign Up or Login: ======== */}
 
       <Route path='/rps' element={<RpsInfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
+      <Route path='/tictactoe' element={<TttInfoPage navigate={ useNavigate() } gameTitle={ "Tic Tac Toe" }/>}/>
+      <Route path='/battleships' element={<BattleInfoPage navigate={ useNavigate() } gameTitle={ "Battleships" }/>}/>
       {/* <Route path='/rps/:gameId' element={<GamePage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/> */}
 
       
