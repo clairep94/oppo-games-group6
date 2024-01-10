@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import landingBg from "../../assets/dual-console-image-white.png";
-import SignUpForm from "../sign_up/SignUpPage";
+import SignUpForm from "../sign_up/SignUpForm";
 import LoginForm from "../auth/LoginForm"
 
 const Landing = ({ navigate }) => {
@@ -12,7 +12,7 @@ const Landing = ({ navigate }) => {
     const frostTexture = `
     backdrop-blur-md bg-purple-100/20 shadow-xl shadow-[#444a6b] border-[2.5px] border-white/10 place-self-center`
 
-    const popupContainer = 'flex flex-col items-center justify-center rounded-[2.5rem]'
+    const popupContainer = 'flex flex-col my-auto rounded-[2.5rem]'
 
 
     // This stores the view state --> "Welcome", "Login", "Popup". If NOT Welcome, there is a pop up div with either the login or 
@@ -55,8 +55,8 @@ const Landing = ({ navigate }) => {
                     {/* LOGIN/SIGNUP CONTAINER */}
                     <div className={frostTexture + popupContainer}>
 
-                    {view === "Signup" && (<SignUpForm navigate={navigate}/>)}
-                    {view === "Login" && (<LoginForm navigate={navigate}/>)}
+                    {view === "Signup" && (<SignUpForm navigate={navigate} viewWelcome={viewWelcome} viewLogin={viewLogin}/>)}
+                    {view === "Login" && (<LoginForm navigate={navigate} viewWelcome={viewWelcome} viewSignup={viewLogin}/>)}
 
                     </div>
                     </>

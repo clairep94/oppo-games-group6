@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styles from './SignUpForm.module.css';
 import loginImg from "../../assets/bg-gaming-console-duo-animations.png"
 
-const SignUpForm = ({ navigate }) => {
+const SignUpForm = ({ navigate, viewWelcome, viewLogin }) => {
 
     // =========== STATE VARIABLES ==========================
   const [username, setUsername] = useState("");
@@ -90,13 +90,8 @@ const SignUpForm = ({ navigate }) => {
     setRetypePassword(event.target.value)
   }
 
-
-
-  // const bgGradient = "bg-gradient-to-br from-gray-900 via-customPurple to-customIndigo "
-  // const bgGradientDark = "bg-gradient-to-br from-gray-400 via-blue-400 to-purple-500 "
-  // const bgGradientLight = "bg-gradient-to-br from-customPink via-customIndigo to-customBlack "
   const h2Style = "pt-3 pb-3 text-7xl text-white font-extrabold"
-  const buttonStyle = "w-2/5 bg-customPink text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-pink-600 focus:outline-none focus:shadow-outline-pink active:bg-pink-700"
+    const buttonStyle = "w-2/5 text-xl text-white font-semibold rounded-lg py-3 px-4 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
   const fieldStyle = "w-4/5 p-2 rounded-lg border-2 border-gray-300 flex-col"
   const fieldStyle2 = "w-2/5 p-2 rounded-lg border-2 border-gray-300 mr-1"
 
@@ -104,7 +99,14 @@ const SignUpForm = ({ navigate }) => {
     return (
       <>
  
-      <div className="flex-1 pl-40 pr-40 pt-80 pb-80">
+      <div className="flex-1 pl-40 pr-40 pt-[15rem] pb-[15rem] relative">
+        <button
+          className="absolute top-[3rem] right-[3rem] text-white text-3xl cursor-pointer"
+          onClick={viewWelcome}
+        >
+          X
+        </button>
+        
         <h2 className={h2Style}>Sign Up</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
