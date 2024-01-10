@@ -15,7 +15,7 @@ const OPS = { // Comments describe required `args` property in PUT req body
   PREPARE: "prepare", // { completedShipPlacements : 
   // [{ topLeftCornerLocation, orientation }] /* array of length 5 */ }
   FIRE: "fire", // { currentRound, /* (0~1) */ currentTurn, /* (0~1) */ 
-  // targetLocation: {row, col} }
+  // targetedLocation: {row, col} }
   RESIGN: "resign", // { } /* empty object */
 };
 
@@ -381,8 +381,13 @@ const doFireActionEvent = (game, action) => {
   // Data will have been validated & verified by this point
   const playerIndex = findPlayerIndex(game, action.playerId);
   const opponentIndex = (1 - playerIndex); // rofl
-  const { row, col } = action.args.targetLocation;
+  const { row, col } = action.args.targetedLocation;
   const locationContents = game.oceanGrids[opponentIndex][row][col];
+  game.movesTaken = game.movesTaken.concat([{
+    round: game.currentRound,
+    turn: game.currentTurnWithinRound,
+    targetedLocation: { row: row, col: col }
+  }]);
   game.oceanGrids[opponentIndex][row][col].hitStatus = true;
   if (locationContents.occupiedByShip) {
     const { indexInFleet, locationIndexInShip } = locationContents;
@@ -396,13 +401,35 @@ const doFireActionEvent = (game, action) => {
   // Check for win
   if (countRemainingShips(game, opponentIndex) === 0) {
     doWinTransition(game, action);
+  } else {
+    if (game.currentTurnWithinRound === 0) {
+      game.currentTurnWithinRound = 1;
+    } else if (game.currentTurnWithinRound === 1) {
+      game.currentTurnWithinRound = 0;
+      game.currentRound += 1;
+    }
   }
+  game.markModified('movesTaken');
   game.markModified('oceanGrids');
   game.markModified('shipPieces');
 };
 
 const doWinTransition = (game, action) => {
-  // TOOD
+  game.progressState = STATE_CODES.CONCLUDED;
+  game.concludedAt = Date.now();
+  game.conclusionType = "normal";
+  game.playerResults = [
+    { outcome: null, shipsRemaining: countRemainingShips(game, 0) },
+    { outcome: null, shipsRemaining: countRemainingShips(game, 1) }
+  ];
+  if (game.playerResults[1].shipsRemaining === 0 ) { // First player wins
+    game.playerResults[0].outcome = "won";
+    game.playerResults[1].outcome = "lost";
+  } else { // Second player wins
+    game.playerResults[0].outcome = "lost";
+    game.playerResults[1].outcome = "won";
+  }
+  game.markModified('playerResults');
 };
 
 
