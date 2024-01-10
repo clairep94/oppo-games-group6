@@ -248,9 +248,23 @@ const concludedManager = (game, action) => {
 
 // ====================== TRANSITION & EVENT FUNCTIONS ======================
 
-
 const doJoinGameEvent = (game, action) => {
-  // TODO
+  game.players.push(action.playerId);
+  game.isReady.push(false);
+  if (game.progressState === STATE_CODES.AWAITING_HOST) {
+    doBecomeHostTransition(game, action);
+  }
+};
+
+const doBecomeHostTransition = (game, action) => {
+  game.hostId = action.playerId;
+  // Initialise game object values for new state
+  game.progressState = STATE_CODES.AWAITING_GAME;
+  game.settings = { 
+    spectationPermitted: false,
+    turnOrderAssignmentMechanism: TURN_ORDER_ASSIGNMENT_MECHANISMS.INDEX_0,
+    // (i.e. host starts by default)
+   };
 };
 
 const doUpdateSettingsEvent = (game, action) => {
