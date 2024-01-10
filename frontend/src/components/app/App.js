@@ -14,7 +14,7 @@ import {
 import { isLoggedIn } from '../../utility/LoggedInCheck';
 
 import LoginForm from '../auth/LoginForm'
-import SignUpForm from '../sign_up/SignUpForm'
+import SignUpPage from '../sign_up/SignUpPage'
 // import GamesLobby from '../games_lobby/GamesLobby';
 // import TicTacToe from '../../games/tictactoe/TicTacToe';
 import ProfilePage from '../profile_page/ProfilePage';
@@ -36,7 +36,7 @@ const App = () => {
       <Landing navigate={ navigate }/> : <Navigate to='/'/>}/>
 
       <Route path='/signup' element={ !isLoggedIn() ?
-      <SignUpForm navigate={navigate}/> : <Navigate to='/'/>}/>
+      <SignUpPage navigate={navigate}/> : <Navigate to='/'/>}/>
       
       <Route path='/login' element={ !isLoggedIn() ?
         <LoginForm navigate={navigate}/> : <Navigate to='/'/>}/>
