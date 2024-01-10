@@ -15,9 +15,6 @@ import { isLoggedIn } from '../../utility/LoggedInCheck';
 
 import LoginPage from '../auth/LoginPage'
 import SignUpPage from '../sign_up/SignUpPage'
-// import GamesLobby from '../games_lobby/GamesLobby';
-// import TicTacToe from '../../games/tictactoe/TicTacToe';
-import ProfilePage from '../profile_page/ProfilePage';
 import Landing from '../landing/Landing';
 import ProtectedRoutes from './ProtectedRoutes';
 
@@ -47,3 +44,9 @@ const App = () => {
     </Routes>
   )}
 export default App;
+
+
+
+// emerald-400 
+// emerald-700
+// purple-700

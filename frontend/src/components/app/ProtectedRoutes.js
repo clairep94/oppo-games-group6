@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import {
-  useNavigate,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 
 import { useSessionTimeOutCheck } from '../../utility/LoggedInCheck';
@@ -12,7 +10,7 @@ import LoginPopup from '../auth/LoginPopup';
 import { findUser } from '../../api_calls/usersAPI';
 
 import NavBar from '../navbar/NavBar';
-import GamesLobby from '../games_lobby/GamesLobby';
+import GamesLobby from '../games_lobby/GamesLobby2';
 import TicTacToe from '../../games/tictactoe/TicTacToe_Lowpoly';
 import ProfilePage from '../profile_page/ProfilePage';
 
@@ -67,7 +65,7 @@ const ProtectedRoutes = ({navigate}) => {
   
 
       {/* =============== MAIN PAGE ============================= */}
-      <div className='h-full w-full flex flex-col overflow-none ml-[10.5rem] text-gray-50 m-[3rem]'>
+      <div className='h-full w-full flex flex-col overflow-none text-gray-50'>
   
         <Routes>
           {/* ------ Lobby ------  */}
@@ -89,17 +87,7 @@ const ProtectedRoutes = ({navigate}) => {
         </Routes>
 
       </div>
-        
-        {/* TO DO: Fix this -- just for 9am DEMO */}
-        {/* <img src="/backgrounds/BS1.jpeg" className="h-screen -z-10 absolute" alt='bg'></img> */}
-        <img src="/backgrounds/TTT.jpg" className="h-screen -z-10 absolute" alt='bg'></img>
 
-      {/* BACKGROUND GRADIENTS */}
-      <div className="-z-10 absolute top-[6rem] right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[12rem] sm:w-[68.75rem] bg-[#8e6464]/90"></div>
-      <div className="-z-10 absolute top-[1rem]  left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] bg-[#4f4c6e]"></div>
-      {/* BACKGROUND COLOUR */}
-      <div className='absolute -z-20 h-screen w-screen bg-gray-900 '></div>
-        
     </div>
     );
 
