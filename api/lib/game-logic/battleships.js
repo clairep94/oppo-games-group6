@@ -151,6 +151,13 @@ const awaitingGameManager = (game, action) => {
     } else {
       throw new Error(`JOIN failed (playerId: ${action.playerId}, game.players: ${game.players})`);
     }
+  } else if (action.op === OPS.SETUP) {
+    // Must be the host in order to change settings.
+    if (JSON.stringify(game.hostId) !== JSON.stringify(action.playerId)) {
+      throw new Error(`SETUP failed (playerId: ${action.playerId}, game.hostId: ${game.hostId})`);
+    }
+    validateSettingsObject(action.args.settings);
+    doUpdateSettingsEvent(game, action);
   }
 };
 
@@ -171,6 +178,10 @@ const concludedManager = (game, action) => {
 
 
 const doJoinGameEvent = (game, action) => {
+  // TODO
+};
+
+const doUpdateSettingsEvent = (game, action) => {
   // TODO
 };
 
