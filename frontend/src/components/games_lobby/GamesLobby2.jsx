@@ -5,6 +5,7 @@ import gameCardBattle from "../../assets/BS2.jpg"
 import gameCardTTT from "../../assets/TTT.jpg"
 import gameCardRPS from "../../assets/RPS.jpg"
 import gameCardAll from "../../assets/allGames.png"
+import GameInfoCard from './GameInfoCard';
 
 
 
@@ -19,14 +20,23 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
     {
       title:'Tic-Tac-Toe', 
       endpoint: 'tictactoe',
+      hardCodePlayersOnline: "234",
+      mapName: "Icy Alpines",
+      imgSource: '/cards/BS2.jpg'
     },
     {
       title:'Rock-Paper-Scissors', 
-      endpoint: 'rps'
+      endpoint: 'rps',
+      hardCodePlayersOnline: "108",
+      mapName: "Mellow Meadow",
+      imgSource: '/cards/RPS.jpg'
     },
     {
       title: 'Battleships', 
-      endpoint: 'battleships'
+      endpoint: 'battleships',
+      hardCodePlayersOnline: "84",
+      mapName: "Rocky River",
+      imgSource: '/cards/TTT.jpg'
     }
   ] 
 
@@ -60,6 +70,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
   const [viewTitle, setViewTitle] = useState("All"); // ---> Controls view of the games list: "All", "Open", "Your", "TTT", "RPS", "BS"
 
   const showGames = (view) => { // Function that filters using the corresponding view
+
     setViewTitle(view)
     switch (view) {
       case "All":
@@ -102,7 +113,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
 
   // =========== TAILWIND ==============
-  const frostedGlass = ` bg-gradient-to-r from-gray-300/20 via-purple-100/20 to-purple-900/20 backdrop-blur-sm
+  const frostedGlass = ` bg-gradient-to-r from-gray-300/30 via-purple-100/20 to-purple-900/20 backdrop-blur-sm
   shadow-lg shadow-[#363b54] border-[3px] border-white/10
   `
   const headerContainer = 'flex flex-row w-full h-[8rem] rounded-[1.5rem] p-10 pl-[10rem] justify-right'
@@ -158,59 +169,10 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
                       </figcaption>
                   </div>
 
-                  {/* SINGLE CARD */}
-                  <div className='h-[full] min-w-[35rem] rounded-[1rem] overflow-clip flex flex-col relative text-black hover:cursor-pointer  transition-opacity opacity-90 hover:opacity-100'>
-                      <img class="object-cover object-center w-full h-full rounded-xl" src={gameCardTTT} alt="ttt" />
-                      <figcaption class="absolute bottom-8 left-2/4 transform flex w-[calc(100%-4rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
-                          <div class="transition-opacity hover:opacity-50">
-                            <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                                Tic-Tac-Toe
-                            </h5>
-                            <p class="block mt-2 font-sans text-base antialiased font-normal leading-relaxed text-gray-700">
-                                Play in the Icy Alpines
-                            </p>
-                            </div>
-                            <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                            234 players online
-                            </h5>
-                      </figcaption>
-                  </div>
+                  {gamesMenu.map((game, index) => (
+                      <GameInfoCard game={game} index={index} showGames={showGames}/>
+                  ))}
 
-                {/* SINGLE CARD */}
-                  <div className='h-[full] min-w-[35rem] rounded-[1rem] overflow-clip flex flex-col relative text-black hover:cursor-pointer opacity-90 hover:opacity-100'>
-                      <img class="object-cover object-center w-full h-full rounded-xl" src={gameCardRPS} alt="ttt" />
-                      <figcaption class="absolute bottom-8 left-2/4 transform flex w-[calc(100%-4rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
-                          <div class="transition-opacity hover:opacity-0">
-                          <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                              Rock, Paper, Scissors
-                          </h5>
-                          <p class="block mt-2 font-sans text-base antialiased font-normal leading-relaxed text-gray-700">
-                              Play in the Mellow Meadow
-                          </p>
-                          </div>
-                          <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                          108 players online
-                          </h5>
-                      </figcaption>
-                  </div>
-
-                  {/* SINGLE CARD */}
-                  <div className='h-[full] min-w-[35rem] rounded-[1rem] overflow-clip flex flex-col relative text-black hover:cursor-pointer opacity-90 hover:opacity-100'>
-                      <img class="object-cover object-center w-full h-full rounded-xl" src={gameCardBattle} alt="ttt" />
-                      <figcaption class="absolute bottom-8 left-2/4 transform flex w-[calc(100%-4rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
-                          <div class="transition-opacity hover:opacity-0">
-                          <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                              Battleships
-                          </h5>
-                          <p class="block mt-2 font-sans text-base antialiased font-normal leading-relaxed text-gray-700">
-                              Play in the Rocky River
-                          </p>
-                          </div>
-                          <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                          84 players online
-                          </h5>
-                      </figcaption>
-                  </div>
               </div>
 
               {/* LIST OF GAMES DEPENDING ON THE VIEW */}
