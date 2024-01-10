@@ -38,7 +38,7 @@ const LogInForm = ({ navigate }) => {
       
 
       // TEMP: No timeout login popup:
-      navigate('/lobby')
+      navigate('/')
 
       // FOR FUTURE USE IF HAVING TIMEOUT LOGIN POPUP:
       // // Check the current location and navigate accordingly

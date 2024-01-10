@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {useParams} from "react-router-dom";
 
 import getSessionUserID from "../../utility/getSessionUserID";
+import APIProfilePicture from '../../utility/profilePictureFromAPI'; // placeholder unique profile picture for each userID
 
 
 const ProfilePage = ({ navigate }) => {
@@ -43,13 +44,15 @@ const ProfilePage = ({ navigate }) => {
     }, []);
 
     // ============ JSX FOR THE UI =============
+    // NOTE: this takes the profile picture from a random user profile picture API.
     return (
         <>
             {ownProfile ? 
                 <>
                     <h2>{user ? `${user.username}'s profile`: "Loading"}</h2>
-                    <p>Welcome back {user.username}</p>
+                    <p>Welcome back {user ? `${user.username}`: "Loading"}</p>
                     <h3>Profile:</h3>
+                        <APIProfilePicture id={id}/>
                     <h4>Points: {user ? `${user.points}`: "Loading"}</h4>
                     <h4>Active Games:</h4>
                     <h4>Open Games:</h4>
@@ -61,6 +64,7 @@ const ProfilePage = ({ navigate }) => {
                     <h2>{user ? `${user.username}'s profile`: "Loading"}</h2>
                     <p>Challenger</p>
                     <h3>Profile:</h3>
+                        <APIProfilePicture id={id}/>
                     <h4>Points: {user ? `${user.points}`: "Loading"}</h4>
                     <h4>Active Games:</h4>
                     <h4>Open Games:</h4>

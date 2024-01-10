@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import getSessionUserID from "../../utility/getSessionUserID";
+import NewGameButton from './CreateNewGameButton';
+import GamesList from './GamesList';
 
 
+const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, setSessionUser }) => {
 
-const GamesLobby = ({ navigate }) => {
+  const gamesMenu = [ // <------- LIST OF ENDPOINTS & TITLES FOR EACH GAME!!
+    {title:'Tic-Tac-Toe', endpoint: 'tictactoe'},
+    {title:'Rock-Paper-Scissors', endpoint: 'rps'},
+    {title: 'Battleships', endpoint: 'battleships'}
+  ] 
 
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
-  const sessionUserID = getSessionUserID(token);
-  const games = ['tictactoe'] // <------- LIST OF ENDPOINTS FOR EACH GAME!!
   const [openGames, setOpenGames] = useState(null);
   const [yourGames, setYourGames] = useState(null);
   const [allGames, setAllGames] = useState(null);
@@ -31,86 +34,111 @@ const GamesLobby = ({ navigate }) => {
   }, [])
 
 
-  // ============= LOGOUT ======================== //
-  const logout = () => {
-    window.localStorage.removeItem("token")
-    navigate('/login')
-  }
 
   // ============== JSX FOR UI ========================
 
+  // CLAIRE NOTE: THE BELOW IS COMPLETELY WIP, PLEASE DO NOT TAKE AS FINAL, I WILL CLEAN THIS UP LATER
+
     if(token) {
       return(
-        <>
-          <h2>Games Lobby</h2>
-          <a href={`/users/${sessionUserID}`}>
-            <p>Welcome player {sessionUserID}</p>
-          </a>
-          <div id='create-game-section'>
-            <h3>Create a game:</h3>
+        <div className='mr-10'>
 
-            <div id='create-game-buttons'>
-              {games.map((game) => <>
-              <NewGameButton key={game} game={game} token={token} navigate={navigate} />
+          {/* TITLE CARD */}
+        {/* <img src='gameControllers.png' className='w-[36rem] absolute right-2 bottom-0 -z-10 opacity-80'/> */}
+        
+        <div className='h-[10rem] pl-12 py-6 relative
+          bg-gradient-to-r from-gray-300/20 via-purple-100/20 to-purple-900/20
+          -translate-x-2 backdrop-blur-sm
+          shadow-lg shadow-[#363b54] rounded-[1.5rem] border-[3px] border-white/10'>
+          <h3 className='text-[2.7rem] font-semibold'>
+              {`Hello, @${sessionUser?.username}`}
+          </h3>
+          <p className='text-white/40 text-[1.4rem]'>
+              Welcome back to our platform
+          </p>
+        </div>
+        <img src='triangles.jpg' className='h-[9.5rem] rounded-[1.5rem] -translate-x-5 absolute -z-10 w-[88%] -translate-y-[10rem]'></img>
+
+        <h1 className='text-6xl font-bold mt-10 mb-5'>
+          GAME LOBBY
+        </h1>
+
+
+
+        {/* GAME CARD, STILL TO WORK ON: */}
+        {/* <div class="h-[18rem] w-[18rem] rounded-[3.4rem] bg-gradient-to-br from-pink-300 via-pink-500 to-pink-500 p-2">
+          <img src='tictactoe.png' alt='Tic Tac Toe' className='w-[17rem] z-20 absolute -translate-y-[5rem] translate-x-6' />
+          <h2 className='absolute z-20 font-semibold text-[2.5rem] translate-x-6 translate-y-[12.5rem]'>Tic-Tac-Toe</h2>
+          <div class="flex h-full w-full items-center justify-center bg-pink-400 rounded-[3rem] relative shadow-pink-400 shadow-md opacity-80">
+            <div class="absolute inset-0 backdrop-blur-sm rounded-[3rem]"></div>
+          </div>
+        </div> */}
+
+
+        {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
+        <div id='your-games-section'>
+          <h3 className='text-xl font-bold pb-5'>Your games:</h3>
+          <p className='opacity-70'> **Dev note: O TODO: Your games. Each game has a link, and shows the Game Type, GameID + Forfeit or Delete button based on if there's an opponent **</p>
+
+        </div>
+        {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
+
+          <br/>
+          <hr></hr>
+          <br/>
+
+          {/* CREATE A GAME - BUTTON FOR EACH GAME TYPE - gameType.urlEndpoint & gameType.title */}
+          <div id='create-game-section'>
+            <h3 className='text-xl font-bold pb-5'
+            >Create a game:</h3>
+            <div id='create-game-buttons' className='flex flex-row space-x-3 w-full'>
+              {gamesMenu.map((game) => <>
+              <NewGameButton 
+                key={game.title} 
+                gameTitle={game.title} 
+                gameEndpoint={game.endpoint} 
+                token={token} 
+                navigate={navigate} 
+                sessionUserID={sessionUserID}/>
               <br/>
               </>)}
             </div>
-
+            <p className='opacity-70'> **Dev note: Only TTT works from here, will amend for today **</p>
           </div>
+          {/* CREATE A GAME - BUTTON FOR EACH GAME TYPE - gameType.urlEndpoint & gameType.title */}
 
           <br/>
+          <hr></hr>
+          <br/>
+
+          {/* OPEN GAMES SECTION  */}
+          <div id='open-games-section'>
+          <h3 className='text-xl font-bold pb-5'>Join a Game</h3>
+             <p className='opacity-70'>
+              TODO: Open games. Each game has a join button and a link, and shows the Game Type, GameID + Host ID
+              </p> 
+          </div>
+          {/* OPEN GAMES SECTION  */}
+
+          <br/>
+          <hr></hr>
           <br/>
 
           <div id='temp-all-games'>
-            <h3>Temp: All games:               Will change to the below later, this is just for 3pm:
-            </h3>
+          <h3 className='text-xl font-bold pb-5'>Temp: All games -- only TTT for now, will amend today</h3>
+
               Checking if this is fetching games:
               <br/>
               {allGames ? 'games exist' : 'games not found'}
               <br/>
               {allGames ? `${allGames.length} games found` : 'games not found'}
 
-
-              {allGames && <AllGames allGames={allGames} sessionUserID={sessionUserID}/>}
-              {/* <div id='available_games' role="available_games">
-                  {games.map(
-                    (game) => ( <Game game={ game } key={ game._id } /> )
-                  )}
-              </div> */}
+              {allGames && <GamesList gamesList={allGames} sessionUserID={sessionUserID}/>}
           </div>
 
           <br/>
           <br/>
-
-
-          <div id='open-games-section'>
-            <h3>Join a game:</h3>
-              TODO: Open games. Each game has a join button and a link, and shows the Game Type, GameID + Host ID
-              {/* <div id='available_games' role="available_games">
-                  {games.map(
-                    (game) => ( <Game game={ game } key={ game._id } /> )
-                  )}
-              </div> */}
-          </div>
-
-          <br/>
-          <br/>
-
-          <div id='your-games-section'>
-            <h3>Your games:</h3>
-            TODO: Your games. Each game has a link, and shows the Game Type, GameID + Forfeit or Delete button based on if there's an opponent
-
-          </div>
-
-          <br/>
-          <br/>
-
-          
-
-          <button onClick={logout}>
-            Logout
-          </button>
-        </>
+        </div>
       )
     } else {
       navigate('/login')
@@ -118,99 +146,6 @@ const GamesLobby = ({ navigate }) => {
 }
 
 
-// ============== SUPPORTIVE COMPONENTS ============================================== //
-
-// ----------- NEW GAME BUTTON ---------------------- //
-const NewGameButton = (props) => {
-  const game = props.game
-  const token = props.token
-  const navigate = props.navigate
-  // const gameTitle = props.gameTitle
-
-  const createNewGame = async (event) => {
-    event.preventDefault()
-
-    try {
-      const response = await fetch(`/${game}`, {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({}),
-      });
-  
-      if (response.status === 201) {
-        const data = await response.json();
-        const gameID = data.game._id;
-        navigate(`/${game}/${gameID}`);
-      } else {
-        navigate('/login');
-      }
-    } catch (error) {
-      console.error(`Error creating new ${game} game:`, error);
-      navigate('/login');
-    }
-  };
-
-
-  return (
-    <button
-      aria-label={`create ${game} game button`}
-      onClick={createNewGame}
-      className={`create-${game}-game-button`}
-      id={`create-${game}-game-button`}
-      style={{width: "200px", height: "50px"}}
-    >
-      {`New ${game} game`}
-      {/* TODO: Fix this string to be title case */}
-    </button>
-  )
-
-  };
-
-
-// ---------- TEMP ALL GAMES ------------------ //
-const AllGames = (props) => {
-  const allGames = props.allGames
-  const sessionUserID = props.sessionUserID
-
-
-
-  return(
-    <>
-    <div style={{ height: '200px', overflowY: 'scroll', border: '1px solid #ccc', padding: '5px', width: '70%' }}>
-
-      <ul style={{ listStyle: 'none', padding: 0 }}>
-        {allGames.map((game, index) => (
-          <li key={index} style={{ borderBottom: '1px solid #eee', padding: '5px' }}>
-            <SingleGame game={game} sessionUserID={sessionUserID}/>
-          </li>
-        ))}
-      </ul>
-    </div>
-    </>
-  )
-
-}
-const SingleGame = (props) => {
-  const game = props.game
-  const sessionUserID = props.sessionUserID
-
-  return (
-    <>
-    <a href={`/tictactoe/${game._id}`}>Tictactoe #{game._id}: {game.player_two ? `${game.player_one} vs. ${game.player_two}` : `${game.player_one} awaiting opponent`}</a>
-    {/* TODO: add join button, if open game; forfeit button if your game & not awaiting challenger */}
-    {game.awaiting_challenger && <> <button>Join Game</button> <button>Delete Game</button></>}
-    {/* {game.player_one === sessionUserID && <button>Delete Game</button>} */}
-    {game.player_one === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
-    {game.player_two === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
-
-
-
-    </>
-  )
-}
 
 
 export default GamesLobby;
