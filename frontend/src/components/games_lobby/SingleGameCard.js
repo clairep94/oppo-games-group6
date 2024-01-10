@@ -18,7 +18,7 @@ const SingleGameCard = (props) => {
     if(game && game.playerOne && game.playerTwo){
     return (
     <div className='bg-gray-500/50 rounded-lg py-7 px-7'>
-        <a href={`/${game.endpoint}/${game._id}`}>
+        <a href={`/tictactoe/${game._id}`}>
             {game.title} #{game._id.substring(18)}:  
             {game.playerTwo ? 
                 ` ${game.playerOne.username} vs. ${game.playerTwo.username}` : 

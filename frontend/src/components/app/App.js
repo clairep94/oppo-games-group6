@@ -1,8 +1,8 @@
 import './App.css';
 import React, { useState } from 'react';
 
+
 import InfoPage from '../info-page/InfoPage';
-import GamePage from '../game-page/GamePage';
 
 import {
   useNavigate,
