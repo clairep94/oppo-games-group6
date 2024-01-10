@@ -86,6 +86,9 @@ const ProtectedRoutes = ({navigate}) => {
           {/* -------- RPS ----------- */}
           <Route path='/rps/:gameId' element={<GamePage navigate={ navigate } gameTitle={ "Rock Paper Scissors" }/>}/>
 
+          {/* ---- Battleships ---- */}
+          <Route path='/battleships/:gameId' element={<GamePage navigate={ navigate } gameTitle={ "Battleships" }/>}/>
+
         </Routes>
 
       </div>
