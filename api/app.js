@@ -4,6 +4,7 @@ const path = require("path");
 const logger = require("morgan");
 const JWT = require("jsonwebtoken");
 const dotenv = require ('dotenv');
+const cors = require ('cors')
 
 
 const postsRouter = require("./routes/posts");
@@ -11,6 +12,7 @@ const authenticationRouter = require("./routes/authentication");
 const signUpRouter = require("./routes/signup");
 const usersRouter = require("./routes/users");
 const tictactoeRouter = require("./routes/tictactoe")
+const chatRouter = require("./routes/chat")
 
 const rockPaperScissorsRouter = require("./routes/rock-paper-scissors-games");
 
@@ -28,6 +30,7 @@ app.use(express.json())
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cors())
 
 
 // middleware function to check for valid tokens
@@ -57,6 +60,8 @@ app.use("/tokens", authenticationRouter);
 
 // routes with no authentication:
 app.use("/signup", signUpRouter);
+app.use("/chat", chatRouter);
+
 // routes with authentication:
 app.use("/posts", tokenChecker, postsRouter);
 app.use("/tictactoe", tokenChecker, tictactoeRouter);
