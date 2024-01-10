@@ -59,7 +59,6 @@ const BattleshipsGameSchema = new mongoose.Schema({
     type: [[{ // 1st index: playerIndex (0 ~ 1), 2nd index: indexInFleet of ship (0 ~ 4)
       shipName: String, // Carrier Battleship Cruiser Submarine Destroyer (resp'ly)
       shipLength: Number, //     5          4       3         3         2
-      onOceanGrid: Boolean,
       topLeftCornerLocation: { // This has the lowest (row + col) value
         type: { row: Number, col: Number, }, // Each (0 ~ 9)
       },

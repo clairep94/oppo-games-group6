@@ -304,7 +304,36 @@ const doBeginGameTransition = (game, action) => {
 };
 
 const doPlaceShipsEvent = (game, action) => {
-  // TODO
+  // action.args.completedShipPlacements will be in the form of: 
+  // [{ topLeftCornerLocation, orientation }]
+  // This is an array of length 5
+  const playerIndex = findPlayerIndex(game, action.playerId);
+  [0, 1, 2, 3, 4].forEach((indexInFleet) => {
+    const { topLeftCornerLocation, orientation } = action.args.completedShipPlacements[indexInFleet]
+    game.shipPieces[playerIndex][indexInFleet].topLeftCornerLocation = topLeftCornerLocation;
+    game.shipPieces[playerIndex][indexInFleet].orientation = orientation;
+    const { startRow, startCol } = topLeftCornerLocation;
+    for (let i = 0; i < SHIP_DATA.SHIP_LENGTHS[indexInFleet]; i++) {
+      let row = null;
+      let col = null;
+      if (orientation === ORIENTATIONS.HORIZONTAL) {
+        // ROW stays the same, COL increases
+        row = startRow;
+        col = startCol + i;
+      } else if (orientation === ORIENTATIONS.VERTICAL) {
+        // ROW increases, COL stays the same
+        row = startRow + i;
+        col = startCol;
+      }
+      game.oceanGrids[playerIndex][row][col] = {
+        hitStatus: false,
+        occupiedByShip: true,
+        indexInFleet: indexInFleet,
+        locationIndexInShip: i,
+      };
+    }
+  });
+  game.placementComplete[playerIndex] = true;
 };
 
 const doResignTransition = (game, action) => {
@@ -341,7 +370,6 @@ const getNewGame = () => {
         return {
           shipName: SHIP_DATA.SHIP_NAMES[indexInFleet],
           shipLength: SHIP_DATA.SHIP_LENGTHS[indexInFleet],
-          onOceanGrid: false,
           topLeftCornerLocation: null,
           orientation: null,
           sectionHitStatus: Array.from(
