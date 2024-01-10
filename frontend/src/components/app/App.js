@@ -34,7 +34,7 @@ const App = () => {
 
       
       <Route path='/welcome'  element={!isLoggedIn() ?
-      <Landing navigate={ useNavigate() }/> : <Navigate to='/'/>}/>
+      <Landing navigate={ navigate }/> : <Navigate to='/'/>}/>
 
       <Route path='/signup' element={ !isLoggedIn() ?
       <SignUpForm navigate={navigate}/> : <Navigate to='/'/>}/>
