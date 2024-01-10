@@ -277,7 +277,30 @@ const doUpdateSettingsEvent = (game, action) => {
 };
 
 const doMarkAsReadyEvent = (game, action) => {
-  // TODO
+  const playerIndex = findPlayerIndex(game, action.playerId);
+  game.isReady[playerIndex] = true;
+  if (game.players.length === 2 && game.isReady.every((x) => (x === true))) {
+    doBeginGameTransition(game, action);
+  }
+  game.markModified('isReady');
+};
+
+const doBeginGameTransition = (game, action) => {
+  game.progressState = STATE_CODES.PLACING_SHIPS;
+  game.currentRound = 0;
+  game.currentTurnWithinRound = 0;
+  const mechanism = game.settings.turnOrderAssignmentMechanism;
+  if (mechanism === TURN_ORDER_ASSIGNMENT_MECHANISMS.INDEX_0) {
+    game.turnOrder = [0, 1];
+  } else if (mechanism === TURN_ORDER_ASSIGNMENT_MECHANISMS.INDEX_1) {
+    game.turnOrder = [1, 0];
+  } else if (mechanism === TURN_ORDER_ASSIGNMENT_MECHANISMS.RANDOM) {
+    if (game.randomSeed < 0.5) {
+      game.turnOrder = [0, 1];
+    } else {
+      game.turnOrder = [1, 0];
+    }
+  }
 };
 
 const doPlaceShipsEvent = (game, action) => {
