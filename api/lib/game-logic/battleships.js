@@ -260,7 +260,7 @@ const doBecomeHostTransition = (game, action) => {
   game.hostId = action.playerId;
   // Initialise game object values for new state
   game.progressState = STATE_CODES.AWAITING_GAME;
-  game.settings = { 
+  game.settings = {
     spectationPermitted: false,
     turnOrderAssignmentMechanism: TURN_ORDER_ASSIGNMENT_MECHANISMS.INDEX_0,
     // (i.e. host starts by default)
@@ -268,7 +268,12 @@ const doBecomeHostTransition = (game, action) => {
 };
 
 const doUpdateSettingsEvent = (game, action) => {
-  // TODO
+  // As a side effect, set Ready bools to false if the settings changed
+  if (!checkSettingsEqual(game, action.args.settings)) {
+    game.isReady = game.isReady.map((previous) => false);
+  }
+  game.settings.spectationPermitted = action.args.settings.spectationPermitted;
+  game.settings.turnOrderAssignmentMechanism = action.args.settings.turnOrderAssignmentMechanism;
 };
 
 const doMarkAsReadyEvent = (game, action) => {
