@@ -15,9 +15,9 @@ const SingleGameCard = (props) => {
     // FORFEIT GAME
     // DELETE GAME
 
-    if(game && game.playerOne && game.playerTwo){
+    if(game && game.playerOne){
     return (
-    <div className='bg-gray-500/50 rounded-lg py-7 px-7'>
+    <div className='bg-gray-700/30 rounded-lg w-full px-10 py-5 flex flex-row justify-between'>
         <a href={`/tictactoe/${game._id}`}>
             {game.title} #{game._id.substring(18)}:  
             {game.playerTwo ? 
@@ -25,12 +25,13 @@ const SingleGameCard = (props) => {
                 ` ${game.playerOne.username} is awaiting an opponent`}
         </a>
 
-        {game.playerOne !== sessionUserID && game.awaiting_challenger && <button>Join Game</button>}
+        <div className="flex flex-row space-x-3">
+            {game.playerOne._id !== sessionUserID && !game.playerTwo && <button>Join Game</button>}
 
-        {game.playerOne === sessionUserID && game.awaiting_challenger && <button>Delete Game</button>}
+            {game.playerOne._id === sessionUserID && !game.playerTwo && <button>Delete Game</button>}
 
-        {game.playerOne === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
-        {game.playerTwo === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
+            {((game.playerOne._id === sessionUserID) || (game.playerTwo._id === sessionUserID)) && <button>Forfeit Game</button>}
+        </div>
 
     </div>
     )

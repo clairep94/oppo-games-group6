@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function GameInfoCard({ game, index, showGames }) {
+export default function GameInfoCard({ game, index, showGames, createGame }) {
     const [viewFront, setViewFront] = useState(true);
 
     const flipCard = () => {
@@ -12,15 +12,17 @@ export default function GameInfoCard({ game, index, showGames }) {
 
     const handleCreateButtonClick = (e) => {
         e.stopPropagation(); // Prevents the click event from reaching the parent container
-        console.log("Create");
+        createGame(game)
     };
 
     const handleViewButtonClick = (e) => {
         e.stopPropagation(); // Prevents the click event from reaching the parent container
-        console.log("View");
         showGames(game.title);
     };
 
+
+
+    // ============== JSX FOR UI ========================
     return (
         <div
             id={index}

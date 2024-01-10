@@ -166,19 +166,34 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
 
     // ------------ STYLING STRINGS -----------------
 
+    const frostedGlass = ` bg-gradient-to-r from-gray-300/30 via-purple-100/20 to-purple-900/20 backdrop-blur-sm
+    shadow-lg shadow-[#363b54] border-[3px] border-white/10
+    `
+    const headerContainer = 'flex flex-row w-full h-[8rem] rounded-[1.5rem] p-10 pl-[10rem] justify-right'
+
+
     const frostedGlassContainerTexture = `
     backdrop-blur-md bg-purple-100/20 shadow-lg shadow-[#444a6b] border-[2.5px] border-white/10`
 
     // ============ JSX FOR THE UI =============
     if (game) {
         return (
-            <>
+        <div
+            className=" flex flex-row items-center justify-center"
+            style={{ backgroundImage: 'url(/backgrounds/islandfar.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}>
 
-        <div className={`flex flex-row items-center px-[5rem] w-full mr-5 rounded-[2rem] place-self-center py-10 mb-10` + frostedGlassContainerTexture} >
-            <h1 className="text-6xl"> ALPINE MAP: TIC-TAC-TOE</h1>
-        </div>
+          {/* PAGE CONTAINER */}
+          <div className='flex flex-col w-full h-full justify-between'>
 
-        <div className=" w-full h-full flex flex-col">
+            {/* HEADER */}
+            <div className={headerContainer + frostedGlass + 'justify-between items-center'}>
+              {/* HEADER GREETING */}
+              <div className='flex flex-col space-y-5'>
+                <h3 className='text-5xl text-white font-extrabold'>
+                  ALPINE MAP: TIC-TAC-TOE
+                </h3>
+              </div>
+            </div>
             
             {/* INTRO & GAME CONTAINER */}
             <div className="flex flex-row">
@@ -197,15 +212,22 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                         Your challenge will be {" "}
                         <span className="text-3xl font-bold">Tic-Tac-Toe</span>
                     </p>
-                    <p className="pb-4 text-xl">
-                        Your opponent is {" "}
-                        <span className="text-3xl font-bold">{sessionUserID === game.playerOne._id ? game.playerTwo.username: game.playerOne.username}</span>
-                    </p>
+                    
+                    {game.playerTwo ? (
+                        <>
+                            <p className="pb-4 text-xl">
+                                Your opponent is {" "}
+                                <span className="text-3xl font-bold">{sessionUserID === game.playerOne._id ? game.playerTwo.username: game.playerOne.username}</span>
+                            </p>
 
-                    <p className="text-xl">
-                        Whose turn: {" "}
-                        <span className="text-3xl font-bold">{sessionUserID === game.playerOne._id ? game.playerTwo.username: game.playerOne.username}</span>
-                    </p>
+                            <p className="text-xl">
+                                Whose turn: {" "}
+                                <span className="text-3xl font-bold">{sessionUserID === game.playerOne._id ? game.playerTwo.username: game.playerOne.username}</span>
+                            </p>
+                        </>
+                    ):(<>
+                        <p>Awaiting player two</p>
+                    </>)}
                 </div>
 
                 {/* GAME CONTAINER */}
@@ -215,7 +237,7 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                     <TicTacToeBoard gameBoard={game.gameBoard} onButtonClick={handlePlacePiece}/>
                     
                     {/* Forfeit button -- only shows if sessionUser is a player && game is not over */}
-                    {!game.finished && (sessionUserID === game.playerOne._id || sessionUserID === game.playerTwo._id) &&
+                    {!game.finished && game.playerTwo && (sessionUserID === game.playerOne._id || sessionUserID === game.playerTwo._id) &&
                         (<button onClick={handleForfeit} className="bg-black/70 p-4 w-[13rem] rounded-lg">
                             {forfeitButtonMessage}
                         </button>)
@@ -236,12 +258,12 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
             <div className={"flex flex-col w-3/4 p-10 rounded-[2rem] h-[28rem] justify-between opacity-80 mt-[4rem]" + frostedGlassContainerTexture}>
                 <h3 className="font-bold text-3xl">Chat container</h3>
                 <div className="space-y-3">
-                    <p>{game.playerOne.username}: {'  '}Wow nice move</p>
+                    {/* <p>{game.playerOne.username}: {'  '}Wow nice move</p>
                     <p>{game.playerTwo.username}: {'  '}Thanks man</p>
                     <p>{game.playerOne.username}: {'  '}Ok I'll get you next time</p>
                     <p>{game.playerTwo.username}: {'  '}lol sure</p>
                     <p>{game.playerOne.username}: {'  '}go again?</p>
-                    <p>{game.playerTwo.username}: {'  '}ya sounds good</p>
+                    <p>{game.playerTwo.username}: {'  '}ya sounds good</p> */}
                 </div>
                 <div className="rounded-lg border-2 p-3">
                     Write message here...
@@ -263,9 +285,9 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
 
                 <br></br>
 
-        </div>
 
-            </>
+</div>
+            </div>
         )
     }
 };

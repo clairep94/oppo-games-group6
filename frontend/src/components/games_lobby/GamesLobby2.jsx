@@ -1,20 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import NewGameButton from './CreateNewGameButton';
-import GamesList from './GamesList';
-import gameCardBattle from "../../assets/BS2.jpg"
-import gameCardTTT from "../../assets/TTT.jpg"
-import gameCardRPS from "../../assets/RPS.jpg"
-import gameCardAll from "../../assets/allGames.png"
 import GameInfoCard from './GameInfoCard';
-
+import SingleGameCard from './SingleGameCard';
 
 
 const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, setSessionUser }) => {
 
 
   // ======= GAME DATA ================
-  const [allGames, setAllGames] = useState(null); // ---> USE FILTERING METHOD
-  const [displayGames, setDisplayGames] = useState(null);
+  const [allGames, setAllGames] = useState([]); // ---> USE FILTERING METHOD
+  const [displayGames, setDisplayGames] = useState([]);
 
   const gamesMenu = [ // <------- LIST OF ENDPOINTS, TITLES, IMAGE SOURCES FOR EACH GAME!! --> USE TO MAP OVER THE CARDS
     {
@@ -54,24 +48,58 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
           window.localStorage.setItem("token", data.token)
           setToken(window.localStorage.getItem("token"))
           setAllGames(data.games);
+          setDisplayGames(data.games);
         })
     }
   }, [])
 
 
   // =========== CREATING A GAME =================== //
+  // add new game to allGames
+  const createGame = async (game) => {
+    console.log(`Create ${game.title}`)
+    if(token) {
+      try {
+        const response = await fetch(`/${game.endpoint}`, {
+            method: 'post',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            }
+            });
+        
+            if (response.status === 201) {
+            const data = await response.json();
+            const gameID = data.game._id;
+            setAllGames([...allGames, data.game])
+
+            navigate(`/${game.endpoint}/${gameID}`);
+
+            } else {
+            console.log("error creating game")
+            // navigate('/login');
+            }
+      } catch (error) {
+        console.error(`Error creating new ${game.title} game:`, error);
+        // navigate('/login');
+      }
+    }
+  }
 
 
-  // =========== JOINING A GAME =================== //
-
+  // =========== JOINING/FOREFEIT/DELETE A GAME =================== // --> SEE SINGLE GAME CARD
+  // add sessionUser to game.playerTwo
+  // forfeit game
+  // delete game
 
 
   // ======= GAME LIST VIEW ==============    
   const [viewTitle, setViewTitle] = useState("All"); // ---> Controls view of the games list: "All", "Open", "Your", "TTT", "RPS", "BS"
 
   const showGames = (view) => { // Function that filters using the corresponding view
-
     setViewTitle(view)
+    // fetch Games
+
     switch (view) {
       case "All":
         setDisplayGames(allGames);
@@ -170,7 +198,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
                   </div>
 
                   {gamesMenu.map((game, index) => (
-                      <GameInfoCard game={game} index={index} showGames={showGames}/>
+                      <GameInfoCard game={game} index={index} showGames={showGames} createGame={createGame}/>
                   ))}
 
               </div>
@@ -179,11 +207,12 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
               <h3 className='text-3xl text-white font-extrabold'>
                 {viewTitle}{' '}Games
               </h3>
-
-              <div className='flex flex-col bg-gray-600/40 rounded-[1rem] h-[40%] overflow-x-scroll pt-3 pl-2 pr-2 pb-6 border-2 space-x-3 border-white/20'>
-                <p className='text-2xl opacity-70'>
-                  Game
-                </p>
+              
+              {/* GAMES LIST - Show in anti-chronological order */}
+              <div className='flex flex-col bg-gray-600/40 rounded-[1rem] h-[40%] overflow-y-auto pt-3 pl-2 pr-2 pb-6 border-2 space-y-1 border-white/20'>
+                {displayGames.slice().reverse().map((game => (
+                  <SingleGameCard key={game._id} game={game} sessionUserID={sessionUserID}/>
+                )))}
               </div>
           </div>
 
