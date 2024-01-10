@@ -7,9 +7,11 @@ const OPS = { // Comments describe required `args` property in PUT req body
   JOIN: "join", // { } /* empty object */
   SETUP: "setup", // { settings }
   READY: "ready", // { settings }
-  PLACE: "place", // { indexInFleet, topLeftCornerLocation: { row, col },
-  // orientation /* "horizontal", "vertical" */ }
-  UNPLACE: "unplace", // { indexInFleet }
+  // **** use PREPARE instead of PLACE & UNPLACE; ****
+  // **** handle placement code in frontend **********
+  // PLACE: "place", // { indexInFleet, topLeftCornerLocation: { row, col },
+  // // orientation /* "horizontal", "vertical" */ }
+  // UNPLACE: "unplace", // { indexInFleet }
   PREPARE: "prepare", // { completedShipPlacements : 
   // [{ topLeftCornerLocation, orientation }] /* array of length 5 */ }
   FIRE: "fire", // { currentRound, /* (0~1) */ currentTurn, /* (0~1) */ 
@@ -80,6 +82,13 @@ const validateSettingsObject = (settings) => {
   }
   if (!Object.values(TURN_ORDER_ASSIGNMENT_MECHANISMS).includes(settings.turnOrderAssignmentMechanism)) {
     throw new Error(`settings.turnOrderAssignmentMechanism of ${settings.turnOrderAssignmentMechanism} is invalid`);
+  }
+};
+
+const validateShipsPlacement = (shipsPlacement) => {
+  // TODO
+  if (false) {
+    throw new Error(`shipsPlacement invalid due to <REASON>`);
   }
 };
 
@@ -174,7 +183,19 @@ const awaitingGameManager = (game, action) => {
 };
 
 const placingShipsManager = (game, action) => {
-  // TODO
+  // Valid ops: PREPARE, RESIGN
+  if (action.op === OPS.PREPARE) {
+    const playerIndex = findPlayerIndex(game, action.playerId);
+    if (playerIndex === -1) {
+      throw new Error(`PREPARE failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+    validateShipsPlacement(action.args.shipsPlacement);
+    // Can't overwrite placement once submitted
+    if (game.placementComplete[playerIndex] === true) {
+      throw new Error(`PREPARE failed (game.placementComplete[${playerIndex}]: ${game.placementComplete[playerIndex]})`);
+    }
+    doPlaceShipsEvent(game, action);
+  }
 };
 
 const takingTurnsManager = (game, action) => {
@@ -200,6 +221,11 @@ const doUpdateSettingsEvent = (game, action) => {
 const doMarkAsReadyEvent = (game, action) => {
   // TODO
 };
+
+const doPlaceShipsEvent = (game, action) => {
+  // TODO
+};
+
 
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
@@ -237,6 +263,7 @@ const getNewGame = () => {
         };
       });
     }),
+    placementComplete: [false, false],
     oceanGrids: [0, 1].map(playerIndex => {
       return Array.from({ length: 10 }, (_, i) => {
         return Array.from({ length: 10 }, (_1, _2) => {

@@ -70,6 +70,7 @@ const BattleshipsGameSchema = new mongoose.Schema({
       hasSunk: Boolean,
     }]],
   },
+  placementComplete: [Boolean],
   oceanGrids: {
     type: [[[OceanGridLocationContents]]],
     // 1st index: playerIndex (0 ~ 1),
