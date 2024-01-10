@@ -1,8 +1,7 @@
 import './App.css';
 import React, { useState } from 'react';
 
-
-import InfoPage from '../info-page/InfoPage';
+import RpsInfoPage from '../InfoPage/RpsInfoPage';
 
 import {
   useNavigate,
@@ -29,7 +28,7 @@ const App = () => {
     <Routes>
       {/* ====== NO AUTHENTICATION - Sign Up or Login: ======== */}
 
-      <Route path='/rps' element={<InfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
+      <Route path='/rps' element={<RpsInfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
       {/* <Route path='/rps/:gameId' element={<GamePage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/> */}
 
       

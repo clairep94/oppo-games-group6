@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import MiniNavBar from "../navbar/MiniNavBar";
 import gameCardRPSImage from "../../assets/yellow-green-low-poly-landscape-1th24g6bt64mgokg.jpg"
+import tttSingle from "../../assets/TTT-single-image.png" // TODO: Change to rock paper scissors images
 
 //STYLE VARS
 const buttonStyleGamePage = "pr-20 pl-20 bg-purple-900 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:outline-purple-900 focus:shadow-outline-purple-900 active:bg-emerald-700";
 const bgGradient = "bg-gradient-to-br from-emerald-400 via-emerald-700 to-purple-700 h-screen"
 const basicFont = "pt-3 text-black text-lg font-medium tracking-wide text-wrap text-center"
-const h1Style = "pt-3 text-6xl text-white font-extrabold text-center"
+const h1Style = "pt-3 text-6xl text-grey font-extrabold text-center"
 
 
 
-const InfoPage = ({ navigate, gameTitle }) => {
+const RpsInfoPage = ({ navigate, gameTitle }) => {
 
   const gameCardRPS = {
     backgroundImage: `url(${gameCardRPSImage})`,
@@ -61,13 +62,13 @@ const InfoPage = ({ navigate, gameTitle }) => {
       
         <MiniNavBar />
 
-        <div class="container mx-auto">
+        <div class="container mx-auto mt-40">
         <div class="flex justify-end">
         <div class="text-left w-3/5 pr-4">
         
         
 
-        <div className="flex flex-col min-h-full justify-center mr-40">
+        <div className="flex flex-col min-h-full justify-center mr-40  rounded-xl border border-white bg-white/50 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
         <h1 className={h1Style}>Rock Paper Scissors</h1>
         <p className={basicFont}> 
           Simultaneous moves? How does that work? With our hidden information game system,
@@ -95,7 +96,7 @@ const InfoPage = ({ navigate, gameTitle }) => {
 
         <div class="w-2/5 flex flex-col justify-center">
             <img 
-                src={gameCardRPSImage} 
+                src={tttSingle} 
                 alt="3d-game-console-in-purple" 
                 width="700px"
                 className="transition duration-500 ease-in-out transition-transform hover:scale-110"
@@ -117,4 +118,4 @@ const InfoPage = ({ navigate, gameTitle }) => {
   }
 };
 
-export default InfoPage;
+export default RpsInfoPage;

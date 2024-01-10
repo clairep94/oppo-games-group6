@@ -14,7 +14,9 @@ const Landing = ({ navigate }) => {
     const buttonStyle = "w-2/5 bg-purple-900 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:outline-purple-900 focus:shadow-outline-purple-900 active:bg-emerald-700"
 
     const buttonStyle2 = "bg-purple-900 mr-2 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:shadow-outline-purple-900"
-
+    //purple-900
+    //purple-600
+    //emerald-700
 
     return (
         <>
@@ -70,7 +72,7 @@ const Landing = ({ navigate }) => {
             <figcaption class="absolute bottom-8 left-2/4 transform -translate-x-2/4 flex w-[calc(100%-4rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
                 <div class="transition-opacity hover:opacity-0">
                 <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                    Tic-Tac-Toe
+                    Tic Tac Toe
                 </h5>
                 <p class="block mt-2 font-sans text-base antialiased font-normal leading-relaxed text-gray-700">
                     play against a player and win

@@ -78,11 +78,12 @@ const LogInForm = ({ navigate }) => {
   const bgGradientDark = "bg-gradient-to-br from-gray-900 via-customIndigo to-customPink "
   const bgGradientLight = "bg-gradient-to-br from-customPink via-customIndigo to-customBlack "
   const h2Style = "pt-3 pb-3 text-7xl text-white font-extrabold"
-  const buttonStyle = "w-2/5 bg-customPink text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-pink-600 focus:outline-none focus:shadow-outline-pink active:bg-pink-700"
+  const buttonStyle = "w-2/5 bg-purple-900 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:outline-purple-900 focus:shadow-outline-purple-900 active:bg-emerald-700"
   const fieldStyle = "w-4/5 p-2 rounded-lg border-2 border-gray-300"
     return (
       <>
       <div className={`flex h-screen ${bgGradientDark}`}>
+      
 
       {/* LEFT side with image */}
       <div className="flex-1 hidden lg:flex items-center justify-center w-1/2">

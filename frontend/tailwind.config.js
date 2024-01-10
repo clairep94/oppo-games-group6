@@ -7,3 +7,6 @@ module.exports = {
   plugins: [],
 }
 
+    //purple-900
+    //purple-600
+    //emerald-700
