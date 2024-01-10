@@ -1,4 +1,80 @@
-# Battleship Site
+# OppoGames
+
+OppoGames is a fullstack social-gaming site, showcasing use of the MERN stack, Socket.io and Tailwind CSS.
+
+Users can sign up, log in, and play a number of mini-games 1v1 with other users. Users can see their opponents moves in real-time.
+
+## Installing Project Dependencies:
+
+### Node.js
+1. Install Node Version Manager (nvm)
+   ```
+   brew install nvm
+   ```
+   Then follow the instructions to update your `~/.bash_profile`.
+2. Open a new terminal
+3. Install the latest version of [Node.js](https://nodejs.org/en/), currently `18.1.0`.
+   ```
+   nvm install 18
+   ```
+
+### MongoDB
+1. Install MongoDB
+   ```
+   brew tap mongodb/brew
+   brew install mongodb-community@5.0
+   ```
+   *Note:* If you see a message that says `If you need to have mongodb-community@5.0 first in your PATH, run:`, follow the instruction. Restart your terminal after this.
+2. Start MongoDB
+   ```
+   brew services start mongodb-community@5.0
+   ```
+
+### Packages:
+1. npm install in the three main folders:
+
+   ``` shell
+   ; cd api
+   ; npm install
+   ; cd ../frontend
+   ; npm install
+   ; cd ../socket
+   ; npm install
+   ```
+
+# Running the App:
+
+1. Start the server application (in the `api` directory)
+
+   ```shell
+   ; cd api
+   ; JWT_SECRET=f6d278bb34e1d0e146a80b16ec254c05 npm start
+   ```
+
+2. Start the front end application (in the `frontend` directory)
+
+  In a new terminal session...
+
+  ```shell
+  ; cd frontend
+  ; npm start
+  ```
+
+You should now be able to open your browser and go to `http://localhost:3000/`
+
+3. Start the socket (in the `socket` directory)
+
+   In a new terminal session...
+
+```shell
+; cd socket
+; npm start
+```
+
+
+
+<!---
+
 
 ## Quickstart
 
@@ -130,4 +206,4 @@ If you have issues that are not resolved by these tips, please reach out to a co
 
 [More documentation of the codebase and its architecture can be found here.](./DOCUMENTATION.md) It's recommended you all read this _after making sure the whole setup below worked for everyone_. Then work together on a diagram describing how the application works.
 
-[A template Miro board for your diagrams can be found here.](https://miro.com/app/board/uXjVPqNzFfc=/?share_link_id=360271550320) Make sure your validate your diagrams with your coach.
+[A template Miro board for your diagrams can be found here.](https://miro.com/app/board/uXjVPqNzFfc=/?share_link_id=360271550320) Make sure your validate your diagrams with your coach. --->
