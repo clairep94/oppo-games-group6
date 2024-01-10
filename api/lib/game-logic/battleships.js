@@ -119,18 +119,6 @@ const registerSuccessfulAction = (game, action) => {
 
 // ============================= STATE MANAGERS =============================
 
-// const getStateManager = (progressState) => {
-//   if (progressState === STATE_CODES.AWAITING_HOST) {
-//     return awaitingHostManager;
-//   } else if (progressState === STATE_CODES.AWAITING_GAME) {
-//     return awaitingGameManager;
-//   } else if (progressState === STATE_CODES.PLAYING_GAME) {
-//     return playingGameManager;
-//   } else if (progressState === STATE_CODES.CONCLUDED) {
-//     return concludedManager;
-//   }
-// };
-
 const getStateManager = (progressState) => {
   if (progressState === STATE_CODES.AWAITING_HOST) {
     return awaitingHostManager;
@@ -146,7 +134,13 @@ const getStateManager = (progressState) => {
 };
 
 const awaitingHostManager = (game, action) => {
-  // TODO
+  // Valid ops: JOIN
+  if (action.op === OPS.JOIN) {
+    // Join as host
+    doJoinGameEvent(game, action);
+  } else {
+    throw new Error(`Op invalid while AWAITING_HOST: ${action.op}`);
+  }
 };
 
 const awaitingGameManager = (game, action) => {
@@ -164,6 +158,15 @@ const takingTurnsManager = (game, action) => {
 const concludedManager = (game, action) => {
   // TODO
 };
+
+
+// ====================== TRANSITION & EVENT FUNCTIONS ======================
+
+
+const doJoinGameEvent = (game, action) => {
+  // TODO
+};
+
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
 
