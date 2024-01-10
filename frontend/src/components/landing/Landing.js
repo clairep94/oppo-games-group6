@@ -1,9 +1,9 @@
-import landingBg from "../../assets/bg-gaming-console-duo-animations.png"
+import landingBg from "../../assets/dual-console-image-white.png"
 
 const Landing = ({ navigate }) => {
 
-    const basicFont = "pt-3 text-white text-lg font-extralight tracking-widest text-wrap"
-    const bgGradient = "bg-gradient-to-br from-customPurple via-customIndigo to-customPink "
+    const basicFont = "pt-3 text-white text-lg font-light tracking-widest text-wrap"
+    const bgGradient = "bg-gradient-to-br from-indigo-800 via-purple-500 to-purple-900 "
     const bgGradientLight = "bg-gradient-to-br from-customPink via-customIndigo to-customBlack "
     const h1Style = "pt-3 text-8xl text-white font-extrabold"
     const buttonStyle = "w-2/5 bg-customPink text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-pink-600 focus:outline-none focus:shadow-outline-pink active:bg-pink-700"
@@ -40,7 +40,7 @@ const Landing = ({ navigate }) => {
                 src={landingBg} 
                 alt="3d-game-console-in-purple" 
                 width="700px"
-                className="transition duration-700 ease-in-out transition-transform hover:scale-110"
+                className="transition duration-500 ease-in-out transition-transform hover:scale-110"
                 ></img>
         </div>
         </div>

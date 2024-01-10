@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import loginImg from "../../assets/gaming-comuter-headphones-set.png"
+import loginImg from "../../assets/single-console-stand.png"
 // import { useLocation } from 'react-router-dom'; // use this for login-popup when timed-out
 // import styles from './LoginForm.module.css'
 
