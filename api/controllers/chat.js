@@ -31,6 +31,7 @@ export const findChat = async (req,res) => {
     const chat = await Chat.findOne({
       members: {$all: [req.params.firstID, req.params.secondID]}
     })
+    res.status(200).json(chat)
   } catch(error) {
     res.status(500).json(error)
   }
