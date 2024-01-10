@@ -139,7 +139,12 @@ const registerSuccessfulAction = (game, action) => {
 };
 
 const countRemainingShips = (game, playerIndex) => {
-  // TODO
+  let shipsCounted = 0;
+  game.shipPieces[playerIndex].forEach((shipPiece) => {
+    if (shipPiece.hasSunk === false) {
+      shipsCounted += 1;
+  }});
+  return shipsCounted;
 };
 
 
