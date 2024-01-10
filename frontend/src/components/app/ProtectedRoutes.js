@@ -13,7 +13,7 @@ import { findUser } from '../../api_calls/usersAPI';
 
 import NavBar from '../navbar/NavBar';
 import GamesLobby from '../games_lobby/GamesLobby';
-import TicTacToe from '../../games/tictactoe/TicTacToe';
+import TicTacToe from '../../games/tictactoe/TicTacToe_Lowpoly';
 import ProfilePage from '../profile_page/ProfilePage';
 
 import GamePage from '../game-page/GamePage';
@@ -89,13 +89,17 @@ const ProtectedRoutes = ({navigate}) => {
         </Routes>
 
       </div>
-      
+        
+        {/* TO DO: Fix this -- just for 9am DEMO */}
+        <img src="/backgrounds/TTT.jpg" 
+          className="h-screen -z-10 absolute"
+          alt='bg'></img>
+
       {/* BACKGROUND GRADIENTS */}
-      <div className="-z-10 absolute top-[6rem] right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[10rem] sm:w-[68.75rem] bg-[#8e6464]/90"></div>
+      <div className="-z-10 absolute top-[6rem] right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[12rem] sm:w-[68.75rem] bg-[#8e6464]/90"></div>
       <div className="-z-10 absolute top-[1rem]  left-[-35rem] h-[31.25rem] w-[50rem] rounded-full blur-[10rem] sm:w-[68.75rem] md:left-[-33rem] lg:left-[-28rem] xl:left-[-15rem] 2xl:left-[-5rem] bg-[#4f4c6e]"></div>
       {/* BACKGROUND COLOUR */}
       <div className='absolute -z-20 h-screen w-screen bg-gray-900 '></div>
-        
         
     </div>
     );
