@@ -144,7 +144,14 @@ const awaitingHostManager = (game, action) => {
 };
 
 const awaitingGameManager = (game, action) => {
-  // TODO
+  // Valid ops: JOIN, SETUP (settings), READY (agreedSettings)
+  if (action.op === OPS.JOIN) {
+    if (game.players.length < 2 && findPlayerIndex(game, action.playerId) === -1) {
+      doJoinGameEvent(game, action);
+    } else {
+      throw new Error(`JOIN failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+  }
 };
 
 const placingShipsManager = (game, action) => {
