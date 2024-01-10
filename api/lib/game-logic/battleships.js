@@ -158,6 +158,18 @@ const awaitingGameManager = (game, action) => {
     }
     validateSettingsObject(action.args.settings);
     doUpdateSettingsEvent(game, action);
+  } else if (action.op === OPS.READY) {
+    if (findPlayerIndex(game, action.playerId) === -1 ) {
+      throw new Error(`READY failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+    validateSettingsObject(action.args.settings);
+    if (checkSettingsEqual(game, action.args.settings)) {
+      doMarkAsReadyEvent(game, action);
+    } else {
+      throw new Error(`READY failed (args.settings: ${action.args.settings}, game.settings: ${game.settings})`);
+    }
+  } else {
+    throw new Error(`Op invalid while AWAITING_HOST: ${action.op}`);
   }
 };
 
@@ -182,6 +194,10 @@ const doJoinGameEvent = (game, action) => {
 };
 
 const doUpdateSettingsEvent = (game, action) => {
+  // TODO
+};
+
+const doMarkAsReadyEvent = (game, action) => {
   // TODO
 };
 
