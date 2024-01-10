@@ -32,7 +32,6 @@ const App = () => {
       <Route path='/rps' element={<InfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
       {/* <Route path='/rps/:gameId' element={<GamePage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/> */}
 
-      
       <Route path='/welcome'  element={!isLoggedIn() ?
       <Landing navigate={ navigate }/> : <Navigate to='/'/>}/>
 
@@ -44,7 +43,7 @@ const App = () => {
 
       {/* ====== AUTHENTICATION ONLY - Lobby, Games, etc. : ======== */}
       <Route path='/*'  element={ isLoggedIn() ?         
-        <ProtectedRoutes navigate={navigate}/> : <Navigate to='/login'/>}/>
+        <ProtectedRoutes navigate={navigate}/> : <Navigate to='/welcome'/>}/>
         
     </Routes>
   )}

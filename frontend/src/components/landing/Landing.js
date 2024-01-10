@@ -12,8 +12,10 @@ const Landing = ({ navigate }) => {
         <>
      {/* comment  */}
 
-    <div className={bgGradient}>
-    <div class="container mx-auto">
+    {/* <div className={bgGradient}> */}
+    <div >
+    <div class="container">
+        <img className="-z-10 absolute h-full w-full " src='/backgrounds/islandfar.jpg' alt='bg far'/>
         <div class="flex justify-end">
         <div class="text-left w-3/5 pr-4">
             
@@ -36,15 +38,16 @@ const Landing = ({ navigate }) => {
         </div>
 
         <div class="w-2/5 min-h-screen flex flex-col justify-center">
-            <img 
+            {/* <img 
                 src={landingBg} 
                 alt="3d-game-console-in-purple" 
                 width="700px"
                 className="transition duration-500 ease-in-out transition-transform hover:scale-110"
-                ></img>
+                ></img> */}
         </div>
         </div>
     </div>
+
     </div>
 
     </>
