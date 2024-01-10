@@ -85,13 +85,26 @@ const validateSettingsObject = (settings) => {
   }
 };
 
-const validateShipPlacements = (completedShipPlacement) => {
+const validateShipPlacements = (completedShipPlacements) => {
   // TODO
   if (false) {
-    throw new Error(`completedShipPlacement invalid due to <REASON>`);
+    throw new Error(`completedShipPlacements invalid due to <REASON>`);
   }
 };
 
+const validateFireAction = (action) => {
+  // TODO
+  if (false) {
+    throw new Error(`action.args invalid due to <REASON>`);
+  }
+};
+
+const verifyFireAction = (game, action) => {
+  // TODO
+  if (false) {
+    throw new Error(`fire action invalid due to <REASON>`);
+  }
+};
 
 // ===================== MISCELLANEOUS UTILITY FUNCTIONS ====================
 
@@ -189,7 +202,7 @@ const placingShipsManager = (game, action) => {
     if (playerIndex === -1) {
       throw new Error(`PREPARE failed (playerId: ${action.playerId}, game.players: ${game.players})`);
     }
-    validateShipPlacements(action.args.completedShipPlacement);
+    validateShipPlacements(action.args.completedShipPlacements);
     // Can't overwrite placement once submitted
     if (game.placementComplete[playerIndex] === true) {
       throw new Error(`PREPARE failed (game.placementComplete[${playerIndex}]: ${game.placementComplete[playerIndex]})`);
@@ -209,7 +222,13 @@ const placingShipsManager = (game, action) => {
 const takingTurnsManager = (game, action) => {
   // Valid ops: FIRE (currentRound, currentTurn, (row, col)), RESIGN
   if (action.op === OPS.FIRE) {
-    // TODO
+    const playerIndex = findPlayerIndex(game, action.playerId);
+    if (playerIndex === -1) {
+      throw new Error(`FIRE failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+    validateFireAction(action);
+    verifyFireAction(game, action);
+    doFireActionEvent(game, action);
   } else if (action.op === OPS.RESIGN) {
     const playerIndex = findPlayerIndex(game, action.playerId);
     if (playerIndex === -1) {
@@ -249,6 +268,10 @@ const doPlaceShipsEvent = (game, action) => {
 const doResignTransition = (game, action) => {
   // TODO
 };
+
+const doFireActionEvent = (game, action) => {
+  // TODO
+}
 
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
