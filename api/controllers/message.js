@@ -1,5 +1,5 @@
 const Message = require("../models/message");
-const TokenGenerator = require("../lib/token_generator");
+//const TokenGenerator = require("../lib/token_generator");
 
 const MessagesController = {
     AddMessage: async (req, res) => { 
@@ -15,7 +15,7 @@ const MessagesController = {
                 select: '_id username', 
             });
 
-            const token = TokenGenerator.jsonwebtoken(req.user_id) 
+            //const token = TokenGenerator.jsonwebtoken(req.user_id) 
             res.status(201).json({ message: 'Successful New Message in Messages Controller', newMessage: result });
 
         } catch (error) {
@@ -32,7 +32,7 @@ const MessagesController = {
             .populate({
                 path: 'author',
                 select: '_id username'})
-            const token = TokenGenerator.jsonwebtoken(req.user_id) 
+            //const token = TokenGenerator.jsonwebtoken(req.user_id) 
             res.status(200).json({ message: 'Successful All Messages in Messages Controller', allMessages: messages }); 
 
         } catch (error) {

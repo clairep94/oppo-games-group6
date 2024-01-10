@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
-const MessagePage = () => {
+const MessagePage = ({navigate}) => {
   return (
-  <div><h2>Messages</h2></div>
+  <><h2>Messages</h2></>
   )
 }
 
