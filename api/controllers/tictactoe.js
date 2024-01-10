@@ -38,12 +38,18 @@ const TicTacToeController = {
   },
 
   Create: async (req, res) => {
+    // const newTicTacToe = new TicTacToe({
+    //   playerOne: req.body.playerOne,
+    //   playerTwo: req.body.playerTwo 
+    // });
+    const userID = req.user_id;
+
     const newTicTacToe = new TicTacToe({
-      playerOne: req.body.playerOne,
-      playerTwo: req.body.playerTwo 
+      playerOne: userID
     });
 
-    try { const result = await newTicTacToe.save()
+    try { 
+      const result = await newTicTacToe.save()
       const populatedTicTacToe = await TicTacToe.populate(result, { path: 'playerOne', select: '_id username points' });
       await TicTacToe.populate(populatedTicTacToe, { path: 'playerTwo', select: '_id username points' });
       await TicTacToe.populate(populatedTicTacToe, { path: 'winner', select: '_id username points' });
@@ -57,6 +63,36 @@ const TicTacToeController = {
       console.log('Error in TTT.Create', error);
       res.status(501).json(error);
     }
+  },
+
+  Join: async (req, res) => {
+    const gameID = req.params.id;
+    const userID = req.user_id;
+    
+    try {
+      const game = await TicTacToe.findById(gameID);
+
+      if (game.playerTwo) {
+        console.log("ERROR: GAME ALREADY FULL");
+        return res.status(403).json({error: 'Game already full.', game: game})
+      
+      } else {
+        const joinedGame = await TicTacToe.findOneAndUpdate( // NOT .populated yet.
+          { _id: gameID },
+          {
+            $set: { playerTwo : userID },
+          },
+          {new: true}
+        )
+      }
+      
+    } catch (error) {
+      console.log('Error in TTT.Join', error);
+      res.status(501).json(error);
+      
+    }
+
+
   },
 
   PlacePiece: async (req, res) => {
