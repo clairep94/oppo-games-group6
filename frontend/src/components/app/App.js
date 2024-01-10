@@ -26,7 +26,7 @@ const App = () => {
       {/* ====== NO AUTHENTICATION - Sign Up or Login: ======== */}
 
       <Route path='/rps' element={<InfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
-      <Route path='/rps/:gameId' element={<GamePage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
+      {/* <Route path='/rps/:gameId' element={<GamePage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/> */}
 
       <Route path='/signup' element={ !isLoggedIn() ?
         <SignUpForm navigate={navigate}/> : <Navigate to='/'/>}/>

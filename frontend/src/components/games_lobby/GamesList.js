@@ -10,11 +10,11 @@ const GamesList = (props) => {
 
     return (
         <>
-        <div style={{ height: '200px', overflowY: 'scroll', border: '1px solid #ccc', padding: '5px', width: '70%' }}>
+        <div className='h-[250px] overflow-scroll w-9/12 p-2 border-2 border-white/30 rounded-lg mt-5'>
     
             <ul style={{ listStyle: 'none', padding: 0 }}>
                 {gamesList.map((game, index) => (
-                <li key={index} style={{ borderBottom: '1px solid #eee', padding: '5px' }}>
+                <li key={index} className='py-1 px-2'>
                     <SingleGameCard game={game} sessionUserID={sessionUserID}/>
                 </li>
                 ))}

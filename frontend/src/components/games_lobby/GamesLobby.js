@@ -7,7 +7,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
   const gamesMenu = [ // <------- LIST OF ENDPOINTS & TITLES FOR EACH GAME!!
     {title:'Tic-Tac-Toe', endpoint: 'tictactoe'},
-    {title:'Rock-Paper-Scissors', endpoint: 'rockpaperscissors'},
+    {title:'Rock-Paper-Scissors', endpoint: 'rps'},
     {title: 'Battleships', endpoint: 'battleships'}
   ] 
 
@@ -59,14 +59,10 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
         </div>
         <img src='triangles.jpg' className='h-[9.5rem] rounded-[1.5rem] -translate-x-5 absolute -z-10 w-[88%] -translate-y-[10rem]'></img>
 
-        <h1 className='text-6xl font-bold my-10'>
+        <h1 className='text-6xl font-bold mt-10 mb-5'>
           GAME LOBBY
         </h1>
 
-        TESTING AVATAR API:
-        <div className='w-[5rem] h-[5rem] border-[0.3rem] rounded-full border-white/80 shadow-lg opacity-80'>
-          <img src={`https://api.dicebear.com/7.x/rings/svg?seed=${sessionUserID}`} alt="avatar" />
-        </div>
 
 
         {/* GAME CARD, STILL TO WORK ON: */}
@@ -79,11 +75,11 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
         </div> */}
 
 
-
         {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
         <div id='your-games-section'>
-          <h3>Your games:</h3>
-          TODO: Your games. Each game has a link, and shows the Game Type, GameID + Forfeit or Delete button based on if there's an opponent
+          <h3 className='text-xl font-bold pb-5'>Your games:</h3>
+          <p className='opacity-70'> **Dev note: O TODO: Your games. Each game has a link, and shows the Game Type, GameID + Forfeit or Delete button based on if there's an opponent **</p>
+
         </div>
         {/* SESSION USER'S GAMES - ONGOING & OPEN TOGETHER */}
 
@@ -93,8 +89,9 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
           {/* CREATE A GAME - BUTTON FOR EACH GAME TYPE - gameType.urlEndpoint & gameType.title */}
           <div id='create-game-section'>
-            <h3>Create a game:</h3>
-            <div id='create-game-buttons'>
+            <h3 className='text-xl font-bold pb-5'
+            >Create a game:</h3>
+            <div id='create-game-buttons' className='flex flex-row space-x-3 w-full'>
               {gamesMenu.map((game) => <>
               <NewGameButton 
                 key={game.title} 
@@ -106,6 +103,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
               <br/>
               </>)}
             </div>
+            <p className='opacity-70'> **Dev note: Only TTT works from here, will amend for today **</p>
           </div>
           {/* CREATE A GAME - BUTTON FOR EACH GAME TYPE - gameType.urlEndpoint & gameType.title */}
 
@@ -115,8 +113,10 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
           {/* OPEN GAMES SECTION  */}
           <div id='open-games-section'>
-            <h3>Join a game:</h3>
+          <h3 className='text-xl font-bold pb-5'>Join a Game</h3>
+             <p className='opacity-70'>
               TODO: Open games. Each game has a join button and a link, and shows the Game Type, GameID + Host ID
+              </p> 
           </div>
           {/* OPEN GAMES SECTION  */}
 
@@ -125,8 +125,8 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
           <br/>
 
           <div id='temp-all-games'>
-            <h3>Temp: All games:               Will change to the below later, this is just for 3pm:
-            </h3>
+          <h3 className='text-xl font-bold pb-5'>Temp: All games -- only TTT for now, will amend today</h3>
+
               Checking if this is fetching games:
               <br/>
               {allGames ? 'games exist' : 'games not found'}

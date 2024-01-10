@@ -17,7 +17,7 @@ const SingleGameCard = (props) => {
 
     if(game && game.playerOne && game.playerTwo){
     return (
-    <>
+    <div className='bg-gray-500/50 rounded-lg py-7 px-7'>
         <a href={`/${game.endpoint}/${game._id}`}>
             {game.title} #{game._id.substring(18)}:  
             {game.playerTwo ? 
@@ -25,14 +25,14 @@ const SingleGameCard = (props) => {
                 ` ${game.playerOne.username} is awaiting an opponent`}
         </a>
 
-        {game.player_one !== sessionUserID && game.awaiting_challenger && <button>Join Game</button>}
+        {game.playerOne !== sessionUserID && game.awaiting_challenger && <button>Join Game</button>}
 
-        {game.player_one === sessionUserID && game.awaiting_challenger && <button>Delete Game</button>}
+        {game.playerOne === sessionUserID && game.awaiting_challenger && <button>Delete Game</button>}
 
-        {game.player_one === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
-        {game.player_two === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
+        {game.playerOne === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
+        {game.playerTwo === sessionUserID && !game.awaiting_challenger && <button>Forfeit Game</button>}
 
-    </>
+    </div>
     )
 }else{
     return(<>Fetching Game Data...</>)

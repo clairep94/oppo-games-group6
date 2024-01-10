@@ -16,6 +16,9 @@ import GamesLobby from '../games_lobby/GamesLobby';
 import TicTacToe from '../../games/tictactoe/TicTacToe';
 import ProfilePage from '../profile_page/ProfilePage';
 
+import GamePage from '../game-page/GamePage';
+
+
 
 const ProtectedRoutes = ({navigate}) => {
   
@@ -45,7 +48,7 @@ const ProtectedRoutes = ({navigate}) => {
   // =================== JSX FOR COMPONENT =================================== 
   if(token && sessionUserID) {
     return (
-    <div className='h-screen w-screen flex flex-row overflow-clip'> 
+    <div className='h-screen w-screen flex flex-row overflow-scroll'> 
     {/* FULL PAGE */}
   
       {/* LOGGED OUT POPUP */}
@@ -71,14 +74,18 @@ const ProtectedRoutes = ({navigate}) => {
           <Route path='/'  element={<GamesLobby navigate={navigate} token={token} setToken={setToken} 
               sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
           
+          {/* ------ User Profile ------  */}
+          <Route path='/users/:id'  element={<ProfilePage navigate={navigate} token={token} setToken={setToken} 
+              sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
+
+
           {/* ------ Tictactoe ------  */}
           <Route path='/tictactoe/:id'  element={<TicTacToe navigate={navigate} token={token} setToken={setToken} 
               sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
   
-          {/* ------ User Profile ------  */}
-          <Route path='/users/:id'  element={<ProfilePage navigate={navigate} token={token} setToken={setToken} 
-              sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
-  
+          {/* -------- RPS ----------- */}
+          <Route path='/rps/:gameId' element={<GamePage navigate={ navigate } gameTitle={ "Rock Paper Scissors" }/>}/>
+
         </Routes>
 
       </div>
