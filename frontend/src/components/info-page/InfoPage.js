@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from "react";
 
-const PlaceholderNavbar = ({ }) => {
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
-  const logout = () => {
-    window.localStorage.removeItem("token");
-    setToken(null);
-  };
-  if (token) {
-    return (
-      <div className="placeholder-navbar">
-        <button onClick={logout}>Log out</button>
-        <a href="/lobby">Games lobby</a>
-      </div>
-    );
-  } else {
-    return (
-      <div className="placeholder-navbar">
-        <a href="/login">Log in</a>
-        <a href="/signup">Sign up</a>
-      </div>
-    );
-  }
-};
+// const PlaceholderNavbar = ({ }) => {
+//   const [token, setToken] = useState(window.localStorage.getItem("token"));
+//   const logout = () => {
+//     window.localStorage.removeItem("token");
+//     setToken(null);
+//   };
+//   if (token) {
+//     return (
+//       <div className="placeholder-navbar">
+//         <button onClick={logout}>Log out</button>
+//         <a href="/lobby">Games lobby</a>
+//       </div>
+//     );
+//   } else {
+//     return (
+//       <div className="placeholder-navbar">
+//         <a href="/login">Log in</a>
+//         <a href="/signup">Sign up</a>
+//       </div>
+//     );
+//   }
+// };
 
 const InfoPage = ({ navigate, gameTitle }) => {
   const [token, setToken] = useState(window.localStorage.getItem("token"));
@@ -33,6 +33,8 @@ const InfoPage = ({ navigate, gameTitle }) => {
     let gamePath = null;
     if (gameTitle === "Rock Paper Scissors") {
       gamePath = "rps";
+    } else if (gameTitle === "Battleships") {
+      gamePath = "battleships";
     } else {
       throw new Error("unrecognised game :(");
     }
@@ -61,7 +63,6 @@ const InfoPage = ({ navigate, gameTitle }) => {
   if (gameTitle === "Rock Paper Scissors") {
     return (
       <>
-        <PlaceholderNavbar />
         <h2>Our Games: Rock Paper Scissors</h2>
         <p>
           Simultaneous moves? How does that work? With our hidden information game system,
@@ -72,6 +73,19 @@ const InfoPage = ({ navigate, gameTitle }) => {
           an account to play all the different games on our website and chat with other players.
         </p>
         <button onClick={startAndRedirectToNewGame}>Play Rock Paper Scissors</button>
+      </>
+    );
+  }
+  if (gameTitle === "Battleships") {
+    return (
+      <>
+        <h2>Our Games: Battleships</h2>
+        <p>
+          You have some ships. Your opponent has some ships. You want to battle.
+          Your opponent wants to battle. What happens next will hardly surprise you... although
+          you may need nerves of steel and a pinch of luck to win the day!
+        </p>
+        <button onClick={startAndRedirectToNewGame}>Play Battleships</button>
       </>
     );
   }
