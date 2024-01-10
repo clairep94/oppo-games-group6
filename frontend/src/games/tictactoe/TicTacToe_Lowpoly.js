@@ -209,7 +209,7 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 </div>
 
                 {/* GAME CONTAINER */}
-                <div className={"flex flex-col w-2/3 ml-5 p-10 rounded-[2rem] h-[28rem]" + frostedGlassContainerTexture}>
+                <div className={"flex flex-col w-2/4 ml-5 p-10 rounded-[2rem] h-[28rem]" + frostedGlassContainerTexture}>
 
 
                     <TicTacToeBoard gameBoard={game.gameBoard} onButtonClick={handlePlacePiece}/>
@@ -221,7 +221,7 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                         </button>)
                     }
                     
-                    <h2 className="text-red-500/60">
+                    <h2 className="text-red-400/80 font-semibold text-2xl">
                         {errorMessage}
                     </h2>
 
@@ -282,7 +282,7 @@ const TicTacToeBoard = ({ gameBoard, onButtonClick }) => {
                     {Object.keys(gameBoard[row]).map(col => (
                         <button
                             key={col}
-                            className="h-[5rem] w-[5rem] bg-slate-300 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400"
+                            className="h-[5rem] w-[5rem] mb-2 bg-slate-300/60 border-2 border-white/20 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400"
                             onClick={() => onButtonClick(row, col)}
                         >
                             {gameBoard[row][col]}

@@ -91,9 +91,8 @@ const ProtectedRoutes = ({navigate}) => {
       </div>
         
         {/* TO DO: Fix this -- just for 9am DEMO */}
-        <img src="/backgrounds/TTT.jpg" 
-          className="h-screen -z-10 absolute"
-          alt='bg'></img>
+        {/* <img src="/backgrounds/BS1.jpeg" className="h-screen -z-10 absolute" alt='bg'></img> */}
+        <img src="/backgrounds/TTT.jpg" className="h-screen -z-10 absolute" alt='bg'></img>
 
       {/* BACKGROUND GRADIENTS */}
       <div className="-z-10 absolute top-[6rem] right-[11rem] h-[31.25rem] w-[31.25rem] rounded-full blur-[12rem] sm:w-[68.75rem] bg-[#8e6464]/90"></div>
