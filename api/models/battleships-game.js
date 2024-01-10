@@ -91,14 +91,14 @@ const BattleshipsGameSchema = new mongoose.Schema({
       },
     }],
   },
-  publicCommunications: {
-    // Such as opponent announcing name of hit/sunk ship (THIS IS NOT GAME CHAT)
-    type: [{
-      speakerIndex: Number, // is a player index
-      subject: String, // e.g. "you-missed", "you-hit", "you-sunk"
-      details: String, // Can parse this to json depending on value of `subject`
-    }],
-  },
+  // publicCommunications: {
+  //   // Such as opponent announcing name of hit/sunk ship (THIS IS NOT GAME CHAT)
+  //   type: [{
+  //     speakerIndex: Number, // is a player index
+  //     subject: String, // e.g. "you-missed", "you-hit", "you-sunk"
+  //     details: String, // Can parse this to json depending on value of `subject`
+  //   }],
+  // },
 
   // Section 5: Properties first needed for state CONCLUDED
   concludedAt: Date,

@@ -377,7 +377,32 @@ const doResignTransition = (game, action) => {
 };
 
 const doFireActionEvent = (game, action) => {
-  // TODO
+  // FIRE (currentRound, currentTurn, (row, col))
+  // Data will have been validated & verified by this point
+  const playerIndex = findPlayerIndex(game, action.playerId);
+  const opponentIndex = (1 - playerIndex); // rofl
+  const { row, col } = action.args.targetLocation;
+  const locationContents = game.oceanGrids[opponentIndex][row][col];
+  game.oceanGrids[opponentIndex][row][col].hitStatus = true;
+  if (locationContents.occupiedByShip) {
+    const { indexInFleet, locationIndexInShip } = locationContents;
+    const hitShipPiece = game.shipPieces[opponentIndex][indexInFleet];
+    hitShipPiece.sectionHitStatus[locationIndexInShip] = true;
+    if (hitShipPiece.sectionHitStatus.every((x) => (x === true))) {
+      // Ship sunk!
+      hitShipPiece.hasSunk = true;
+    }
+  }
+  // Check for win
+  if (countRemainingShips(game, opponentIndex) === 0) {
+    doWinTransition(game, action);
+  }
+  game.markModified('oceanGrids');
+  game.markModified('shipPieces');
+};
+
+const doWinTransition = (game, action) => {
+  // TOOD
 };
 
 
@@ -432,7 +457,6 @@ const getNewGame = () => {
     currentTurnWithinRound: null,
     turnOrder: null, // Also determines first player
     movesTaken: [],
-    publicCommunications: [],
     concludedAt: null,
     conclusionType: null,
     playerResults: null
