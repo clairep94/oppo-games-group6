@@ -43,6 +43,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
       return(
         <div className='mr-10'>
 
+
           {/* TITLE CARD */}
         {/* <img src='gameControllers.png' className='w-[36rem] absolute right-2 bottom-0 -z-10 opacity-80'/> */}
         
@@ -60,7 +61,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
         <img src='triangles.jpg' className='h-[9.5rem] rounded-[1.5rem] -translate-x-5 absolute -z-10 w-[88%] -translate-y-[10rem]'></img>
 
         <h1 className='text-6xl font-bold my-10'>
-          GAME LOBBY
+          GAME LOBBY - If you see this, this is the stashed branch for TTT socket
         </h1>
 
         TESTING AVATAR API:
