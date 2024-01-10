@@ -343,7 +343,7 @@ const doPlaceShipsEvent = (game, action) => {
 };
 
 const doBeginTurnsTransition = (game, action) => {
-  // TODO
+  game.progressState = STATE_CODES.TAKING_TURNS;
 };
 
 const doResignTransition = (game, action) => {
