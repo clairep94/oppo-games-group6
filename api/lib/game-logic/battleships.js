@@ -211,7 +211,8 @@ const takingTurnsManager = (game, action) => {
 };
 
 const concludedManager = (game, action) => {
-  // TODO
+  // No ops are valid in this state, as it's a terminal state
+  throw new Error(`Op invalid while CONCLUDED: ${action.op}`);
 };
 
 
