@@ -10,7 +10,6 @@ const MessagesController = {
         });
         try {
             const result = await newMessage.save()
-            // Populating the new message
             const populatedMessage = await Message.populate(result, {
                 path: 'author',
                 select: '_id username', 
@@ -41,6 +40,6 @@ const MessagesController = {
             res.status(500).json(error);
         }
     },
-  }
+}
 
 module.exports = MessagesController

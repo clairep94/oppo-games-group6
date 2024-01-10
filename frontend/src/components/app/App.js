@@ -17,6 +17,7 @@ import { isLoggedIn } from '../../utility/LoggedInCheck';
 import LoginForm from '../auth/LoginForm'
 import SignUpForm from '../sign_up/SignUpForm'
 import ProtectedRoutes from './ProtectedRoutes';
+import MessagePage from '../messages/MessagePage';
 
 const App = () => {
   const navigate = useNavigate();
@@ -35,10 +36,14 @@ const App = () => {
       <Route path='/login' element={ !isLoggedIn() ?
         <LoginForm navigate={navigate}/> : <Navigate to='/'/>}/>
 
+      <Route path='/message' element={ !isLoggedIn() ?
+        <MessagePage navigate={navigate}/> : <Navigate to='/message'/>}/>
+
       {/* ====== AUTHENTICATION ONLY - Lobby, Games, etc. : ======== */}
       <Route path='/*'  element={ isLoggedIn() ?         
         <ProtectedRoutes navigate={navigate}/> : <Navigate to='/login'/>}/>
-        
+      
+
     </Routes>
   )}
 export default App;
