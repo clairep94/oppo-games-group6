@@ -334,6 +334,16 @@ const doPlaceShipsEvent = (game, action) => {
     }
   });
   game.placementComplete[playerIndex] = true;
+  if (game.placementComplete.every((x) => (x === true))) {
+    doBeginTurnsTransition(game, action);
+  }
+  game.markModified('shipPieces');
+  game.markModified('oceanGrids');
+  game.markModified('placementComplete');
+};
+
+const doBeginTurnsTransition = (game, action) => {
+  // TODO
 };
 
 const doResignTransition = (game, action) => {
@@ -342,7 +352,7 @@ const doResignTransition = (game, action) => {
 
 const doFireActionEvent = (game, action) => {
   // TODO
-}
+};
 
 
 // ======================== INPUT & OUTPUT FUNCTIONS ========================
