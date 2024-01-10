@@ -85,10 +85,10 @@ const validateSettingsObject = (settings) => {
   }
 };
 
-const validateShipsPlacement = (shipsPlacement) => {
+const validateShipPlacements = (completedShipPlacement) => {
   // TODO
   if (false) {
-    throw new Error(`shipsPlacement invalid due to <REASON>`);
+    throw new Error(`completedShipPlacement invalid due to <REASON>`);
   }
 };
 
@@ -183,13 +183,13 @@ const awaitingGameManager = (game, action) => {
 };
 
 const placingShipsManager = (game, action) => {
-  // Valid ops: PREPARE, RESIGN
+  // Valid ops: PREPARE (completedShipPlacements), RESIGN
   if (action.op === OPS.PREPARE) {
     const playerIndex = findPlayerIndex(game, action.playerId);
     if (playerIndex === -1) {
       throw new Error(`PREPARE failed (playerId: ${action.playerId}, game.players: ${game.players})`);
     }
-    validateShipsPlacement(action.args.shipsPlacement);
+    validateShipPlacements(action.args.completedShipPlacement);
     // Can't overwrite placement once submitted
     if (game.placementComplete[playerIndex] === true) {
       throw new Error(`PREPARE failed (game.placementComplete[${playerIndex}]: ${game.placementComplete[playerIndex]})`);
@@ -207,7 +207,18 @@ const placingShipsManager = (game, action) => {
 };
 
 const takingTurnsManager = (game, action) => {
-  // TODO
+  // Valid ops: FIRE (currentRound, currentTurn, (row, col)), RESIGN
+  if (action.op === OPS.FIRE) {
+    // TODO
+  } else if (action.op === OPS.RESIGN) {
+    const playerIndex = findPlayerIndex(game, action.playerId);
+    if (playerIndex === -1) {
+      throw new Error(`RESIGN failed (playerId: ${action.playerId}, game.players: ${game.players})`);
+    }
+    doResignTransition(game, action);
+  } else {
+    throw new Error(`Op invalid while TAKING_TURNS: ${action.op}`);
+  }
 };
 
 const concludedManager = (game, action) => {
