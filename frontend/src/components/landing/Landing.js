@@ -14,6 +14,7 @@ const Landing = ({ navigate }) => {
 
     <div className={bgGradient}>
     <div class="container mx-auto">
+        <img className="-z-10 absolute h-full w-full " src='/backgrounds/islandfar.jpg' alt='bg far'/>
         <div class="flex justify-end">
         <div class="text-left w-3/5 pr-4">
             
@@ -45,6 +46,7 @@ const Landing = ({ navigate }) => {
         </div>
         </div>
     </div>
+
     </div>
 
     </>
