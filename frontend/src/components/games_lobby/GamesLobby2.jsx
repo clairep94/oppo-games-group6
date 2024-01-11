@@ -209,7 +209,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
   // ============== JSX FOR UI ========================
 
-    if(token && sessionUser) {
+    if(token) {
       return(
         // BACKGROUND
         <div
