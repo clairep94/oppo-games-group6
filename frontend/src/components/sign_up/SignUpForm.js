@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import styles from './SignUpForm.module.css';
-import loginImg from "../../assets/bg-gaming-console-duo-animations.png"
+import loginImg from "../../assets/dual-console-image-white.png"
 
 const SignUpForm = ({ navigate, viewWelcome, viewLogin }) => {
 
@@ -94,7 +94,8 @@ const SignUpForm = ({ navigate, viewWelcome, viewLogin }) => {
   }
 
   const h2Style = "pt-3 pb-3 text-7xl text-white font-extrabold"
-  const buttonStyle = "w-2/5 text-xl text-white font-semibold rounded-lg py-3 px-4 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
+  // const buttonStyle = "w-2/5 text-xl text-white font-semibold rounded-lg py-3 px-4 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
+  const buttonStyle = "w-2/5 bg-purple-900 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:outline-purple-900 focus:shadow-outline-purple-900 active:bg-emerald-700"
   const fieldStyle = "w-4/5 p-2 rounded-lg border-2 border-gray-300 flex-col"
   const fieldStyle2 = "w-2/5 p-2 rounded-lg border-2 border-gray-300 mr-1"
 
