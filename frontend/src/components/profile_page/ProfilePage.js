@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {useParams} from "react-router-dom";
 import getSessionUserID from "../../utility/getSessionUserID";
 import APIProfilePicture from '../../utility/profilePictureFromAPI'; // placeholder unique profile picture for each userID
+import profileBg from "../../assets/Welcome.jpeg"
 
 
 const ProfilePage = ({ navigate }) => {
@@ -42,6 +43,16 @@ const ProfilePage = ({ navigate }) => {
         }
     }, []);
 
+    // ============ BACKGROUND IMAGE  =============
+
+    const profileBgImage = {
+        backgroundImage: `url(${profileBg})`,
+     //color and opacity???
+        backgroundSize: 'cover',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center',
+    };
+
     const h1Style = "text-5xl text-white font-bold text-center pb-8"
     const h2Style = "text-2xl text-white font-bold text-center"
 
@@ -49,13 +60,17 @@ const ProfilePage = ({ navigate }) => {
     // NOTE: this takes the profile picture from a random user profile picture API.
     return (
         <>
+        {/* background div */}
+        <div
+            className="bg-auto min-h-screen"
+            style={profileBgImage}>
             {ownProfile ? 
                 <>
 
             {/* <h2>{user ? `${user.username}'s profile`: "Loading"}</h2> */}
 
             <div className="flex items-center justify-center">
-            <img src={`https://api.dicebear.com/7.x/rings/svg?seed=${sessionUserID}`}  alt="Your Image" width="200px" className="max-w-full max-h-full my-11" />
+            <img src={`https://api.dicebear.com/7.x/rings/svg?seed=${sessionUserID}`}  alt="Your Image" width="200px" className="max-w-full max-h-full my-11 border-[0.4rem] rounded-full" />
             </div>
 
             <p className="text-2xl text-white font-bold text-center">Welcome back {user ? `@${user.username}`: "Loading"}</p>
@@ -80,7 +95,7 @@ const ProfilePage = ({ navigate }) => {
 
 
 <h2 className={h1Style}>Scoreboard</h2>
-
+<div className="mx-36 items-center justify-center">
 {/* TIC TAC TOE GAME SCOREBOARD - START */}
 <div class="mt-20 min-h-20 w-full place-items-left overflow-x-scroll rounded-lg p-6 lg:overflow-visible relative">
     <figure class="w-full relative transition-opacity">
@@ -137,10 +152,14 @@ const ProfilePage = ({ navigate }) => {
             </figcaption>
         </a>
     </figure>
+{/* background div */}
 </div>
+</div> 
 {/* BATTLESHIPS GAME SCOREBOARD - END */}
 
+</div>
         </>
+
     );
 };
 

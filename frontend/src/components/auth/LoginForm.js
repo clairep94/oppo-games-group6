@@ -11,6 +11,8 @@ const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
   const [error, setError] = useState(null);
   const [passwordHidden, setPasswordHidden] = useState(true);
 
+
+
   const location = useLocation(); // use this for login-popup when timed-out
 
 
@@ -78,12 +80,13 @@ const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
   // const bgGradientDark = "bg-gradient-to-br from-gray-900 via-customIndigo to-customPink "
   // const bgGradientLight = "bg-gradient-to-br from-customPink via-customIndigo to-customBlack "
   const h2Style = "pt-3 pb-3 text-7xl text-white font-extrabold"
-  const buttonStyle = "w-2/5 text-xl text-white font-semibold rounded-lg py-3 px-4 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
+  const buttonStyle = "w-2/5 bg-purple-900 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:outline-purple-900 focus:shadow-outline-purple-900 active:bg-emerald-700"
   const fieldStyle = "w-4/5 p-2 rounded-lg border-2 border-gray-300"
     return (
       <>
+      {/* flex-1 p-[5rem] relative */}
       {/* RIGHT side with login form */}
-      <div className="flex-1 pl-40 pr-40 pt-[15rem] pb-[15rem] relative">
+      <div className="flex-1 p-[5rem] relative">
         <button
           className="absolute top-[3rem] right-[3rem] text-white text-3xl cursor-pointer"
           onClick={viewWelcome}
@@ -94,7 +97,7 @@ const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
       <h2 className={h2Style}>Login</h2>
       
       {/* LOGIN FORM */}
-      <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4">
         <input
           aria-label="Email Field" 
           placeholder='Email' 
@@ -142,7 +145,7 @@ const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
       {/* Register Link */}
       <p aria-label="Don't have an account? Register" className="mt-4 text-white">
         Don't have an account?{' '}
-        <a aria-label="Link to Register" href="/signup" className="underline">Register</a>
+        <a aria-label="Link to Register" onClick={viewSignup} className="underline">Register</a>
       </p>
     </div>
 
