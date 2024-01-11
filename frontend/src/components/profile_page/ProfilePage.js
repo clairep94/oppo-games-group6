@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import {useParams} from "react-router-dom";
 import getSessionUserID from "../../utility/getSessionUserID";
 import APIProfilePicture from '../../utility/profilePictureFromAPI'; // placeholder unique profile picture for each userID
-import profileBg from "../../assets/TTT1.jpg"
+import profileBg from "../../assets/Welcome.jpeg"
 
 
 const ProfilePage = ({ navigate }) => {
