@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import GameInfoCard from './GameInfoCard';
+import GameTypeCard from './GameTypeCard';
 import SingleGameCard from './SingleGameCard';
-
+import AllGamesCard from './AllGamesCard';
 
 const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, setSessionUser }) => {
-
 
   // ======= GAME DATA ================
   const [allGames, setAllGames] = useState([]); // ---> USE FILTERING METHOD
@@ -16,7 +15,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
       endpoint: 'tictactoe',
       hardCodePlayersOnline: "234",
       mapName: "Icy Alpines",
-      imgSource: '/cards/BS2.jpg'
+      imgSource: '/cards/TTT.jpg'
     },
     {
       title:'Rock-Paper-Scissors', 
@@ -30,10 +29,9 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
       endpoint: 'battleships',
       hardCodePlayersOnline: "84",
       mapName: "Rocky River",
-      imgSource: '/cards/TTT.jpg'
+      imgSource: '/cards/BS2.jpg'
     }
   ] 
-
 
   // ============= GETTING ALL GAMES ================= //
   useEffect(() => {
@@ -86,13 +84,6 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
     }
   }
 
-
-  // =========== JOINING/FOREFEIT/DELETE A GAME =================== // --> SEE SINGLE GAME CARD
-  // add sessionUser to game.playerTwo
-  // forfeit game
-  // delete game
-
-
   // ======= GAME LIST VIEW ==============    
   const [viewTitle, setViewTitle] = useState("All"); // ---> Controls view of the games list: "All", "Open", "Your", "TTT", "RPS", "BS"
 
@@ -106,7 +97,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
         break;
 
       case "Open":
-        const openGames = allGames.filter(game => game.awaitingOpponent === true);
+        const openGames = allGames.filter(game => !game.playerTwo);
         setDisplayGames(openGames);
         break;
 
@@ -149,7 +140,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
   // ============== JSX FOR UI ========================
 
-    if(token) {
+    if(token && sessionUser) {
       return(
         // BACKGROUND
         <div
@@ -179,26 +170,10 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
               <div className='flex flex-row bg-gray-600/40 rounded-[1rem] h-[60%] overflow-x-scroll pt-3 pl-2 pr-2 pb-6 border-2 space-x-3 border-white/20'>
 
                   {/* ALL GAMES CARD */}
-                  <div className='h-[full] min-w-[18rem] rounded-[1rem] overflow-clip flex flex-col relative text-black hover:cursor-pointer opacity-90 hover:opacity-100'>
-                      <img class="object-cover object-center w-full h-full rounded-xl" src={'/backgrounds/allGames.png'} alt="ttt" />
-                      <figcaption class="absolute bottom-8 left-2/4 transform flex w-[calc(100%-4rem)] -translate-x-2/4 justify-between rounded-xl border border-white bg-white/75 py-4 px-6 shadow-lg shadow-black/5 saturate-200 backdrop-blur-sm">
-                          <div class="transition-opacity hover:opacity-0 h-[4rem]">
-                          <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                            All Games
-                          </h5>
-                          <p class="block mt-2 font-sans text-base antialiased font-normal leading-relaxed text-gray-700">
-                            View games of all types
-                          </p>
-
-                          </div>
-                          {/* <h5 class="block font-sans text-xl antialiased font-semibold leading-snug tracking-normal text-blue-gray-900">
-                          426 players online
-                          </h5> */}
-                      </figcaption>
-                  </div>
+                  <AllGamesCard showGames={showGames}/>
 
                   {gamesMenu.map((game, index) => (
-                      <GameInfoCard game={game} index={index} showGames={showGames} createGame={createGame}/>
+                      <GameTypeCard game={game} index={index} showGames={showGames} createGame={createGame}/>
                   ))}
 
               </div>
@@ -211,7 +186,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
               {/* GAMES LIST - Show in anti-chronological order */}
               <div className='flex flex-col bg-gray-600/40 rounded-[1rem] h-[40%] overflow-y-auto pt-3 pl-2 pr-2 pb-6 border-2 space-y-1 border-white/20'>
                 {displayGames.slice().reverse().map((game => (
-                  <SingleGameCard key={game._id} game={game} sessionUserID={sessionUserID}/>
+                  <SingleGameCard game={game} sessionUserID={sessionUserID}/>
                 )))}
               </div>
           </div>

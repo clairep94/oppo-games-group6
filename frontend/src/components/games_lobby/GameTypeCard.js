@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export default function GameInfoCard({ game, index, showGames, createGame }) {
+export default function GameTypeCard({ game, index, showGames, createGame }) {
     const [viewFront, setViewFront] = useState(true);
 
     const flipCard = () => {

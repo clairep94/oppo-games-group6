@@ -26,11 +26,11 @@ const SingleGameCard = (props) => {
         </a>
 
         <div className="flex flex-row space-x-3">
-            {game.playerOne._id !== sessionUserID && !game.playerTwo && <button>Join Game</button>}
+            {game.playerOne?._id !== sessionUserID && !game.playerTwo && <button>Join Game</button>}
 
-            {game.playerOne._id === sessionUserID && !game.playerTwo && <button>Delete Game</button>}
+            {game.playerOne?._id === sessionUserID && !game.playerTwo && <button>Delete Game</button>}
 
-            {((game.playerOne._id === sessionUserID) || (game.playerTwo._id === sessionUserID)) && <button>Forfeit Game</button>}
+            {((game.playerOne?._id === sessionUserID) || (game.playerTwo?._id === sessionUserID)) && <button>Forfeit Game</button>}
         </div>
 
     </div>
