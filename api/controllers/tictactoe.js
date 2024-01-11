@@ -77,13 +77,21 @@ const TicTacToeController = {
         return res.status(403).json({error: 'Game already full.', game: game})
       
       } else {
-        const joinedGame = await TicTacToe.findOneAndUpdate( // NOT .populated yet.
+        const joinedGame = await TicTacToe.findOneAndUpdate( 
           { _id: gameID },
           {
             $set: { playerTwo : userID },
           },
           {new: true}
         )
+        .populate('playerOne', '_id username points') 
+        .populate('playerTwo', '_id username points') 
+        .populate('winner', '_id username points')
+
+        const token = TokenGenerator.jsonwebtoken(req.user_id);
+        res.status(200).json({token: token, game: joinedGame});
+        // res.status(200).json({game: forfeitedGame});
+
       }
       
     } catch (error) {
@@ -246,7 +254,7 @@ const TicTacToeController = {
       const game = await TicTacToe.findById(gameID);
 
       // Throw error if sessionUser is not in the game:
-      if (sessionUser != game.playerOne && sessionUser !== game.playerTwo){
+      if ((sessionUser != game.playerOne) && (sessionUser != game.playerTwo)){
         console.log("ERROR: NON-PARTICIPANTS CANNOT FORFEIT");
         return res.status(403).json({error: 'Only players can forfeit the game.', game: game}); //return the old game so as to not mess up the rendering
       }

@@ -13,6 +13,10 @@ export default function GameTypeCard({ game, index, showGames, createGame }) {
         setViewFront(false);
     };
 
+    const flipCard = () => {
+        setViewFront(!viewFront)
+    }
+
     // ============ TAILWIND =====================
     const buttonStyle1 = "w-[80%] text-lg text-white font-semibold rounded-lg py-3 px-4 bg-pink-600/50 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
     const buttonStyle2 = "w-[80%] text-lg text-white font-semibold rounded-lg py-3 px-4 border-2 border-pink-600/50 hover:bg-pink-600/20 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
@@ -36,8 +40,7 @@ export default function GameTypeCard({ game, index, showGames, createGame }) {
         <div
             id={index}
             className="h-[full] min-w-[35rem] rounded-[1rem] overflow-clip flex flex-col relative text-black hover:cursor-pointer transition-opacity opacity-90 hover:opacity-100"
-            onMouseEnter={flipToBack}
-            onMouseLeave={flipToFront}
+            onClick={flipCard}
         >
             {viewFront ? (
                 <>

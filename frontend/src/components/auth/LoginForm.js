@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import loginImg from "../../assets/single-console-stand.png"
-// import { useLocation } from 'react-router-dom'; // use this for login-popup when timed-out
+import { useLocation } from 'react-router-dom'; // use this for login-popup when timed-out
 // import styles from './LoginForm.module.css'
 
 const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
@@ -11,7 +11,7 @@ const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
   const [error, setError] = useState(null);
   const [passwordHidden, setPasswordHidden] = useState(true);
 
-  // const location = useLocation(); // use this for login-popup when timed-out
+  const location = useLocation(); // use this for login-popup when timed-out
 
 
 
@@ -37,13 +37,13 @@ const LogInForm = ({ navigate, viewWelcome, viewSignup }) => {
       window.localStorage.setItem("token", data.token)
       
 
-      // TEMP: No timeout login popup:
+      // // TEMP: No timeout login popup:
       navigate('/')
 
       // FOR FUTURE USE IF HAVING TIMEOUT LOGIN POPUP:
       // // Check the current location and navigate accordingly
-      // if (location.pathname === '/') {
-      //   navigate('/timeline');
+      // if (location.pathname === ('/welcome' || '/login')) {
+      //   navigate('/');
       // } else {
       //   // 
       // }

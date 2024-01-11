@@ -13,6 +13,9 @@ export default function GameTypeCard({ game, index, showGames}) {
         setViewFront(false);
     };
 
+    const flipCard = () => {
+        setViewFront(!viewFront)
+    }
 
     // ============== GAMES FILTERING =========================
     const handleAllGamesButtonClick = (e) => {

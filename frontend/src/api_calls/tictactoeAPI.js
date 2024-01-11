@@ -107,4 +107,4 @@ const forfeitGame = async (token, id) => {
     }
 }
 
-export { newGame, fetchGame, allGames, placePiece, forfeitGame }
+export { newGame, fetchGame, allGames, placePiece, joinGame, forfeitGame }

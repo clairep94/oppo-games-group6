@@ -8,6 +8,8 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
   // ======= GAME DATA ================
   const [allGames, setAllGames] = useState([]); // ---> USE FILTERING METHOD
   const [displayGames, setDisplayGames] = useState([]);
+  const [viewTitle, setViewTitle] = useState("All"); // ---> Controls view of the games list: "All", "Open", "Your", "TTT", "RPS", "BS"
+
 
   const gamesMenu = [ // <------- LIST OF ENDPOINTS, TITLES, IMAGE SOURCES FOR EACH GAME!! --> USE TO MAP OVER THE CARDS
     {
@@ -63,7 +65,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
-            }
+            } // @Perran, I don't use body with my create method, please amend conditionally accordingly
             });
         
             if (response.status === 201) {
@@ -75,17 +77,84 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
 
             } else {
             console.log("error creating game")
-            // navigate('/login');
             }
       } catch (error) {
         console.error(`Error creating new ${game.title} game:`, error);
-        // navigate('/login');
       }
     }
   }
 
+  // ============ JOINING A GAME ================== // 
+  // join a game and re-direct to the unique game's page
+  const joinGame = async (game) => {
+    console.log(`Join ${game.title}`)
+    console.log(game._id)
+    console.log(game.endpoint)
+    if(token){
+      try {
+        const response = await fetch (`/${game.endpoint}/${game._id}/join`, {
+          method: 'put',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.status === 200) {
+          const data = await response.json();
+          const gameID = data.game._id;
+
+          navigate(`/${game.endpoint}/${gameID}`);
+        } else {
+          console.log("Error joining game")
+        }
+      } catch (error) {
+        console.error(`Error joining ${game.title} game:`, error);
+      }
+    }
+  }
+
+  // ============ FORFEIT A GAME ================= //
+  // forfeit a game and stay on the same page with the updated data.
+  const forfeitGame = async (game) => {
+    console.log(`Forfeit ${game.title}`)
+    if(token){
+      try {
+        const response = await fetch (`/${game.endpoint}/${game._id}/forfeit`, {
+          method: 'put',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (response.status === 200) {
+          const data = await response.json();
+          const gameID = data.game._id;
+
+          setAllGames(allGames.map(game => game._id === gameID ? game : data.game)) // update All Games with the new forfeit
+          setDisplayGames(displayGames.map(game => game._id === gameID ? game : data.game)) // update Display Games with the new forfeit
+
+        } else {
+          console.log("Error joining game")
+        }
+      } catch (error) {
+        console.error(`Error joining ${game.title} game:`, error);
+      }
+    }
+  }
+
+
+  // ============ DELETE GAME ============= //
+  // Delete a game and stay on the same page with the updated data
+  const deleteGame = async (game) => {
+    // TODO have not written this yet for any games --> Just update page view for demo
+    setAllGames(allGames.filter(el => el._id !== game._id)) // update All Games with the new forfeit
+    setDisplayGames(displayGames.filter(el => el._id !== game._id)) // update Display Games with the new forfeit
+  }
+
+
   // ======= GAME LIST VIEW ==============    
-  const [viewTitle, setViewTitle] = useState("All"); // ---> Controls view of the games list: "All", "Open", "Your", "TTT", "RPS", "BS"
 
   const showGames = (view) => { // Function that filters using the corresponding view
     setViewTitle(view)
@@ -185,8 +254,8 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
               
               {/* GAMES LIST - Show in anti-chronological order */}
               <div className='flex flex-col bg-gray-600/40 rounded-[1rem] h-[40%] overflow-y-auto pt-3 pl-2 pr-2 pb-6 border-2 space-y-1 border-white/20'>
-                {displayGames.slice().reverse().map((game => (
-                  <SingleGameCard game={game} sessionUserID={sessionUserID}/>
+                {displayGames.filter((game)=> (!game.finished)).map((game => (
+                  <SingleGameCard game={game} sessionUserID={sessionUserID} joinGame={joinGame} forfeitGame={forfeitGame} deleteGame={deleteGame}/>
                 )))}
               </div>
           </div>

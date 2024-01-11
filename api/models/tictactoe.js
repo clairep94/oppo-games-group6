@@ -7,9 +7,9 @@ const TicTacToeSchema = new mongoose.Schema({
     type: String,
     default: "Tic-Tac-Toe"
   },
-  endpoint: {
+  endpoint: { // don't include the '/'
     type: String,
-    default: "/tictactoe"
+    default: "tictactoe"
   },
 
   // ----------- Players & Open Game Properties ------------    

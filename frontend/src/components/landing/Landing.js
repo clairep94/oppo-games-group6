@@ -4,6 +4,7 @@ import SignUpForm from "../sign_up/SignUpForm";
 import LoginForm from "../auth/LoginForm"
 
 const Landing = ({ navigate }) => {
+
     const basicFont = "pt-3 text-white text-lg font-light tracking-widest text-wrap";
     const h1Style = "pt-3 text-8xl text-white font-extrabold";
     // const buttonStyle = "w-2/5 bg-customPink text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-pink-600 focus:outline-none focus:shadow-outline-pink active:bg-pink-700";
@@ -11,10 +12,10 @@ const Landing = ({ navigate }) => {
 
     const frostTexture = `
     backdrop-blur-md bg-purple-100/20 shadow-xl shadow-[#444a6b] border-[2.5px] border-white/10 place-self-center`
-
     const popupContainer = 'flex flex-col my-auto rounded-[2.5rem]'
 
-
+    
+    // =========== CHOOSING THE VIEW =====================
     // This stores the view state --> "Welcome", "Login", "Popup". If NOT Welcome, there is a pop up div with either the login or 
     const [view, setView] = useState("Welcome")
 
@@ -23,7 +24,7 @@ const Landing = ({ navigate }) => {
     const viewSignup = () => setView("Signup")
 
 
-
+    // =========== JSX FOR UI =====================
     return (
         <>
         <div
