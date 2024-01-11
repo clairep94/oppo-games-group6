@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import { newGame, fetchGame, allGames, placePiece, forfeitGame } from "../../api_calls/tictactoeAPI";
+import { addMessage, fetchMessages } from "../../api_calls/messageAPI";
 import io from "socket.io-client";
 
 
@@ -144,6 +145,23 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
     // const [receivedMessage, setReceivedMessage] = useState(null); //chatwindow, menu
     // const [sendNewConversation, setSendNewConversation] = useState(null); //menu
 
+    const [messages, setMessages] = useState([]);
+
+    const fetchMessagesData = () => {
+        fetchMessages(gameID) 
+            .then(messagesData => {
+
+                setMessages(messagesData.allMessages);
+            })
+    }
+
+    useEffect(() => {
+        if (token) {
+            fetchMessagesData()
+            console.log("fetching messages!", messages) 
+        }
+    }, [])
+
 
 
     // ============ FORFEIT GAME ==================
@@ -255,9 +273,17 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
 
             </div>
 
-            <div className={"flex flex-col w-3/4 p-10 rounded-[2rem] h-[28rem] justify-between opacity-80 mt-[4rem]" + frostedGlassContainerTexture}>
+            <div className={"flex flex-col w-3/4 p-10 rounded-[2rem] h-[28rem] justify-between opacity-80 mt-[4rem] ml-[10rem]" + frostedGlassContainerTexture}>
                 <h3 className="font-bold text-3xl">Chat container</h3>
                 <div className="space-y-3">
+                    {messages.length}
+                    {messages.map((message) => (
+                    <div key={message.id}>
+                        <p>{message.author?.username}</p>
+                        <p>{message.body}</p>
+                    </div>
+))}
+
                     {/* <p>{game.playerOne.username}: {'  '}Wow nice move</p>
                     <p>{game.playerTwo.username}: {'  '}Thanks man</p>
                     <p>{game.playerOne.username}: {'  '}Ok I'll get you next time</p>

@@ -6,8 +6,10 @@ const MessagesSchema = mongoose.Schema({
     },
 
     author: {
-      type:String
-  },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: [true, 'Messages must have an author']
+    },
 
   body: {
     type:String
