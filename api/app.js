@@ -16,6 +16,7 @@ const messagesRouter = require("./routes/messages");
 // const chatRouter = require("./routes/chat")
 
 const rockPaperScissorsRouter = require("./routes/rock-paper-scissors-games");
+const battleshipsRouter = require("./routes/battleships-games");
 
 
 const app = express();
@@ -69,6 +70,7 @@ app.use("/messages", messagesRouter);
 app.use("/posts", tokenChecker, postsRouter);
 app.use("/tictactoe", tokenChecker, tictactoeRouter);
 app.use("/rps", tokenChecker, rockPaperScissorsRouter);
+app.use("/battleships", tokenChecker, battleshipsRouter);
 app.use("/users", tokenChecker, usersRouter);
 
 

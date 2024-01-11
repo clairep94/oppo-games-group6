@@ -94,6 +94,9 @@ const BattleshipsGamesController = {
       : req.body.args
     );
 */
+    if (req.body.args === undefined) {
+      res.status(400).json({ message: "Must provide `args` in request body" });
+    }
     // First DB access: Find the game
     BattleshipsGame.findById(req.params.id)
     /*.populate('players', 'username')*/ // DO NOT USE with `handleGameAction`!

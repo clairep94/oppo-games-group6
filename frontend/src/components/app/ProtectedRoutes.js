@@ -86,11 +86,9 @@ const ProtectedRoutes = ({navigate}) => {
           {/* -------- RPS ----------- */}
           <Route path='/rps/:gameId' element={<GamePage navigate={ navigate } gameTitle={ "Rock Paper Scissors" }/>}/>
 
-          {/* -------- Messages ----------- */}
+          {/* ---- Battleships ---- */}
+          <Route path='/battleships/:gameId' element={<GamePage navigate={ navigate } gameTitle={ "Battleships" }/>}/>
 
-          <Route path='/messages'  element={<MessagePage navigate={navigate} token={token} setToken={setToken} 
-              sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
-          
 
         </Routes>
 
