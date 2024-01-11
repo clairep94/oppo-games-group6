@@ -33,7 +33,7 @@ const fetchMessages = async (gameID) => {
         return messagesData;
         
     } catch (error) {
-        console.error("Messagesapi.fetchMessages:", error);
+        console.error("MessagesAPI.fetchMessages:", error);
         throw error;
     }
 

@@ -212,8 +212,7 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 }
 
                 {errorMessage}
-                allmessages
-                {messages?.length}
+
 
             </>
         )

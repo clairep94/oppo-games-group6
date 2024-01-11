@@ -63,13 +63,14 @@ io.on("connection", (socket) => {
         }
     })
 
-    socket.on("send-message", (data) => {
-        const {receiverID} = data;
-        const user = activeusers.find((user) => user.userID === socket.id);
-        if (user) {
-            io.to(user.socketID).emit("recieve-message", data);
-        }
-    }
-    )
+    //socket.on("send-message", (data) => {
+        //const {receiverID} = data;
+        //const user = activeusers.find((user) => user.userID === socket.id);
+       //if (user) {
+        //    io.to(user.socketID).emit("recieve-message", data);
+        //}
+   // }
+  //  )
+
 
 })
