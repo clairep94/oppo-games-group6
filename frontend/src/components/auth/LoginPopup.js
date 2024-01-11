@@ -26,9 +26,9 @@ export default function LoginPopup({ navigate}) {
                     justify-center
                     h-[28rem] min-w-[28rem] 
                     rounded-lg p-5 py-10 items-center
-                    relative` + frostTexture}>
+                    relative bg-purple-400/20` + frostTexture}>
         {/* X to exit */}
-        <span className='text-[1.5rem] absolute top-6 right-8 cursor-pointer' onClick={closeLoginPopup}>
+        <span className='text-[1.5rem] absolute top-6 right-8 cursor-pointer text-white' onClick={closeLoginPopup}>
           &times;
         </span>
         {/* Login Form - this form takes you to the signup page if you click 'register' */}

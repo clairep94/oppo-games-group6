@@ -4,22 +4,23 @@ import { newGame, fetchGame, allGames, placePiece, forfeitGame } from "../../api
 import io from "socket.io-client";
 
 
-const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setSessionUser }) => {
+export default function TTTGamePage({ token, setToken, sessionUserID, sessionUser }) {
 
-    // =========== STATE VARIABLES =====================================================================================================
+    const background = 'TTT.jpg'
+    const mapName = 'Alpine Map'
+
+    // ============================= STATE VARIABLES ===========================================
     // --------- Session & Game ID ----------
     const { id } = useParams(); // IMPORTANT: DO NOT RENAME 'id' This refers to gameID but changing it would cause issues in routes etc.
     const gameID = id; // declared gameID variable to store this info in case it is more readable for usage below:
 
-    // ------- Game state variables ----------
+    // ------- Game state variables & Finding win: ----------
     const [game, setGame] = useState(null); // stores game object retrieved from DB
     const [whoseTurn, setWhoseTurn] = useState(null); // this needs to be stored and updated explicitly due to issues with game.turn
 
     const [winMessage, setWinMessage] = useState(null); // same as above but with game.winner.length
     const [errorMessage, setErrorMessage] = useState(null);
     const [forfeitButtonMessage, setForfeitButtonMessage] = useState("Forfeit Game")
-
-    const timeInterval = 2000; // time interval for manual polling
 
     const findWinMessage = (game) => {
         if (game.winner.length === 0) {
@@ -34,7 +35,19 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
             }
         }
     };
-    // ============ LOADING THE BOARD =============
+
+    const findOpponent = (game) => {
+        if (!game.playerTwo) {
+            return ": Awaiting Challenger"
+        } else if (sessionUserID === game.playerOne._id) {
+            return ` vs. ${game.playerTwo.username}`
+        } else if (sessionUserID === game.playerTwo._id) {
+            return ` vs. ${game.playerOne.username}`
+        }
+    }
+
+
+    // ===================== LOADING THE BOARD ====================================
     // Function to fetch the tictactoe data
     const fetchGameData = () => {
         fetchGame(token, gameID) //TODO fix? this version of fetchGameData always refreshes the token so the user never times out
@@ -56,14 +69,20 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
         }
     }, [])
 
-    // ============ SESSION USER GAMEPLAY =============
+
+    // ============ SESSION USER GAMEPLAY =================================
     // Function to place a piece on the gameboard
     const handlePlacePiece = async(row, col) => {
         const coordinates = `${row}${col}`
         console.log(`Coordinates: ${row} ${col}`)
 
+        // check if there is a second player:
+        if (!game.playerTwo) {
+            console.log("Must wait for player two!")
+            setErrorMessage("You must wait for player two to join")
+
         // check if the space is already occupied:
-        if (game.xPlacements.includes(coordinates) || game.oPlacements.includes(coordinates)){
+        } else if (game.xPlacements.includes(coordinates) || game.oPlacements.includes(coordinates)){
             console.log("already a piece here")
             setErrorMessage("There is already a piece here!")
         
@@ -101,8 +120,7 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
         }
     }
 
-    // ============ OPPONENT GAMEPLAY =============
-
+    // =================== OPPONENT GAMEPLAY ========================================
     // ------------ Socket setup: -------------------------------
     const socket = useRef() //menu, chatwindow
     const [onlineUsers, setOnlineUsers] = useState(null);
@@ -134,15 +152,6 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
     }, [sessionUserID])
 
 
-
-    // MESSAGING STATES BELOW:
-    // const [onlineUsers, setOnlineUsers] = useState([]); //menu
-    // const [sendMessage, setSendMessage] = useState(null); //chatwindow
-    // const [receivedMessage, setReceivedMessage] = useState(null); //chatwindow, menu
-    // const [sendNewConversation, setSendNewConversation] = useState(null); //menu
-
-
-
     // ============ FORFEIT GAME ==================
     // Function to forfeit game -- first sets warning message, then forfeits game.
     const handleForfeit = async (event) => {
@@ -158,128 +167,99 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 setToken(window.localStorage.getItem("token"));
                 setGame(gameData.game)
                 findWinMessage(gameData.game)
+                // TO DO!!! SOCKET ADD METHOD HERE
                 ;})
             }}
 
 
-    // ============ FORFEIT GAME =============================================================================================
 
-
-
-
-    // ------------ STYLING STRINGS -----------------
-
+    // ============================== TAILWIND ==============================================
     const frostedGlass = ` bg-gradient-to-r from-gray-300/30 via-purple-100/20 to-purple-900/20 backdrop-blur-sm
-    shadow-lg shadow-[#363b54] border-[3px] border-white/10
-    `
-    const headerContainer = 'flex flex-row w-full h-[8rem] rounded-[1.5rem] p-10 pl-[10rem] justify-right'
+    shadow-lg shadow-[#363b54] border-[3px] border-white/10 `
+    const headerContainer = 'flex flex-row w-full h-[8rem] rounded-[1.5rem] p-10 pl-[5rem] justify-right'
 
-
-    const frostedGlassContainerTexture = `
-    backdrop-blur-md bg-purple-100/20 shadow-lg shadow-[#444a6b] border-[2.5px] border-white/10`
-
-    // ============ JSX FOR THE UI =============
-    if (game) {
+    // =================================== JSX FOR UI ==============================================================
+    if(game){
         return (
+        // BACKGROUND
         <div
-            className=" flex flex-row items-center justify-center"
-            style={{ backgroundImage: 'url(/backgrounds/islandfar.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}>
-
-          {/* PAGE CONTAINER */}
-          <div className='flex flex-col w-full h-full justify-between'>
-
-            {/* HEADER */}
-            <div className={headerContainer + frostedGlass + 'justify-between items-center'}>
-              {/* HEADER GREETING */}
-              <div className='flex flex-col space-y-5'>
-                <h3 className='text-5xl text-white font-extrabold'>
-                  ALPINE MAP: TIC-TAC-TOE
-                </h3>
-              </div>
-            </div>
-            
-            {/* INTRO & GAME CONTAINER */}
-            <div className="flex flex-row">
-
-                {/* INTRO CARD */}
-                <div className={"flex flex-col w-1/3 p-10 rounded-[2rem] h-[28rem] justify-center" + frostedGlassContainerTexture}>
-                    <p className="text-4xl italic pb-9">
-                        Welcome to the Alpine Map, {sessionUser.username}.
-                    </p>
-                    <p className="italic font-light pb-4">
-                        In this icy terrain, opponents must face off against each other ...<br></br> **DEVS: WRITE COPY HERE 
-
-                    </p>
-
-                    <p className="py-4 text-xl">
-                        Your challenge will be {" "}
-                        <span className="text-3xl font-bold">Tic-Tac-Toe</span>
-                    </p>
-                    
-                    {game.playerTwo ? (
-                        <>
-                            <p className="pb-4 text-xl">
-                                Your opponent is {" "}
-                                <span className="text-3xl font-bold">{sessionUserID === game.playerOne._id ? game.playerTwo.username: game.playerOne.username}</span>
-                            </p>
-
-                            <p className="text-xl">
-                                Whose turn: {" "}
-                                <span className="text-3xl font-bold">{sessionUserID === game.playerOne._id ? game.playerTwo.username: game.playerOne.username}</span>
-                            </p>
-                        </>
-                    ):(<>
-                        <p>Awaiting player two</p>
-                    </>)}
+            className=" flex flex-row items-center justify-center pl-[10rem] pr-[2rem] py-[1rem]"
+            style={{ backgroundImage: `url(/backgrounds/${background})`, backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}>
+            {/* PAGE CONTAINER */}
+            <div className='flex flex-col w-full h-full justify-between space-y-5'>
+                {/* HEADER */}
+                <div className={headerContainer + frostedGlass + 'justify-between items-center'}>
+                    {/* HEADER GREETING */}
+                    <div className='flex flex-col space-y-5'>
+                        <h3 className='text-5xl text-white font-extrabold'>
+                            Tic-Tac-Toe{game && findOpponent(game)}
+                        </h3>
+                    </div>
                 </div>
+    
+    
+                {/* GAMES CONTAINER -- this is the max size of the game, actual game board is inside */}
+                <div className="flex flex-col items-center justify-center  h-full w-full">
 
-                {/* GAME CONTAINER */}
-                <div className={"flex flex-col w-2/4 ml-5 p-10 rounded-[2rem] h-[28rem]" + frostedGlassContainerTexture}>
+                    {/* TTT CONTAINER */}
+                    <div className={"flex flex-col bg-gray-500/60 w-[40rem] h-[40rem] items-center justify-between pt-[5rem] rounded-[2rem]" +  frostedGlass}>
+    
+                        {/* OPPONENT & TURN HEADER */}
+                        {game.playerTwo ? (   
+                                <p className="text-3xl font-bold">Whose turn: {" "}
+                                    <span className="text-3xl font-bold">{sessionUserID === game.playerOne._id ? game.playerTwo.username: game.playerOne.username}</span>
+                                </p>
+                        ):( <p className="text-3xl font-bold">Awaiting player two</p>)}
 
-
-                    <TicTacToeBoard gameBoard={game.gameBoard} onButtonClick={handlePlacePiece}/>
-                    
-                    {/* Forfeit button -- only shows if sessionUser is a player && game is not over */}
-                    {!game.finished && game.playerTwo && (sessionUserID === game.playerOne._id || sessionUserID === game.playerTwo._id) &&
-                        (<button onClick={handleForfeit} className="bg-black/70 p-4 w-[13rem] rounded-lg">
-                            {forfeitButtonMessage}
-                        </button>)
-                    }
-                    
-                    <h2 className="text-red-400/80 font-semibold text-2xl">
-                        {errorMessage}
-                    </h2>
-
-                    <h2 className="font-bold text-4xl pt-5">
-                        {winMessage}
-                    </h2>
-                    
+                        {/* TTT GAME BOARD */}
+                        <TicTacToeBoard gameBoard={game.gameBoard} onButtonClick={handlePlacePiece}/>
+                        
+                        {/* FORFEIT BUTTON-- only shows if sessionUser is a player && game is not over */}
+                        {!game.finished && game.playerTwo && (sessionUserID === game.playerOne._id || sessionUserID === game.playerTwo._id) &&
+                            (<button onClick={handleForfeit} className="bg-black/70 p-4 w-[13rem] rounded-lg">
+                                {forfeitButtonMessage}
+                            </button>)
+                        }
+                        
+                        
+                        <h2 className="text-red-600/80 font-semibold text-2xl p-3">
+                            {errorMessage}
+                        </h2>
+    
+                        <h2 className="text-white font-semibold text-2xl p-3">
+                            {winMessage}
+                        </h2>
+    
+    
+                    </div>
                 </div>
-
-            </div>
-
-            <div className={"flex flex-col w-3/4 p-10 rounded-[2rem] h-[28rem] justify-between opacity-80 mt-[4rem]" + frostedGlassContainerTexture}>
-                <h3 className="font-bold text-3xl">Chat container</h3>
-                <div className="space-y-3">
-                    {/* <p>{game.playerOne.username}: {'  '}Wow nice move</p>
-                    <p>{game.playerTwo.username}: {'  '}Thanks man</p>
-                    <p>{game.playerOne.username}: {'  '}Ok I'll get you next time</p>
-                    <p>{game.playerTwo.username}: {'  '}lol sure</p>
-                    <p>{game.playerOne.username}: {'  '}go again?</p>
-                    <p>{game.playerTwo.username}: {'  '}ya sounds good</p> */}
+    
+    
+                {/* MESSAGES container */}
+                <div className='flex flex-col h-[22%]'>
+                    <h3 className='text-3xl text-white font-extrabold ml-3'>
+                        Messages
+                    </h3>
+                    <div className="flex flex-col bg-gray-600/40 rounded-[1rem] h-full overflow-y-auto px-5 py-2 border-2 space-y-1 border-white/20">
+                        <div className="flex flex-col h-full overflow-auto">
+                            MESSAGES
+                        </div>
+                        <div className="flex flex-col h-2/5 bg-white/10 rounded-lg border-2 border-white/20 p-2">
+                            Write a message... 
+                        </div>
+                    </div>
                 </div>
-                <div className="rounded-lg border-2 p-3">
-                    Write message here...
-                </div>
-
-            </div>
-
-
-</div>
-            </div>
+    
+    
+    
+            </div>        
+        </div>        
+    
         )
     }
-};
+}
+
+
 
 // =========== SUPPORTIVE COMPONENTS: ==================================== //
 
@@ -293,7 +273,7 @@ const TicTacToeBoard = ({ gameBoard, onButtonClick }) => {
                     {Object.keys(gameBoard[row]).map(col => (
                         <button
                             key={col}
-                            className="h-[5rem] w-[5rem] mb-2 bg-slate-300/60 border-2 border-white/20 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400"
+                            className="h-[6rem] w-[6rem] mb-2 bg-slate-300/60 border-2 border-white/20 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400 text-bold"
                             onClick={() => onButtonClick(row, col)}
                         >
                             {gameBoard[row][col]}
@@ -304,27 +284,3 @@ const TicTacToeBoard = ({ gameBoard, onButtonClick }) => {
         </div>
     );
 };
-
-
-
-
-
-// ======== SINGLE BUTTON ===========//
-const TicTacToeButton = (props) => {
-    const space = props.gameBoard[props.row][props.col]
-    const buttonActive = space === " " && !props.winMessage && !props.opponentsTurn;
-
-    return (
-        <button
-            aria-label={`${props.row}${props.col} button`}
-            onClick={props.handleClick}
-            className={buttonActive ? "active-ttt-space" : "inactive-ttt-space"}
-            disabled={!buttonActive}
-            style={{ width: "100px", height: "100px" }}
-        >
-            <span style={{ display: "inline-block", minWidth: "100%" }}>{ space }</span>
-        </button>
-    );
-};
-
-export default TicTacToe;
