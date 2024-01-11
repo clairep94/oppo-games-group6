@@ -49,9 +49,9 @@ const NavBar = (props) => {
                 </div>
         
                 <div className="w-[5rem] h-[5rem] hover:bg-white/30  rounded-xl items-center justify-center flex hover:cursor-pointer">
-                    <a href={`/messages`} className="text-[2rem] text-[#1f1d22]/70 hover:text-[#1f1d22]/80">
+                    <p href={`/messages`} className="text-[2rem] text-[#1f1d22]/70 hover:text-[#1f1d22]/80">
                         <AiFillMessage />
-                    </a>
+                    </p>
                 </div>
 
                 <div className="w-[5rem] h-[5rem] hover:bg-white/30  rounded-xl items-center justify-center flex hover:cursor-pointer">

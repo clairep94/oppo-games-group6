@@ -220,7 +220,10 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
                 author: receivedMessage.author,
                 body: receivedMessage.body
             }
+            // const currentMessages = messages.push(newGame)
             setMessages([...messages, newMessage])
+            // setMessages((prevMessages) => prevMessages.concat(newMessage));
+            // setMessages(currentMessages)
 
         })
 
