@@ -1,6 +1,7 @@
 import React, {useState, useRef, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import { newGame, fetchGame, allGames, placePiece, forfeitGame } from "../../api_calls/tictactoeAPI";
+import { addMessage, fetchMessages } from "../../api_calls/messageAPI";
 import io from "socket.io-client";
 
 
@@ -45,7 +46,6 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
             return ` vs. ${game.playerOne.username}`
         }
     }
-
 
     // ===================== LOADING THE BOARD ====================================
     // Function to fetch the tictactoe data
@@ -172,6 +172,16 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
             }}
 
 
+    // ======================= MESSAGES ==================================
+    const [messages, setMessages] = useState([]);
+    
+    useState(() => {
+        fetchMessages(gameID)
+        .then(messagesData => {
+            setMessages(messagesData.allMessages);
+        })
+    }, [])
+
 
     // ============================== TAILWIND ==============================================
     const frostedGlass = ` bg-gradient-to-r from-gray-300/30 via-purple-100/20 to-purple-900/20 backdrop-blur-sm
@@ -202,12 +212,12 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
                 <div className="flex flex-col items-center justify-center  h-full w-full">
 
                     {/* TTT CONTAINER */}
-                    <div className={"flex flex-col bg-gray-500/60 w-[40rem] h-[40rem] items-center justify-between py-[4rem] rounded-[2rem]" +  frostedGlass}>
+                    <div className={"flex flex-col bg-gray-500/40 w-[40rem] h-[40rem] items-center justify-between py-[4rem] rounded-[2rem]" +  frostedGlass}>
     
                         {/* OPPONENT & TURN HEADER */}
                         {game.playerTwo ? (   
                                 <p className="text-3xl font-bold">Whose turn: {" "}
-                                    <span className="text-3xl font-bold">{sessionUserID === game.playerOne._id ? game.playerTwo.username: game.playerOne.username}</span>
+                                    <span className="text-3xl font-bold">{whoseTurn.username}</span>
                                 </p>
                         ):( <p className="text-3xl font-bold">Awaiting player two</p>)}
 
@@ -224,36 +234,38 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
                         {errorMessage && 
                             <h2 className="text-red-600/80 font-semibold text-2xl p-3">{errorMessage}</h2>}
 
-                        
-                        {winMessage && 
                         <h2 className="text-white font-bold text-3xl p-3">
                             {winMessage}
                         </h2>
-                        }
-    
-    
-    
+
                     </div>
                 </div>
     
     
                 {/* MESSAGES container */}
                 <div className='flex flex-col h-[22%]'>
-                    <h3 className='text-3xl text-white font-extrabold ml-3'>
+                    <h3 className='text-3xl text-white font-extrabold ml-5 -translate-y-2'>
                         Messages
                     </h3>
                     <div className="flex flex-col bg-gray-600/40 rounded-[1rem] h-full overflow-y-auto px-5 py-2 border-2 space-y-1 border-white/20">
                         <div className="flex flex-col h-full overflow-auto">
-                            MESSAGES
+                            {messages.length === 0 ? (
+                                    <p>Write a message...</p>
+                                ) : (
+                                    messages.map(message => (
+                                        <p key={message._id}>
+                                            <span className="text-bold">{message.author.username}:</span> {message.body}
+                                        </p>
+                                    ))
+                            )}
                         </div>
                         <div className="flex flex-col h-2/5 bg-white/10 rounded-lg border-2 border-white/20 p-2">
-                            Write a message... 
+                            Write a message...
                         </div>
                     </div>
                 </div>
-    
-    
-    
+
+
             </div>        
         </div>        
     
@@ -275,7 +287,7 @@ const TicTacToeBoard = ({ gameBoard, onButtonClick }) => {
                     {Object.keys(gameBoard[row]).map(col => (
                         <button
                             key={col}
-                            className="h-[6rem] w-[6rem] mb-2 bg-slate-300/60 border-2 border-white/20 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400 text-bold flex items-center justify-center"
+                            className="h-[6rem] w-[6rem] mb-2 text-[2rem] bg-slate-300/60 border-2 border-white/20 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400 text-bold flex items-center justify-center"
                             onClick={() => onButtonClick(row, col)}
                         >
                             {gameBoard[row][col]}
