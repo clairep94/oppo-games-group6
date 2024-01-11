@@ -3,17 +3,27 @@ const express = require("express");
 const path = require("path");
 const logger = require("morgan");
 const JWT = require("jsonwebtoken");
+const dotenv = require ('dotenv');
+const cors = require ('cors')
+
 
 const postsRouter = require("./routes/posts");
 const authenticationRouter = require("./routes/authentication");
 const signUpRouter = require("./routes/signup");
 const usersRouter = require("./routes/users");
-const tictactoeRouter = require("./routes/tictactoe")
+const tictactoeRouter = require("./routes/tictactoe");
+const messagesRouter = require("./routes/messages");
+// const chatRouter = require("./routes/chat")
 
 const rockPaperScissorsRouter = require("./routes/rock-paper-scissors-games");
 
 
 const app = express();
+const server = require('http').Server(app);
+
+dotenv.config();
+const port = process.env.PORT || 5001;
+
 
 // setup for receiving JSON
 app.use(express.json())
@@ -21,6 +31,8 @@ app.use(express.json())
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+app.use(cors())
+
 
 // middleware function to check for valid tokens
 const tokenChecker = (req, res, next) => {
@@ -49,6 +61,10 @@ app.use("/tokens", authenticationRouter);
 
 // routes with no authentication:
 app.use("/signup", signUpRouter);
+// app.use("/chat", chatRouter);
+app.use("/messages", messagesRouter);
+
+
 // routes with authentication:
 app.use("/posts", tokenChecker, postsRouter);
 app.use("/tictactoe", tokenChecker, tictactoeRouter);
@@ -70,5 +86,6 @@ app.use((err, req, res) => {
   // respond with details of the error
   res.status(err.status || 500).json({message: 'server error'})
 });
+
 
 module.exports = app;

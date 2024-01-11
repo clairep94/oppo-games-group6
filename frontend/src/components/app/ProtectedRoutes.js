@@ -15,7 +15,7 @@ import NavBar from '../navbar/NavBar';
 import GamesLobby from '../games_lobby/GamesLobby';
 import TicTacToe from '../../games/tictactoe/TicTacToe';
 import ProfilePage from '../profile_page/ProfilePage';
-
+import MessagePage from '../messages/MessagePage';
 import GamePage from '../game-page/GamePage';
 
 
@@ -85,6 +85,12 @@ const ProtectedRoutes = ({navigate}) => {
   
           {/* -------- RPS ----------- */}
           <Route path='/rps/:gameId' element={<GamePage navigate={ navigate } gameTitle={ "Rock Paper Scissors" }/>}/>
+
+          {/* -------- Messages ----------- */}
+
+          <Route path='/messages'  element={<MessagePage navigate={navigate} token={token} setToken={setToken} 
+              sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
+          
 
         </Routes>
 

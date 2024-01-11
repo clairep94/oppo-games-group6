@@ -40,6 +40,9 @@ We also used...
 - [Handlebars](https://handlebarsjs.com/) for the `home` template.
 - [ESLint](https://eslint.org) for linting.
 - [Nodemon](https://nodemon.io/) to reload the server automatically.
+//TODO write socket and cors documentation
+- socket.io
+- cors
 
 ## Architecture
 
