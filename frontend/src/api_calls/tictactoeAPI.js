@@ -1,6 +1,6 @@
 const endpoint = '/tictactoe';
 
-const newGame = async (newGamePayload) => {
+const newGame = async (newGamePayload, token) => {
     // payload:
     // playerOne: req.body.playerOne,
     // playerTwo: req.body.playerTwo 
@@ -10,6 +10,7 @@ const newGame = async (newGamePayload) => {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify(newGamePayload)
         });

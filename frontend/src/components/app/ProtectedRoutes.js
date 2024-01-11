@@ -15,7 +15,7 @@ import NavBar from '../navbar/NavBar';
 import GamesLobby from '../games_lobby/GamesLobby';
 import TicTacToe from '../../games/tictactoe/TicTacToe';
 import ProfilePage from '../profile_page/ProfilePage';
-
+import MessagePage from '../messages/MessagePage';
 import GamePage from '../game-page/GamePage';
 
 
@@ -88,6 +88,7 @@ const ProtectedRoutes = ({navigate}) => {
 
           {/* ---- Battleships ---- */}
           <Route path='/battleships/:gameId' element={<GamePage navigate={ navigate } gameTitle={ "Battleships" }/>}/>
+
 
         </Routes>
 

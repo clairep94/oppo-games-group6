@@ -14,6 +14,7 @@ const TicTacToeController = {
         throw err;
       }
       const token = TokenGenerator.jsonwebtoken(req.user_id)
+      res.setHeader('Cache-Control', 'no-store, no-cache');
       res.status(200).json({ games: tictactoeGames, token: token });
       // res.status(200).json({ games: tictactoeGames });
 
@@ -31,6 +32,7 @@ const TicTacToeController = {
         throw err;
       }
       const token = TokenGenerator.jsonwebtoken(req.user_id)
+      res.setHeader('Cache-Control', 'no-store, no-cache');
       res.status(200).json({ game: tictactoe, token: token });
       // res.status(200).json({ game: tictactoe });
 
@@ -49,6 +51,7 @@ const TicTacToeController = {
       await TicTacToe.populate(populatedTicTacToe, { path: 'winner', select: '_id username points' });
 
       const token = TokenGenerator.jsonwebtoken(req.user_id)
+      res.setHeader('Cache-Control', 'no-store, no-cache');
       res.status(201).json({ token: token, game: populatedTicTacToe });
       // res.status(201).json({ game: populatedTicTacToe });
 

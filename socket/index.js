@@ -62,37 +62,14 @@ io.on("connection", (socket) => {
             console.log("Active Games: ", activeGames);
         }
     })
-    
 
-    // MESSAGING METHODS:
-    // when user A sends a message to user B, socket finds user B and sends a signal to userB.socket
-    // socket.on("send-message", (data) => {
-    //     const {receiverID} = data;
-    //     const user = activeUsers.find((user) => user.userID === receiverID);
-    //     console.log("Sending newMessage from socket to :", receiverID)
-    //     console.log("New Message Data: ", data)
-
-    //     if (user) {
-    //         io.to(user.socketID).emit("receive-message", data);
-    //         console.log("Receiving data from socket to:", receiverID);
-    //         console.log("Recieved Data: ", data.body)
-    //     }
-    // })
-
-    // when user A starts a chat with userB, socket finds user B and sends a signal to userB.socket
-    // socket.on("send-new-conversation", (data) => {
-    //     const { receiverID } = data;
-    //     const user = activeUsers.find((user) => user.userID === receiverID);
-    //     console.log("Sending new conversation from socket to :", receiverID)
-    //     console.log("New Conversation Data: ", data)
-
-    //     if (user) {
-    //         io.to(user.socketID).emit("receive-new-conversation", data);
-    //         console.log("Receiving new conversation data from socket to:", receiverID);
-    //         console.log("Recieved newConversation Data: ", data.members)
-    //     }
-
-
-    // })
+    socket.on("send-message", (data) => {
+        const {receiverID} = data;
+        const user = activeusers.find((user) => user.userID === socket.id);
+        if (user) {
+            io.to(user.socketID).emit("recieve-message", data);
+        }
+    }
+    )
 
 })
