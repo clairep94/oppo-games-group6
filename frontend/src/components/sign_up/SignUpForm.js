@@ -102,8 +102,8 @@ const SignUpForm = ({ navigate, viewWelcome, viewLogin }) => {
 
     return (
       <>
- 
-      <div className="flex-1 pl-40 pr-40 pt-[15rem] pb-[15rem] relative">
+
+      <div className="flex-1 p-[5rem] relative">
         <button
           className="absolute top-[3rem] right-[3rem] text-white text-3xl cursor-pointer"
           onClick={viewWelcome}

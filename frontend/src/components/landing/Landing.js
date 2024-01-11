@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import landingBg from "../../assets/dual-console-image-white.png";
 import SignUpForm from "../sign_up/SignUpForm";
 import LoginForm from "../auth/LoginForm"
+import MiniNavBar from "../navbar/MiniNavBar";
 
 const Landing = ({ navigate }) => {
 
     const basicFont = "pt-3 text-white text-lg font-light tracking-widest text-wrap";
     const h1Style = "pt-3 text-8xl text-white font-extrabold";
-    // const buttonStyle = "w-2/5 bg-customPink text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-pink-600 focus:outline-none focus:shadow-outline-pink active:bg-pink-700";
-    const buttonStyle = "w-2/5 text-xl text-white font-semibold rounded-lg py-3 px-4 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
+    const buttonStyle = "w-2/5 bg-purple-900 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:outline-purple-900 focus:shadow-outline-purple-900"
+    
 
     const frostTexture = `
     backdrop-blur-md bg-purple-100/20 shadow-xl shadow-[#444a6b] border-[2.5px] border-white/10 place-self-center`
@@ -28,10 +29,19 @@ const Landing = ({ navigate }) => {
     return (
         <>
         <div
-            className=" flex flex-row items-center justify-center"
+            className="flex flex-row items-center justify-center"
             style={{ backgroundImage: 'url(/backgrounds/islandfar.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', height: '100vh' }}>
 
-            <div className="container mx-auto ">
+            <div className="container mx-auto min-h-screen">
+
+            {/* MINI NAV BAR FOR LANDING PAGE ONLY*/}
+            <nav class="absolute top-6 right-20 m-4">
+                <a class="bg-gray-700 mr-2 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:shadow-outline-purple-900" href="/welcome">OPPO GAMES</a>
+                <a class="bg-purple-900 mr-2 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:shadow-outline-purple-900" href="/login">Log in</a>
+                <a class="bg-purple-900 text-xl text-white font-semibold rounded-lg py-2 px-4 hover:bg-purple-600 focus:shadow-outline-purple-900" href="/signup">Sign Up</a>
+            </nav>
+
+                {/* MINI NAV BAR */}
             <div className="flex justify-end">
 
                 {/* WELCOME MESSAGE */}
@@ -43,7 +53,7 @@ const Landing = ({ navigate }) => {
                         <h2 className={basicFont}>Welcome to Oppo Games. An online platform to participate in retro, multiplayer games in live time. Join a game, chat with your opponent and have fun!</h2>
 
                         <div className="pt-6">
-                            <button className={buttonStyle} onClick={viewSignup}>
+                            <button className={buttonStyle} onClick={viewLogin}>
                                 START PLAYING
                             </button>
                         </div>
