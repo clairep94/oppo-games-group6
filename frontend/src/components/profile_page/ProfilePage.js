@@ -95,7 +95,7 @@ const ProfilePage = ({ navigate }) => {
 
 
 <h2 className={h1Style}>Scoreboard</h2>
-<div className="container mx-20">
+<div className="mx-36 items-center justify-center">
 {/* TIC TAC TOE GAME SCOREBOARD - START */}
 <div class="mt-20 min-h-20 w-full place-items-left overflow-x-scroll rounded-lg p-6 lg:overflow-visible relative">
     <figure class="w-full relative transition-opacity">
