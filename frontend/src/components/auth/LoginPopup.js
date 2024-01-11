@@ -11,6 +11,10 @@ export default function LoginPopup({ navigate}) {
     navigate('/signup')
   }
 
+  const frostTexture = `
+  backdrop-blur-md bg-purple-100/20 shadow-xl shadow-[#444a6b] border-[2.5px] border-white/10 place-self-center`
+
+
   return (
     <div className='fixed top-0 left-0 w-full h-full flex items-center justify-center z-50'>
       {/* BACKGROUND */}
@@ -18,13 +22,11 @@ export default function LoginPopup({ navigate}) {
 
       {/* POPUP CONTAINER */}
       <div aria-label='login popup container'
-        className='bg-white flex flex-col
+        className={`flex flex-col
                     justify-center
                     h-[28rem] min-w-[28rem] 
                     rounded-lg p-5 py-10 items-center
-                    dark:bg-gray-800 dark:border-gray-700 dark:border
-                    shadow-[0px_0px_10px_0px_#d9deed] dark:shadow-lg
-                    relative'>
+                    relative` + frostTexture}>
         {/* X to exit */}
         <span className='text-[1.5rem] absolute top-6 right-8 cursor-pointer' onClick={closeLoginPopup}>
           &times;

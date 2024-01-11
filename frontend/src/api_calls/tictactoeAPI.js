@@ -1,10 +1,6 @@
 const endpoint = '/tictactoe';
 
-const newGame = async (newGamePayload, token) => {
-    // payload:
-    // playerOne: req.body.playerOne,
-    // playerTwo: req.body.playerTwo 
-
+const newGame = async (token) => {
     try {
         const response = await fetch(`${endpoint}`, {
             method: 'post',
@@ -12,7 +8,6 @@ const newGame = async (newGamePayload, token) => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`,
             },
-            body: JSON.stringify(newGamePayload)
         });
         const newGameData = await response.json();
         return newGameData;
@@ -75,6 +70,26 @@ const placePiece = async (token, id, movePayload) => {
     }
 }
 
+const joinGame = async (token, id) => {
+    // Payload = {row: row, col: col}
+    try {
+        const response = await fetch(`${endpoint}/${id}/join`, {
+            method: 'put',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+
+            },
+        });
+        const gameData = await response.json();
+        return gameData;
+    } catch (error) {
+        console.error("TictactoeAPI.join:", error);
+        throw error;
+    }
+}
+
+
 const forfeitGame = async (token, id) => {
     try {
         const response = await fetch(`${endpoint}/${id}/forfeit`, {
@@ -92,4 +107,4 @@ const forfeitGame = async (token, id) => {
     }
 }
 
-export { newGame, fetchGame, allGames, placePiece, forfeitGame }
+export { newGame, fetchGame, allGames, placePiece, joinGame, forfeitGame }

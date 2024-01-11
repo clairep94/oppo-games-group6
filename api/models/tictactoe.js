@@ -2,16 +2,26 @@ const mongoose = require("mongoose");
 
 const TicTacToeSchema = new mongoose.Schema({
 
+  // ----------- Title & Endpoint -- necessary for mapping over gamesList ------------    
+  title: {
+    type: String,
+    default: "Tic-Tac-Toe"
+  },
+  endpoint: { // don't include the '/'
+    type: String,
+    default: "tictactoe"
+  },
+
   // ----------- Players & Open Game Properties ------------    
   playerOne: { // games will be created once both players have joined.
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Games must have all members confirmed to start']
+    required: [true, 'Games must have a host']
   },
   playerTwo: { // games will be created once both players have joined.
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: [true, 'Games must have all members confirmed to start']
+    // required: [true, 'Games must have all members confirmed to start']
   },
 
   // ----------- Active Game Properties ------------    

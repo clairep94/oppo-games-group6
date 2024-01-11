@@ -25,7 +25,7 @@ const NavBar = (props) => {
     // ============= LOGOUT ======================== //
     const logout = () => {
         window.localStorage.removeItem("token")
-        navigate('/login')
+        navigate('/welcome')
     }
 
     return (

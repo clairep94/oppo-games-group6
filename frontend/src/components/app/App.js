@@ -14,11 +14,8 @@ import {
 
 import { isLoggedIn } from '../../utility/LoggedInCheck';
 
-import LoginForm from '../auth/LoginForm'
-import SignUpForm from '../sign_up/SignUpForm'
-// import GamesLobby from '../games_lobby/GamesLobby';
-// import TicTacToe from '../../games/tictactoe/TicTacToe';
-import ProfilePage from '../profile_page/ProfilePage';
+import LoginPage from '../auth/LoginPage'
+import SignUpPage from '../sign_up/SignUpPage'
 import Landing from '../landing/Landing';
 import ProtectedRoutes from './ProtectedRoutes';
 //import MessagePage from '../messages/MessagePage';
@@ -32,7 +29,6 @@ const App = () => {
       {/* ====== NO AUTHENTICATION - Sign Up or Login: ======== */}
 
       <Route path='/rps' element={<InfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
-      {/* <Route path='/rps/:gameId' element={<GamePage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/> */}
 
 
       <Route path='/battleships' element={<InfoPage navigate={ navigate } gameTitle={ "Battleships" }/>}/>
@@ -42,10 +38,10 @@ const App = () => {
 
 
       <Route path='/signup' element={ !isLoggedIn() ?
-      <SignUpForm navigate={navigate}/> : <Navigate to='/'/>}/>
+      <SignUpPage navigate={navigate}/> : <Navigate to='/'/>}/>
       
       <Route path='/login' element={ !isLoggedIn() ?
-        <LoginForm navigate={navigate}/> : <Navigate to='/'/>}/>
+        <LoginPage navigate={navigate}/> : <Navigate to='/'/>}/>
 
       {/*<Route path='/message' element={ !isLoggedIn() ?
         <MessagePage navigate={navigate}/> : <Navigate to='/message'/>}/>
@@ -57,3 +53,9 @@ const App = () => {
     </Routes>
   )}
 export default App;
+
+
+
+// emerald-400 
+// emerald-700
+// purple-700

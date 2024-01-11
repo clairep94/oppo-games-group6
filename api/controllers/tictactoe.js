@@ -40,12 +40,18 @@ const TicTacToeController = {
   },
 
   Create: async (req, res) => {
+    // const newTicTacToe = new TicTacToe({
+    //   playerOne: req.body.playerOne,
+    //   playerTwo: req.body.playerTwo 
+    // });
+    const userID = req.user_id;
+
     const newTicTacToe = new TicTacToe({
-      playerOne: req.body.playerOne,
-      playerTwo: req.body.playerTwo 
+      playerOne: userID
     });
 
-    try { const result = await newTicTacToe.save()
+    try { 
+      const result = await newTicTacToe.save()
       const populatedTicTacToe = await TicTacToe.populate(result, { path: 'playerOne', select: '_id username points' });
       await TicTacToe.populate(populatedTicTacToe, { path: 'playerTwo', select: '_id username points' });
       await TicTacToe.populate(populatedTicTacToe, { path: 'winner', select: '_id username points' });
@@ -60,6 +66,44 @@ const TicTacToeController = {
       console.log('Error in TTT.Create', error);
       res.status(501).json(error);
     }
+  },
+
+  Join: async (req, res) => {
+    const gameID = req.params.id;
+    const userID = req.user_id;
+    
+    try {
+      const game = await TicTacToe.findById(gameID);
+
+      if (game.playerTwo) {
+        console.log("ERROR: GAME ALREADY FULL");
+        return res.status(403).json({error: 'Game already full.', game: game})
+      
+      } else {
+        const joinedGame = await TicTacToe.findOneAndUpdate( 
+          { _id: gameID },
+          {
+            $set: { playerTwo : userID },
+          },
+          {new: true}
+        )
+        .populate('playerOne', '_id username points') 
+        .populate('playerTwo', '_id username points') 
+        .populate('winner', '_id username points')
+
+        const token = TokenGenerator.jsonwebtoken(req.user_id);
+        res.status(200).json({token: token, game: joinedGame});
+        // res.status(200).json({game: forfeitedGame});
+
+      }
+      
+    } catch (error) {
+      console.log('Error in TTT.Join', error);
+      res.status(501).json(error);
+      
+    }
+
+
   },
 
   PlacePiece: async (req, res) => {
@@ -213,7 +257,7 @@ const TicTacToeController = {
       const game = await TicTacToe.findById(gameID);
 
       // Throw error if sessionUser is not in the game:
-      if (sessionUser != game.playerOne && sessionUser !== game.playerTwo){
+      if ((sessionUser != game.playerOne) && (sessionUser != game.playerTwo)){
         console.log("ERROR: NON-PARTICIPANTS CANNOT FORFEIT");
         return res.status(403).json({error: 'Only players can forfeit the game.', game: game}); //return the old game so as to not mess up the rendering
       }
