@@ -2,8 +2,7 @@ import './App.css';
 // eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react';
 
-
-import InfoPage from '../info-page/InfoPage';
+import RpsInfoPage from '../InfoPage/RpsInfoPage';
 
 import {
   useNavigate,
@@ -18,7 +17,8 @@ import LoginPage from '../auth/LoginPage'
 import SignUpPage from '../sign_up/SignUpPage'
 import Landing from '../landing/Landing';
 import ProtectedRoutes from './ProtectedRoutes';
-//import MessagePage from '../messages/MessagePage';
+import TttInfoPage from '../InfoPage/TttInfoPage';
+import BattleInfoPage from '../InfoPage/BattleshipsInfoPage';
 
 const App = () => {
   const navigate = useNavigate();
@@ -28,10 +28,9 @@ const App = () => {
     <Routes>
       {/* ====== NO AUTHENTICATION - Sign Up or Login: ======== */}
 
-      <Route path='/rps' element={<InfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
-
-
-      <Route path='/battleships' element={<InfoPage navigate={ navigate } gameTitle={ "Battleships" }/>}/>
+      <Route path='/rps' element={<RpsInfoPage navigate={ useNavigate() } gameTitle={ "Rock Paper Scissors" }/>}/>
+      <Route path='/tictactoe' element={<TttInfoPage navigate={ useNavigate() } gameTitle={ "Tic Tac Toe" }/>}/>
+      <Route path='/battleships' element={<BattleInfoPage navigate={ useNavigate() } gameTitle={ "Battleships" }/>}/>
       
       <Route path='/welcome'  element={!isLoggedIn() ?
       <Landing navigate={ navigate }/> : <Navigate to='/'/>}/>
@@ -42,9 +41,6 @@ const App = () => {
       
       <Route path='/login' element={ !isLoggedIn() ?
         <LoginPage navigate={navigate}/> : <Navigate to='/'/>}/>
-
-      {/*<Route path='/message' element={ !isLoggedIn() ?
-        <MessagePage navigate={navigate}/> : <Navigate to='/message'/>}/>
 
       {/* ====== AUTHENTICATION ONLY - Lobby, Games, etc. : ======== */}
       <Route path='/*'  element={ isLoggedIn() ?         
