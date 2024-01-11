@@ -63,12 +63,37 @@ io.on("connection", (socket) => {
         }
     })
 
-    socket.on("send-message", (data) => {
-        const {receiverID} = data;
-        const user = activeusers.find((user) => user.userID === socket.id);
-        if (user) {
-            io.to(user.socketID).emit("recieve-message", data);
+    socket.on("forfeit-game", ({gameID, updatedGame}) => {
+        if (activeGames[gameID]) { // check if activeGames[gameID] does not return null
+            io.to(gameID).emit("receive-forfeit-game", {gameID, gameState: updatedGame})
+            console.log("Forfeiting game:", gameID);
+            console.log(updatedGame);
+        } else {
+            console.log("No active game found", gameID);
+            console.log("Active Games: ", activeGames);
         }
+    })
+
+
+    socket.on("send-message", ({gameID, sentMessage}) => {
+        console.log("sending a message: ", gameID)
+        if (activeGames[gameID]) { // check if activeGames[gameID] does not return null
+            io.to(gameID).emit("receive-message", {gameID, receivedMessage: sentMessage})
+            console.log("Recieving message:", gameID);
+            console.log(sentMessage);
+        } else {
+            console.log("No active game found", gameID);
+            console.log("Active Games: ", activeGames);
+        }
+
+
+
+
+        // const {receiverID} = data;
+        // const user = activeusers.find((user) => user.userID === socket.id);
+        // if (user) {
+        //     io.to(user.socketID).emit("recieve-message", data);
+        // }
     }
     )
 
