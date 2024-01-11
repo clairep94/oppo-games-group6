@@ -124,8 +124,8 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
     // ------------ Socket setup: -------------------------------
     const socket = useRef() //menu, chatwindow
     const [onlineUsers, setOnlineUsers] = useState(null);
-    const [sendGame, setSendGame] = useState(null);
-    const [receivedGame, setReceivedGame] = useState(null);
+    // const [sendGame, setSendGame] = useState(null);
+    // const [receivedGame, setReceivedGame] = useState(null);
 
     // --------- CONNECTING TO SOCKET & ONLINE USERS -----------------
     // Connect to socket.io when users visit the messages page //TODO lift this to app after login?
@@ -271,11 +271,11 @@ const TicTacToeBoard = ({ gameBoard, onButtonClick }) => {
     return (
         <div className="tictactoe-board">
             {rows.map(row => (
-                <div key={row} className="tictactoe-row">
+                <div key={row} className="tictactoe-row flex">
                     {Object.keys(gameBoard[row]).map(col => (
                         <button
                             key={col}
-                            className="h-[6rem] w-[6rem] mb-2 bg-slate-300/60 border-2 border-white/20 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400 text-bold"
+                            className="h-[6rem] w-[6rem] mb-2 bg-slate-300/60 border-2 border-white/20 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400 text-bold flex items-center justify-center"
                             onClick={() => onButtonClick(row, col)}
                         >
                             {gameBoard[row][col]}
