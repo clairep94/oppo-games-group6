@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
 
 export default function GameTypeCard({ game, index, showGames, createGame }) {
+    
     const [viewFront, setViewFront] = useState(true);
 
-    const flipCard = () => {
-        setViewFront(!viewFront);
+    // ============== FLIPPING THE CARD =========================    
+    const flipToFront = () => {
+        setViewFront(true);
     };
 
+    const flipToBack = () => {
+        setViewFront(false);
+    };
+
+    // ============ TAILWIND =====================
     const buttonStyle1 = "w-[80%] text-lg text-white font-semibold rounded-lg py-3 px-4 bg-pink-600/50 hover:bg-pink-600/70 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
     const buttonStyle2 = "w-[80%] text-lg text-white font-semibold rounded-lg py-3 px-4 border-2 border-pink-600/50 hover:bg-pink-600/20 focus:outline-none focus:shadow-outline-pink active:bg-pink-700/80";
 
+
+    // =========== CREATE GAME & FILTER =============
     const handleCreateButtonClick = (e) => {
         e.stopPropagation(); // Prevents the click event from reaching the parent container
         createGame(game)
@@ -27,7 +36,8 @@ export default function GameTypeCard({ game, index, showGames, createGame }) {
         <div
             id={index}
             className="h-[full] min-w-[35rem] rounded-[1rem] overflow-clip flex flex-col relative text-black hover:cursor-pointer transition-opacity opacity-90 hover:opacity-100"
-            onClick={flipCard}
+            onMouseEnter={flipToBack}
+            onMouseLeave={flipToFront}
         >
             {viewFront ? (
                 <>
@@ -54,7 +64,6 @@ export default function GameTypeCard({ game, index, showGames, createGame }) {
             ) : (
                 <div
                     className="h-full w-full bg-black/60 text-white items-center justify-center flex flex-col"
-                    onClick={flipCard}
                 >
                     {/* CARD BACK */}
                     <h3 className="font-bold text-2xl">Play {game.title}</h3>
