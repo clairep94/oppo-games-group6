@@ -202,7 +202,7 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
                 <div className="flex flex-col items-center justify-center  h-full w-full">
 
                     {/* TTT CONTAINER */}
-                    <div className={"flex flex-col bg-gray-500/60 w-[40rem] h-[40rem] items-center justify-between pt-[5rem] rounded-[2rem]" +  frostedGlass}>
+                    <div className={"flex flex-col bg-gray-500/60 w-[40rem] h-[40rem] items-center justify-between py-[4rem] rounded-[2rem]" +  frostedGlass}>
     
                         {/* OPPONENT & TURN HEADER */}
                         {game.playerTwo ? (   
@@ -221,14 +221,16 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
                             </button>)
                         }
                         
+                        {errorMessage && 
+                            <h2 className="text-red-600/80 font-semibold text-2xl p-3">{errorMessage}</h2>}
+
                         
-                        <h2 className="text-red-600/80 font-semibold text-2xl p-3">
-                            {errorMessage}
-                        </h2>
-    
-                        <h2 className="text-white font-semibold text-2xl p-3">
+                        {winMessage && 
+                        <h2 className="text-white font-bold text-3xl p-3">
                             {winMessage}
                         </h2>
+                        }
+    
     
     
                     </div>
