@@ -28,6 +28,7 @@ const UsersController = {
         throw err;
       }
       const token = TokenGenerator.jsonwebtoken(req.user_id)
+      res.setHeader('Cache-Control', 'no-store, no-cache');
       res.status(200).json({users: users, token: token})
     });
   },
@@ -41,6 +42,7 @@ const UsersController = {
         throw err;
       }
       const token = TokenGenerator.jsonwebtoken(req.user_id)
+      res.setHeader('Cache-Control', 'no-store, no-cache');
       res.status(200).json({ user: user, token: token });
     });
   },

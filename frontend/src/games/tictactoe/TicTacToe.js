@@ -2,6 +2,7 @@ import React, {useState, useRef, useEffect} from "react";
 import {useParams} from "react-router-dom";
 import { newGame, fetchGame, allGames, placePiece, forfeitGame } from "../../api_calls/tictactoeAPI";
 import io from "socket.io-client";
+import { fetchMessages, addMessage } from "../../api_calls/messageAPI";
 
 
 const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setSessionUser }) => {
@@ -144,6 +145,19 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
     // const [receivedMessage, setReceivedMessage] = useState(null); //chatwindow, menu
     // const [sendNewConversation, setSendNewConversation] = useState(null); //menu
 
+    const [messages, setMessages] = useState(null);
+
+    useEffect(() => {
+        fetchMessages(gameID) //TODO fix? this version of fetchGameData always refreshes the token so the user never times out
+            .then(messagesData => {
+                setMessages(messagesData.allMessages);
+            })
+    },
+
+
+    [])
+
+
 
 
     // ============ FORFEIT GAME ==================
@@ -198,6 +212,9 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 }
 
                 {errorMessage}
+                allmessages
+                {messages?.length}
+
             </>
         )
     }

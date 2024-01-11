@@ -8,8 +8,6 @@ const bgGradient = "bg-gradient-to-br from-emerald-400 via-emerald-700 to-purple
 const basicFont = "pt-3 text-black text-lg font-medium tracking-wide text-wrap text-center"
 const h1Style = "pt-3 text-6xl text-white font-extrabold text-center"
 
-
-
 const InfoPage = ({ navigate, gameTitle }) => {
 
   const gameCardRPS = {
@@ -29,6 +27,8 @@ const InfoPage = ({ navigate, gameTitle }) => {
     let gamePath = null;
     if (gameTitle === "Rock Paper Scissors") {
       gamePath = "rps";
+    } else if (gameTitle === "Battleships") {
+      gamePath = "battleships";
     } else {
       throw new Error("unrecognised game :(");
     }
@@ -57,6 +57,7 @@ const InfoPage = ({ navigate, gameTitle }) => {
   if (gameTitle === "Rock Paper Scissors") {
     return (
       <>
+
       <div class="bg-auto h-screen" style={gameCardRPS}>
       
         <MiniNavBar />
@@ -70,6 +71,7 @@ const InfoPage = ({ navigate, gameTitle }) => {
         <div className="flex flex-col min-h-full justify-center mr-40">
         <h1 className={h1Style}>Rock Paper Scissors</h1>
         <p className={basicFont}> 
+
           Simultaneous moves? How does that work? With our hidden information game system,
           you can be sure that your opponent won't see what you're up to before they have
           to make their best move - and stick with it. If you're logged in, click the button
@@ -112,6 +114,19 @@ const InfoPage = ({ navigate, gameTitle }) => {
 
 
         </div>
+      </>
+    );
+  }
+  if (gameTitle === "Battleships") {
+    return (
+      <>
+        <h2>Our Games: Battleships</h2>
+        <p>
+          You have some ships. Your opponent has some ships. You want to battle.
+          Your opponent wants to battle. What happens next will hardly surprise you... although
+          you may need nerves of steel and a pinch of luck to win the day!
+        </p>
+        <button onClick={startAndRedirectToNewGame}>Play Battleships</button>
       </>
     );
   }

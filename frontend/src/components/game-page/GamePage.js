@@ -1,31 +1,32 @@
 import React, { useState, useEffect } from "react";
 //import ThreeButtonsGame from "../../games/threebuttonsgame/ThreeButtonsGame";
 import RockPaperScissors from "../../games/rps/RockPaperScissors";
+import Battleships from "../../games/battleships/Battleships";
 import { useParams } from 'react-router-dom';
 
-const PlaceholderNavbar = ({ }) => {
-  const { gameId } = useParams();
-  const [token, setToken] = useState(window.localStorage.getItem("token"));
-  const logout = () => {
-    window.localStorage.removeItem("token");
-    setToken(null);
-  };
-  if (token) {
-    return (
-      <div className="placeholder-navbar">
-        <button onClick={logout}>Log out</button>
-        <a href="/lobby">Games lobby</a>
-      </div>
-    );
-  } else {
-    return (
-      <div className="placeholder-navbar">
-        <a href="/login">Log in</a>
-        <a href="/signup">Sign up</a>
-      </div>
-    );
-  }
-};
+// const PlaceholderNavbar = ({ }) => {
+//   const { gameId } = useParams();
+//   const [token, setToken] = useState(window.localStorage.getItem("token"));
+//   const logout = () => {
+//     window.localStorage.removeItem("token");
+//     setToken(null);
+//   };
+//   if (token) {
+//     return (
+//       <div className="placeholder-navbar">
+//         <button onClick={logout}>Log out</button>
+//         <a href="/lobby">Games lobby</a>
+//       </div>
+//     );
+//   } else {
+//     return (
+//       <div className="placeholder-navbar">
+//         <a href="/login">Log in</a>
+//         <a href="/signup">Sign up</a>
+//       </div>
+//     );
+//   }
+// };
 
 // const PlaceholderChatbox = ({ }) => {
 //   const [messages, setMessages] = useState([]);
@@ -74,11 +75,17 @@ const GamePage = ({ navigate, gameTitle }) => {
   if (gameTitle === "Rock Paper Scissors") {
     return (
       <>
-        <PlaceholderNavbar />
         <RockPaperScissors gameId={ gameId }/>
         {/* <PlaceholderChatbox /> */}
       </>
     );
+  } else if (gameTitle === "Battleships") {
+    return (
+      <>
+        <Battleships gameId={ gameId }/>
+        {/* <PlaceholderChatbox /> */}
+      </>
+    )
   } else {
     return (
       <>

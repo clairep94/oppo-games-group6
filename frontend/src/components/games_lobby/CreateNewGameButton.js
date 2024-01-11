@@ -13,7 +13,7 @@ const NewGameButton = (props) => {
         // TODO change this after the Game model is created -> manages host, members, awaiting players...
         const newGamePayload = {
             playerOne: sessionUserID, 
-            playerTwo: "65805cfc33d528c09050f9d6"
+            playerTwo: "657c3fea5472053804f922a7"
         }
 
         try {

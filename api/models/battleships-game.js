@@ -59,7 +59,6 @@ const BattleshipsGameSchema = new mongoose.Schema({
     type: [[{ // 1st index: playerIndex (0 ~ 1), 2nd index: indexInFleet of ship (0 ~ 4)
       shipName: String, // Carrier Battleship Cruiser Submarine Destroyer (resp'ly)
       shipLength: Number, //     5          4       3         3         2
-      onOceanGrid: Boolean,
       topLeftCornerLocation: { // This has the lowest (row + col) value
         type: { row: Number, col: Number, }, // Each (0 ~ 9)
       },
@@ -70,6 +69,7 @@ const BattleshipsGameSchema = new mongoose.Schema({
       hasSunk: Boolean,
     }]],
   },
+  placementComplete: [Boolean],
   oceanGrids: {
     type: [[[OceanGridLocationContents]]],
     // 1st index: playerIndex (0 ~ 1),
@@ -91,14 +91,14 @@ const BattleshipsGameSchema = new mongoose.Schema({
       },
     }],
   },
-  publicCommunications: {
-    // Such as opponent announcing name of hit/sunk ship (THIS IS NOT GAME CHAT)
-    type: [{
-      speakerIndex: Number, // is a player index
-      subject: String, // e.g. "you-missed", "you-hit", "you-sunk"
-      details: String, // Can parse this to json depending on value of `subject`
-    }],
-  },
+  // publicCommunications: {
+  //   // Such as opponent announcing name of hit/sunk ship (THIS IS NOT GAME CHAT)
+  //   type: [{
+  //     speakerIndex: Number, // is a player index
+  //     subject: String, // e.g. "you-missed", "you-hit", "you-sunk"
+  //     details: String, // Can parse this to json depending on value of `subject`
+  //   }],
+  // },
 
   // Section 5: Properties first needed for state CONCLUDED
   concludedAt: Date,
