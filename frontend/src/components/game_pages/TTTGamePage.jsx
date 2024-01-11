@@ -287,7 +287,7 @@ const TicTacToeBoard = ({ gameBoard, onButtonClick }) => {
                     {Object.keys(gameBoard[row]).map(col => (
                         <button
                             key={col}
-                            className="h-[6rem] w-[6rem] mb-2 text-[2rem] bg-slate-300/60 border-2 border-white/20 shadow-sm text-black rounded-md mr-1 hover:bg-slate-400 text-bold flex items-center justify-center"
+                            className="h-[6rem] w-[6rem] mb-2 text-[2rem] bg-slate-300/60 border-2 border-white/20 shadow-sm text-black/80 rounded-md mr-1 hover:bg-slate-400 font-semibold flex items-center justify-center"
                             onClick={() => onButtonClick(row, col)}
                         >
                             {gameBoard[row][col]}
