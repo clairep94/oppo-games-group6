@@ -1,12 +1,14 @@
 const mongoose = require("mongoose");
 
 const MessagesSchema = mongoose.Schema({
-    gameID: {
-      type: String,
-    },
+  gameID: {
+    type: String,
+  },
 
-    author: {
-      type:String
+  author: { // games will be created once both players have joined.
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Messages must have an author']
   },
 
   body: {

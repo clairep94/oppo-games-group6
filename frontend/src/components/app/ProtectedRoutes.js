@@ -14,9 +14,9 @@ import GamesLobby from '../games_lobby/GamesLobby2';
 import TicTacToe from '../../games/tictactoe/TicTacToe_Lowpoly';
 import ProfilePage from '../profile_page/ProfilePage';
 import MessagePage from '../messages/MessagePage';
-import GamePage from '../game-page/GamePage';
-
-
+// import GamePage from '../game-page/GamePage';
+import GamePage from '../game_pages/GamePage';
+import TTTGamePage from '../game_pages/TTTGamePage';
 
 const ProtectedRoutes = ({navigate}) => {
   
@@ -78,8 +78,8 @@ const ProtectedRoutes = ({navigate}) => {
 
 
           {/* ------ Tictactoe ------  */}
-          <Route path='/tictactoe/:id'  element={<TicTacToe navigate={navigate} token={token} setToken={setToken} 
-              sessionUserID={sessionUserID} sessionUser={sessionUser} setSessionUser={setSessionUser}/>}/>
+          <Route path='/tictactoe/:id'  element={<TTTGamePage token={token} setToken={setToken} 
+              sessionUserID={sessionUserID} sessionUser={sessionUser} />}/>
   
           {/* -------- RPS ----------- */}
           <Route path='/rps/:gameId' element={<GamePage navigate={ navigate } gameTitle={ "Rock Paper Scissors" }/>}/>
@@ -87,6 +87,7 @@ const ProtectedRoutes = ({navigate}) => {
           {/* ---- Battleships ---- */}
           <Route path='/battleships/:gameId' element={<GamePage navigate={ navigate } gameTitle={ "Battleships" }/>}/>
 
+          <Route path='/gamepagetest' element={<GamePage sessionUser={sessionUser}/>}/>
 
         </Routes>
 

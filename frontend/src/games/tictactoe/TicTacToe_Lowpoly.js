@@ -6,7 +6,7 @@ import io from "socket.io-client";
 
 const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setSessionUser }) => {
 
-    // =========== STATE VARIABLES ==========================
+    // =========== STATE VARIABLES =====================================================================================================
     // --------- Session & Game ID ----------
     const { id } = useParams(); // IMPORTANT: DO NOT RENAME 'id' This refers to gameID but changing it would cause issues in routes etc.
     const gameID = id; // declared gameID variable to store this info in case it is more readable for usage below:
@@ -34,8 +34,6 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
             }
         }
     };
-
-    
     // ============ LOADING THE BOARD =============
     // Function to fetch the tictactoe data
     const fetchGameData = () => {
@@ -57,7 +55,6 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
             fetchGameData()
         }
     }, [])
-
 
     // ============ SESSION USER GAMEPLAY =============
     // Function to place a piece on the gameboard
@@ -163,6 +160,12 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 findWinMessage(gameData.game)
                 ;})
             }}
+
+
+    // ============ FORFEIT GAME =============================================================================================
+
+
+
 
     // ------------ STYLING STRINGS -----------------
 
@@ -270,20 +273,6 @@ const TicTacToe = ({ navigate, token, setToken, sessionUserID, sessionUser, setS
                 </div>
 
             </div>
-            {/* <p>Visibility Testing:</p>
-            <p>YOUR USERNAME: {sessionUser.username}</p>
-            <br></br>
-            <p>GameID: {game._id}</p>
-            <p>Player One: {game.playerOne.username}, Placements: {game.xPlacements}</p>
-            <p>Player Two: {game.playerTwo.username}, Placements: {game.oPlacements}</p>
-            <p>Game Finished: {String(game.finished)}</p>
-            <p>Game Winners: {game.winner.length}</p>
-            <p>Game Turn Number: {game.turn}</p>
-            <p>Which player is SessionUser? : {sessionUserID === game.playerOne._id ? "Player One" : "Player Two or Observer"}</p>
-            <p>Whose Turn? {whoseTurn.username}</p>
-            <p>Is it my turn? {String(whoseTurn._id === sessionUserID)}</p> */}
-
-                <br></br>
 
 
 </div>

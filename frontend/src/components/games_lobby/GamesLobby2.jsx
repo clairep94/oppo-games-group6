@@ -254,7 +254,7 @@ const GamesLobby = ({ navigate, token, setToken, sessionUserID, sessionUser, set
               
               {/* GAMES LIST - Show only unfinished games in the lobby */}
               <div className='flex flex-col bg-gray-600/40 rounded-[1rem] h-[40%] overflow-y-auto pt-3 pl-2 pr-2 pb-6 border-2 space-y-1 border-white/20'>
-                {displayGames.filter((game)=> (!game.finished)).map((game => (
+                {displayGames.map((game => (
                   <SingleGameCard game={game} sessionUserID={sessionUserID} joinGame={joinGame} forfeitGame={forfeitGame} deleteGame={deleteGame}/>
                 )))}
               </div>

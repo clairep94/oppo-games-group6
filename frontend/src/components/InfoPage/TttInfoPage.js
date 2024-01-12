@@ -84,13 +84,13 @@ const TttInfoPage = ({ navigate, gameTitle }) => {
         <h1 className={h1Style}>Tic Tac Toe</h1>
         <div class="container pr-60 pl-60">
         <p className={basicFont}> 
-        Experience the thrill of simultaneous moves in our hidden information game system, where strategic 
-        thinking takes center stage. With our unique approach, you make your move privately, ensuring your 
-        opponent remains in the dark until it's time to reveal choices. Whether you're logged in or a new visitor, 
-        kick off a new game of Tic Tac Toe by clicking the button below. If you're not logged in, the prompt will 
-        seamlessly redirect you to the login screen, where you can create an account, unlocking access to various 
-        games on our platform and enabling you to engage in lively chats with fellow players. Dive into the world of 
-        strategic gaming with Tic Tac Toe and more!
+        Engage in a riveting duel of minds on the alpine map with Tic Tac Toe, where strategy takes center stage 
+        and every move is a live-wire decision! Feel the strategic intensity as you plot your moves, contemplating 
+        each placement with the precision of a seasoned tactician. Explore the dynamic nature of the game, where strategic 
+        brilliance meets real-time decision-making. Will you corner your opponent with a cunning move, or will they 
+        surprise you with an unexpected counter?
+
+
         </p>
         </div>
 

@@ -5,7 +5,7 @@ const MessagesController = {
     AddMessage: async (req, res) => { 
         const newMessage = new Message({
             gameID: req.body.gameID,
-            author: req.body.authorID,
+            author: req.body.author,
             body: req.body.body
         });
         try {

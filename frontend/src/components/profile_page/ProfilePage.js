@@ -70,7 +70,7 @@ const ProfilePage = ({ navigate }) => {
             {/* <h2>{user ? `${user.username}'s profile`: "Loading"}</h2> */}
 
             <div className="flex items-center justify-center">
-            <img src={`https://api.dicebear.com/7.x/rings/svg?seed=${sessionUserID}`}  alt="Your Image" width="200px" className="max-w-full max-h-full my-11" />
+            <img src={`https://api.dicebear.com/7.x/rings/svg?seed=${sessionUserID}`}  alt="Your Image" width="200px" className="max-w-full max-h-full my-11 border-[0.4rem] rounded-full" />
             </div>
 
             <p className="text-2xl text-white font-bold text-center">Welcome back {user ? `@${user.username}`: "Loading"}</p>
