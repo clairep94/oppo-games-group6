@@ -87,6 +87,8 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
     // ======================= LOADING MESSAGES =============================================
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState("");
+    const [receivedMessage, setReceivedMessage] = useState("");
+
 
     useState(() => {
         fetchMessages(gameID)
@@ -94,6 +96,13 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
             setMessages(messagesData.allMessages);
         })
     }, [])
+
+    // Scroll to the last message when messages change
+    const messagesEndRef = useRef(null);
+
+    useEffect(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, [messages]);
 
 
     // ============ SESSION USER GAMEPLAY =================================
@@ -214,20 +223,22 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
         //---------------- Receiving messages -------------------
         socket.current.on("receive-message", ({gameID, receivedMessage}) => {
             console.log("received message from socket", receivedMessage);
-            const newMessage = {
-                _id: receivedMessage._id,
-                gameID: receivedMessage.gameID,
-                author: receivedMessage.author,
-                body: receivedMessage.body
-            }
-            // const currentMessages = messages.push(newGame)
-            setMessages([...messages, newMessage])
+            // const newMessage = {
+            //     _id: receivedMessage._id,
+            //     gameID: receivedMessage.gameID,
+            //     author: receivedMessage.author,
+            //     body: receivedMessage.body
+            // }
+            setMessages([...messages, receivedMessage])
+
             // setMessages((prevMessages) => prevMessages.concat(newMessage));
             // setMessages(currentMessages)
 
         })
 
     }, [sessionUserID])
+
+    
 
 
     // ---------------------- SENDING A MESSAGE -----------------------------
@@ -347,7 +358,8 @@ export default function TTTGamePage({ token, setToken, sessionUserID, sessionUse
                                         </p>
                                     ))
                             )}
-                            
+                            {/* Empty div to scroll to the last message */}
+                            <div ref={messagesEndRef}></div>
                         </div>
                         <div className="flex flex-col h-2/5">
                         {/* Input Field from React Lib for writing a new message, can add emojis */}
