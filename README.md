@@ -1,8 +1,16 @@
 # OppoGames
 
+![Screenshot 2024-01-12 at 02 33 41](https://github.com/clairep94/fp_team6_battleships/assets/128436909/1bd288a9-7537-4ca7-9165-0f002f89bb73)
+
 OppoGames is a fullstack social-gaming site, showcasing use of the MERN stack, Socket.io and Tailwind CSS.
 
 Users can sign up, log in, and play a number of mini-games 1v1 with other users. Users can see their opponents moves in real-time.
+
+![Screenshot 2024-01-12 at 02 33 27](https://github.com/clairep94/fp_team6_battleships/assets/128436909/2bcdacd7-bb84-4a46-8f2e-48f1d63fce17)
+![Screenshot 2024-01-12 at 02 39 48](https://github.com/clairep94/fp_team6_battleships/assets/128436909/bf185f59-b0ad-48ed-ab06-33cb96de69e6)
+![Screenshot 2024-01-12 at 02 41 23](https://github.com/clairep94/fp_team6_battleships/assets/128436909/230d9fec-a425-4393-9c41-8f31ceefe6c4)
+
+
 
 ## Installing Project Dependencies:
 
